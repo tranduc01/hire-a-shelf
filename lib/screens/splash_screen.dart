@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:grocery_app/screens/welcome_screen.dart';
-import 'package:grocery_app/styles/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:grocery_app/common_widgets/app_text.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -30,10 +30,13 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: Color.fromARGB(255, 211, 221, 214),
       body: Center(
-        child: splashScreenIcon(),
-      ),
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [splashScreenIcon(), welcomeTextWidget()],
+      )),
     );
   }
 }
@@ -44,5 +47,27 @@ Widget splashScreenIcon() {
     iconPath,
     height: 70,
     width: 70,
+  );
+}
+
+Widget welcomeTextWidget() {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisSize: MainAxisSize.max,
+    children: [
+      AppText(
+        text: "Hire a Shelf",
+        fontSize: 48,
+        fontWeight: FontWeight.w400,
+        color: Color.fromARGB(255, 8, 38, 12),
+      ),
+      // AppText(
+      //   text: "a Shelf",
+      //   fontSize: 48,
+      //   fontWeight: FontWeight.w600,
+      //   color: Color.fromARGB(255, 8, 38, 12),
+      // ),
+    ],
   );
 }
