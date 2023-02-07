@@ -16,10 +16,10 @@ class NavigatorItem {
 }
 
 List<NavigatorItem> navigatorItems = [
-  NavigatorItem("Shop", "assets/icons/shop_icon.svg", 0, HomeScreen()),
-  NavigatorItem("Explore", "assets/icons/explore_icon.svg", 1, ExploreScreen()),
-  NavigatorItem("Cart", "assets/icons/cart_icon.svg", 2, CartScreen()),
+  NavigatorItem("Home", "assets/icons/shop_icon.svg", 0, HomeScreen()),
   NavigatorItem(
-      "Favourite", "assets/icons/favourite_icon.svg", 3, FavouriteScreen()),
-  NavigatorItem("Account", "assets/icons/account_icon.svg", 4, AccountScreen()),
+      "My Campaingn", "assets/icons/explore_icon.svg", 1, ExploreScreen()),
+  NavigatorItem("Notifications", "assets/icons/notification_icon.svg", 2,
+      FavouriteScreen()),
+  NavigatorItem("Account", "assets/icons/account_icon.svg", 3, AccountScreen()),
 ];

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:grocery_app/styles/colors.dart';
 
 import 'navigator_item.dart';
 
@@ -44,7 +43,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               });
             },
             type: BottomNavigationBarType.fixed,
-            selectedItemColor: AppColors.primaryColor,
+            selectedItemColor: Color.fromARGB(255, 65, 105, 255),
             selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
             unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
             unselectedItemColor: Colors.black,
@@ -60,13 +59,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   BottomNavigationBarItem getNavigationBarItem(
       {required String label, required String iconPath, required int index}) {
-    Color iconColor =
-        index == currentIndex ? AppColors.primaryColor : Colors.black;
+    Color iconColor = index == currentIndex
+        ? Color.fromARGB(255, 65, 105, 255)
+        : Colors.black;
     return BottomNavigationBarItem(
       label: label,
       icon: SvgPicture.asset(
         iconPath,
         color: iconColor,
+        height: 25,
+        width: 25,
       ),
     );
   }
