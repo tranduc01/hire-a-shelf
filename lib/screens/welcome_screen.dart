@@ -1,11 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/screens/dashboard/dashboard_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
-  final String imagePath = "assets/images/welcome_image.png";
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,31 +13,34 @@ class WelcomeScreen extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 30),
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(imagePath),
+          image: AssetImage("assets/images/welcome_image.png"),
           fit: BoxFit.cover,
         ),
       ),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Spacer(),
-            SizedBox(
-              height: 20,
-            ),
-            welcomeTextWidget(),
-            SizedBox(
-              height: 10,
-            ),
-            sloganText(),
-            SizedBox(
-              height: 40,
-            ),
-            getButton(context),
-            SizedBox(
-              height: 40,
-            )
-          ],
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Spacer(),
+              SizedBox(
+                height: 20,
+              ),
+              welcomeTextWidget(),
+              SizedBox(
+                height: 10,
+              ),
+              sloganText(),
+              SizedBox(
+                height: 40,
+              ),
+              getButton(context),
+              SizedBox(
+                height: 40,
+              )
+            ],
+          ),
         ),
       ),
     ));
