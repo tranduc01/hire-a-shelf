@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/grocery_item.dart';
 import 'package:grocery_app/styles/colors.dart';
@@ -51,14 +52,56 @@ class GroceryItemCardWidget extends StatelessWidget {
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
-            AppText(
-              text: item.description,
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF7C7C7C),
+            SizedBox(
+              height: 5,
+            ),
+            Row(
+              children: [
+                SvgPicture.asset(
+                  "assets/icons/out-of-time.svg",
+                  height: 23,
+                  width: 23,
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                AppText(
+                  text: "Exp: " + item.description,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF7C7C7C),
+                ),
+              ],
             ),
             SizedBox(
-              height: 20,
+              height: 4,
+            ),
+            Row(
+              children: [
+                SizedBox(
+                  width: 4,
+                ),
+                SvgPicture.asset(
+                  "assets/icons/location_icon.svg",
+                  height: 23,
+                  width: 23,
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 4),
+                  child: AppText(
+                    text: item.location,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF7C7C7C),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 15,
             ),
             Row(
               children: [
@@ -68,7 +111,6 @@ class GroceryItemCardWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
                 Spacer(),
-                addWidget()
               ],
             )
           ],
@@ -79,24 +121,27 @@ class GroceryItemCardWidget extends StatelessWidget {
 
   Widget imageWidget() {
     return Container(
-      child: Image.asset(item.imagePath),
-    );
-  }
-
-  Widget addWidget() {
-    return Container(
-      height: 45,
-      width: 45,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(17),
-          color: AppColors.primaryColor),
-      child: Center(
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 25,
-        ),
+      child: Image.asset(
+        item.imagePath,
+        fit: BoxFit.fill,
       ),
     );
   }
+
+  // Widget addWidget() {
+  //   return Container(
+  //     height: 45,
+  //     width: 45,
+  //     decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(17),
+  //         color: AppColors.primaryColor),
+  //     child: Center(
+  //       child: Icon(
+  //         Icons.add,
+  //         color: Colors.white,
+  //         size: 25,
+  //       ),
+  //     ),
+  //   );
+  // }
 }

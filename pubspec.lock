@@ -62,6 +62,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_image_slideshow:
+    dependency: "direct main"
+    description:
+      name: flutter_image_slideshow
+      sha256: "0192bf6c683fe993e4694d8803c0b4a0c0757333c356900a9b74bb7fe57546da"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.4"
   flutter_staggered_grid_view:
     dependency: "direct main"
     description:
