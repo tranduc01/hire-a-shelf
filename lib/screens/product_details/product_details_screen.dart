@@ -152,7 +152,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     width: 100,
                   )),
               Spacer(),
-              Visibility(visible: _isVisible, child: AppText(text: item.name))
+              Visibility(visible: _isVisible, child: AppText(text: item.name)),
             ],
           );
         });
