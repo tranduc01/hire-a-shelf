@@ -16,10 +16,17 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   bool _isVisible = false;
+  bool _isVisibleDuration = false;
 
   void showToast() {
     setState(() {
       _isVisible = !_isVisible;
+    });
+  }
+
+  void showToastDuration() {
+    setState(() {
+      _isVisibleDuration = !_isVisibleDuration;
     });
   }
 
@@ -74,16 +81,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       getProductDetailsWidget(),
                       getProducts(coca),
                       Divider(thickness: 1),
-                      getProductDataRowWidget("Expired Date",
-                          customWidget: nutritionWidget()),
+                      getExpiredDate(customWidget: expiredDateWidget()),
                       Divider(thickness: 1),
-                      getProductDataRowWidget(
-                        "Duration",
-                        customWidget: ratingWidget(),
-                      ),
-                      SizedBox(
-                        height: 50,
-                      ),
+                      getDurationWidget(customWidget: durationWidget()),
+                      getDuration(),
                       AppButton(
                         label: "Join Campaign",
                       ),
@@ -157,6 +158,63 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         });
   }
 
+  Widget getDuration() {
+    return Column(
+      children: [
+        Visibility(
+            visible: _isVisibleDuration,
+            child: AppText(
+                text: "From", fontWeight: FontWeight.w600, fontSize: 16)),
+        SizedBox(
+          height: 5,
+        ),
+        Visibility(
+            visible: _isVisibleDuration,
+            child: Container(
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: Color(0xffEBEBEB),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: AppText(
+                text: "01/01/2023",
+                fontWeight: FontWeight.w600,
+                fontSize: 12,
+                color: Color(0xff7C7C7C),
+              ),
+            )),
+        SizedBox(
+          height: 5,
+        ),
+        Visibility(
+            visible: _isVisibleDuration,
+            child:
+                AppText(text: "To", fontWeight: FontWeight.w600, fontSize: 16)),
+        SizedBox(
+          height: 5,
+        ),
+        Visibility(
+            visible: _isVisibleDuration,
+            child: Container(
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: Color(0xffEBEBEB),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: AppText(
+                text: "31/03/2023",
+                fontWeight: FontWeight.w600,
+                fontSize: 12,
+                color: Color(0xff7C7C7C),
+              ),
+            )),
+        SizedBox(
+          height: 10,
+        )
+      ],
+    );
+  }
+
   Widget getProductDataRowWidget(String label, {Widget? customWidget}) {
     return Container(
       margin: EdgeInsets.only(
@@ -174,6 +232,28 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             )
           ],
           Icon(Icons.arrow_back_ios),
+        ],
+      ),
+    );
+  }
+
+  Widget getExpiredDate({Widget? customWidget}) {
+    return Container(
+      margin: EdgeInsets.only(
+        top: 10,
+        bottom: 10,
+      ),
+      child: Row(
+        children: [
+          AppText(
+              text: "Expired Date", fontWeight: FontWeight.w600, fontSize: 16),
+          Spacer(),
+          if (customWidget != null) ...[
+            customWidget,
+            SizedBox(
+              width: 20,
+            )
+          ],
         ],
       ),
     );
@@ -210,7 +290,35 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Widget nutritionWidget() {
+  Widget getDurationWidget({Widget? customWidget}) {
+    return Container(
+      margin: EdgeInsets.only(
+        top: 10,
+        bottom: 10,
+      ),
+      child: Row(
+        children: [
+          AppText(text: "Duration", fontWeight: FontWeight.w600, fontSize: 16),
+          Spacer(),
+          if (customWidget != null) ...[
+            customWidget,
+            SizedBox(
+              width: 20,
+            )
+          ],
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  _isVisibleDuration = !_isVisibleDuration;
+                });
+              },
+              icon: Icon(Icons.arrow_back_ios)),
+        ],
+      ),
+    );
+  }
+
+  Widget expiredDateWidget() {
     return Container(
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
@@ -226,7 +334,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Widget ratingWidget() {
+  Widget durationWidget() {
     return Container(
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
