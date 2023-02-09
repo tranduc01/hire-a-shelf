@@ -65,7 +65,7 @@ class GroceryItemCardWidget extends StatelessWidget {
                   width: 8,
                 ),
                 AppText(
-                  text: "Exp: " + item.description,
+                  text: "Exp: " + item.expiredDate,
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF7C7C7C),
