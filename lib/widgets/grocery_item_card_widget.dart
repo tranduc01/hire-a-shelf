@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/grocery_item.dart';
+import 'package:intl/intl.dart';
 
 class GroceryItemCardWidget extends StatelessWidget {
   GroceryItemCardWidget({Key? key, required this.item, this.heroSuffix})
@@ -65,7 +66,8 @@ class GroceryItemCardWidget extends StatelessWidget {
                   width: 8,
                 ),
                 AppText(
-                  text: "Exp: " + item.expiredDate,
+                  text: "Exp: " +
+                      DateFormat("dd/MM/yyyy").format(item.expiredDate),
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF7C7C7C),

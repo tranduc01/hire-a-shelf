@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/grocery_item.dart';
+import 'package:intl/intl.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final GroceryItem groceryItem;
@@ -34,7 +35,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return Scaffold(
       body: SafeArea(
         child: SizedBox(
-          height: 10000,
+          height: 820,
           child: Column(
             children: [
               getImageHeaderWidget(),
@@ -84,6 +85,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       Divider(thickness: 1),
                       getDurationWidget(customWidget: durationWidget()),
                       getDuration(),
+                      SizedBox(
+                        height: 10,
+                      ),
                       AppButton(
                         label: "Join Campaign",
                       ),
@@ -145,10 +149,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             children: [
               Visibility(
                   visible: _isVisible,
-                  child: Image.asset(
-                    item.imagePath,
-                    height: 100,
-                    width: 100,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Image.asset(
+                      item.imagePath,
+                      height: 80,
+                      width: 80,
+                    ),
                   )),
               Spacer(),
               Visibility(visible: _isVisible, child: AppText(text: item.name)),
@@ -180,7 +187,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: AppText(
-                      text: "01/01/2023",
+                      text: DateFormat("dd/MM/yyyy")
+                          .format(widget.groceryItem.fromDate),
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
                       color: Color(0xff7C7C7C),
@@ -208,7 +216,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: AppText(
-                      text: "31/03/2023",
+                      text: DateFormat("dd/MM/yyyy")
+                          .format(widget.groceryItem.toDate),
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
                       color: Color(0xff7C7C7C),
@@ -333,7 +342,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         borderRadius: BorderRadius.circular(5),
       ),
       child: AppText(
-        text: widget.groceryItem.expiredDate,
+        text: DateFormat("dd/MM/yyyy").format(widget.groceryItem.expiredDate),
         fontWeight: FontWeight.w600,
         fontSize: 12,
         color: Color(0xff7C7C7C),
@@ -349,7 +358,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         borderRadius: BorderRadius.circular(5),
       ),
       child: AppText(
-        text: "90 days",
+        text: durationDay().toString() + " days",
         fontWeight: FontWeight.w600,
         fontSize: 12,
         color: Color(0xff7C7C7C),
@@ -360,4 +369,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   // double getTotalPrice() {
   //   return amount * widget.groceryItem.price;
   // }
+  int durationDay() {
+    Duration duration =
+        widget.groceryItem.toDate.difference(widget.groceryItem.fromDate);
+    return duration.inDays;
+  }
 }
