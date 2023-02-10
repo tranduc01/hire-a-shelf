@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/grocery_item.dart';
-import 'package:grocery_app/models/grocery_item.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final GroceryItem groceryItem;
@@ -159,60 +158,68 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   Widget getDuration() {
-    return Column(
-      children: [
-        Visibility(
-            visible: _isVisibleDuration,
-            child: AppText(
-                text: "From", fontWeight: FontWeight.w600, fontSize: 16)),
-        SizedBox(
-          height: 5,
-        ),
-        Visibility(
-            visible: _isVisibleDuration,
-            child: Container(
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: Color(0xffEBEBEB),
-                borderRadius: BorderRadius.circular(5),
+    return Padding(
+        padding: EdgeInsets.only(left: 20),
+        child: Column(
+          children: [
+            Row(children: [
+              Visibility(
+                  visible: _isVisibleDuration,
+                  child: AppText(
+                      text: "From", fontWeight: FontWeight.w600, fontSize: 16)),
+              SizedBox(
+                height: 5,
+                width: 210,
               ),
-              child: AppText(
-                text: "01/01/2023",
-                fontWeight: FontWeight.w600,
-                fontSize: 12,
-                color: Color(0xff7C7C7C),
+              Visibility(
+                  visible: _isVisibleDuration,
+                  child: Container(
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Color(0xffEBEBEB),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: AppText(
+                      text: "01/01/2023",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      color: Color(0xff7C7C7C),
+                    ),
+                  ))
+            ]),
+            SizedBox(
+              height: 5,
+            ),
+            Row(children: [
+              Visibility(
+                  visible: _isVisibleDuration,
+                  child: AppText(
+                      text: "To", fontWeight: FontWeight.w600, fontSize: 16)),
+              SizedBox(
+                height: 5,
+                width: 230,
               ),
-            )),
-        SizedBox(
-          height: 5,
-        ),
-        Visibility(
-            visible: _isVisibleDuration,
-            child:
-                AppText(text: "To", fontWeight: FontWeight.w600, fontSize: 16)),
-        SizedBox(
-          height: 5,
-        ),
-        Visibility(
-            visible: _isVisibleDuration,
-            child: Container(
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: Color(0xffEBEBEB),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: AppText(
-                text: "31/03/2023",
-                fontWeight: FontWeight.w600,
-                fontSize: 12,
-                color: Color(0xff7C7C7C),
-              ),
-            )),
-        SizedBox(
-          height: 10,
-        )
-      ],
-    );
+              Visibility(
+                  visible: _isVisibleDuration,
+                  child: Container(
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Color(0xffEBEBEB),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: AppText(
+                      text: "31/03/2023",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      color: Color(0xff7C7C7C),
+                    ),
+                  ))
+            ]),
+            SizedBox(
+              height: 10,
+            )
+          ],
+        ));
   }
 
   Widget getProductDataRowWidget(String label, {Widget? customWidget}) {
