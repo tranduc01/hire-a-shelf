@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "239081653692",
+    "project_id": "hire-a-shelf",
+    "storage_bucket": "hire-a-shelf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:239081653692:android:5b614938fab3f29e9f17b9",
+        "android_client_info": {
+          "package_name": "com.example.grocery_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "239081653692-uqta77ljtejumvuufc2tlhisujj6fl5c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCffeTVrsAYImcMF6kDKZgwx9AsBZ3HUrY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "239081653692-uqta77ljtejumvuufc2tlhisujj6fl5c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
