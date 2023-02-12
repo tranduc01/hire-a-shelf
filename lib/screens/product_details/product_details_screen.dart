@@ -35,7 +35,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return Scaffold(
       body: SafeArea(
         child: SizedBox(
-          height: 820,
           child: Column(
             children: [
               getImageHeaderWidget(),
