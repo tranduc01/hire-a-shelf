@@ -9,16 +9,20 @@ class HomeBanner extends StatelessWidget {
         height: 150,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
-          child: ImageSlideshow(children: [
-            Image.network(
-              "https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/redbull-banner.jpg",
-              fit: BoxFit.fill,
-            ),
-            Image.network(
-              "https://cdn.24.co.za/files/Cms/General/d/1069/befc4fb222fa4950a71d517e238342d0.jpg",
-              fit: BoxFit.fill,
-            )
-          ]),
+          child: ImageSlideshow(
+            children: [
+              Image.network(
+                "https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/redbull-banner.jpg",
+                fit: BoxFit.fill,
+              ),
+              Image.network(
+                "https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/thtruemilk-banner.jpg",
+                fit: BoxFit.fill,
+              )
+            ],
+            autoPlayInterval: 3000,
+            isLoop: true,
+          ),
         ));
   }
 }
