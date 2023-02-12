@@ -45,7 +45,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Column(
+                  child: ListView(
                     children: [
                       ListTile(
                         contentPadding: EdgeInsets.zero,
