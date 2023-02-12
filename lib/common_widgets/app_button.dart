@@ -35,7 +35,7 @@ class AppButton extends StatelessWidget {
           backgroundColor: Color.fromARGB(255, 23, 25, 24),
           textStyle: TextStyle(
             color: Color.fromARGB(255, 242, 240, 240),
-            fontFamily: Theme.of(context).textTheme.bodyText1?.fontFamily,
+            fontFamily: Theme.of(context).textTheme.bodyLarge?.fontFamily,
             fontWeight: fontWeight,
           ),
           padding: padding,

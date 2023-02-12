@@ -10,8 +10,8 @@ class HomeBanner extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: ImageSlideshow(children: [
-            Image.asset(
-              "assets/images/redbull-banner.jpg",
+            Image.network(
+              "https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/redbull-banner.jpg",
               fit: BoxFit.fill,
             ),
             Image.asset(

@@ -95,7 +95,7 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
           style: TextStyle(
             color: Color(0xFF7C7C7C),
             fontSize: 14,
-            fontFamily: Theme.of(context).textTheme.bodyText1?.fontFamily,
+            fontFamily: Theme.of(context).textTheme.bodyLarge?.fontFamily,
             fontWeight: FontWeight.w600,
           ),
           children: [
