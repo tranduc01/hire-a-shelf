@@ -3,7 +3,7 @@ import 'package:grocery_app/screens/account/account_screen.dart';
 import 'package:grocery_app/screens/explore_screen.dart';
 import 'package:grocery_app/screens/home/home_screen.dart';
 
-import '../favourite_screen.dart';
+import '../notifications/notification_screen.dart';
 
 class NavigatorItem {
   final String label;
@@ -19,6 +19,6 @@ List<NavigatorItem> navigatorItems = [
   NavigatorItem(
       "My Campaingn", "assets/icons/explore_icon.svg", 1, ExploreScreen()),
   NavigatorItem("Notifications", "assets/icons/notification_icon.svg", 2,
-      FavouriteScreen()),
+      NotificationScreen()),
   NavigatorItem("Account", "assets/icons/account_icon.svg", 3, AccountScreen()),
 ];

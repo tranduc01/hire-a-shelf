@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
@@ -15,6 +17,8 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  bool _isIconDetail = false;
+  bool _isIconDuration = false;
   bool _isVisible = false;
   bool _isVisibleDuration = false;
 
@@ -297,9 +301,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               onPressed: () {
                 setState(() {
                   _isVisible = !_isVisible;
+                  _isIconDetail = !_isIconDetail;
                 });
               },
-              icon: Icon(Icons.arrow_back_ios)),
+              icon: iconChange(_isIconDetail)
+          ),
         ],
       ),
     );
@@ -325,9 +331,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               onPressed: () {
                 setState(() {
                   _isVisibleDuration = !_isVisibleDuration;
+                  _isIconDuration = !_isIconDuration;
                 });
               },
-              icon: Icon(Icons.arrow_back_ios)),
+              icon: iconChange(_isIconDuration),
+          ),
         ],
       ),
     );
@@ -363,6 +371,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         color: Color(0xff7C7C7C),
       ),
     );
+  }
+
+  Icon iconChange(bool icon){
+    if(!icon){
+      return Icon(Icons.keyboard_arrow_left, size: 30);
+    } else return Icon(Icons.keyboard_arrow_down, size: 30);
   }
 
   // double getTotalPrice() {
