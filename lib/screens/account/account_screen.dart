@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/helpers/column_with_seprator.dart';
-import 'package:grocery_app/styles/colors.dart';
 
 import 'account_item.dart';
 
@@ -44,7 +43,7 @@ class AccountScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 20,
+                height: 390,
               ),
               logoutButton(),
               SizedBox(
@@ -68,7 +67,7 @@ class AccountScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(18.0),
           ),
           elevation: 0,
-          backgroundColor: Color(0xffF2F3F2),
+          backgroundColor: Color.fromARGB(255, 219, 218, 231),
           textStyle: TextStyle(
             color: Colors.white,
           ),
@@ -83,6 +82,7 @@ class AccountScreen extends StatelessWidget {
               height: 20,
               child: SvgPicture.asset(
                 "assets/icons/account_icons/logout_icon.svg",
+                color: Color.fromARGB(255, 65, 105, 255),
               ),
             ),
             Text(
@@ -91,7 +91,7 @@ class AccountScreen extends StatelessWidget {
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.primaryColor),
+                  color: Color.fromARGB(255, 65, 105, 255)),
             ),
             Container()
           ],
@@ -106,7 +106,7 @@ class AccountScreen extends StatelessWidget {
     return CircleAvatar(
       radius: 5.0,
       backgroundImage: AssetImage(imagePath),
-      backgroundColor: AppColors.primaryColor.withOpacity(0.7),
+      backgroundColor: Color.fromARGB(255, 65, 105, 255).withOpacity(0.7),
     );
   }
 
