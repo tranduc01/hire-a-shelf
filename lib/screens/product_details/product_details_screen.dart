@@ -45,7 +45,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: ListView(
+                  child: Column(
                     children: [
                       ListTile(
                         contentPadding: EdgeInsets.zero,
@@ -304,8 +304,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   _isIconDetail = !_isIconDetail;
                 });
               },
-              icon: iconChange(_isIconDetail)
-          ),
+              icon: iconChange(_isIconDetail)),
         ],
       ),
     );
@@ -328,13 +327,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             )
           ],
           IconButton(
-              onPressed: () {
-                setState(() {
-                  _isVisibleDuration = !_isVisibleDuration;
-                  _isIconDuration = !_isIconDuration;
-                });
-              },
-              icon: iconChange(_isIconDuration),
+            onPressed: () {
+              setState(() {
+                _isVisibleDuration = !_isVisibleDuration;
+                _isIconDuration = !_isIconDuration;
+              });
+            },
+            icon: iconChange(_isIconDuration),
           ),
         ],
       ),
@@ -373,10 +372,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Icon iconChange(bool icon){
-    if(!icon){
+  Icon iconChange(bool icon) {
+    if (!icon) {
       return Icon(Icons.keyboard_arrow_left, size: 30);
-    } else return Icon(Icons.keyboard_arrow_down, size: 30);
+    } else
+      return Icon(Icons.keyboard_arrow_down, size: 30);
   }
 
   // double getTotalPrice() {
