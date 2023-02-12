@@ -14,8 +14,8 @@ class HomeBanner extends StatelessWidget {
               "https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/redbull-banner.jpg",
               fit: BoxFit.fill,
             ),
-            Image.asset(
-              "assets/images/thtruemilk-banner.jpg",
+            Image.network(
+              "https://cdn.24.co.za/files/Cms/General/d/1069/befc4fb222fa4950a71d517e238342d0.jpg",
               fit: BoxFit.fill,
             )
           ]),

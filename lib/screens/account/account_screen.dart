@@ -82,7 +82,7 @@ class AccountScreen extends StatelessWidget {
               height: 20,
               child: SvgPicture.asset(
                 "assets/icons/account_icons/logout_icon.svg",
-                color: Color.fromARGB(255, 65, 105, 255),
+                color: Color.fromARGB(255, 226, 21, 21),
               ),
             ),
             Text(
@@ -91,7 +91,7 @@ class AccountScreen extends StatelessWidget {
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 65, 105, 255)),
+                  color: Color.fromARGB(255, 226, 21, 21)),
             ),
             Container()
           ],
