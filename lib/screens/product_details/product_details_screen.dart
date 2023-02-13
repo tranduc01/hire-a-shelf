@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
-import 'package:grocery_app/models/grocery_item.dart';
+import 'package:grocery_app/models/campaign.dart';
 import 'package:intl/intl.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  final GroceryItem groceryItem;
+  final Campaign campaign;
   final String? heroSuffix;
 
-  const ProductDetailsScreen(this.groceryItem, {this.heroSuffix});
+  const ProductDetailsScreen(this.campaign, {this.heroSuffix});
 
   @override
   _ProductDetailsScreenState createState() => _ProductDetailsScreenState();
@@ -48,14 +48,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ListTile(
                         contentPadding: EdgeInsets.zero,
                         title: Text(
-                          widget.groceryItem.name,
+                          widget.campaign.title,
                           style: TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                         subtitle: Padding(
                             padding: EdgeInsets.only(top: 5),
                             child: AppText(
-                              text: widget.groceryItem.description,
+                              text: widget.campaign.content,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                               color: Color(0xff7C7C7C),
@@ -67,7 +67,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       Row(
                         children: [
                           Text(
-                            "\$${widget.groceryItem.price}",
+                            "Contact",
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -80,7 +80,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                       Divider(thickness: 1),
                       getProductDetailsWidget(),
-                      getProducts(coca),
+                      //getProducts(coca),
                       Divider(thickness: 1),
                       getExpiredDate(customWidget: expiredDateWidget()),
                       Divider(thickness: 1),
@@ -130,22 +130,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       ),
       child: Hero(
         tag: "GroceryItem:" +
-            widget.groceryItem.name +
+            widget.campaign.title +
             "-" +
             (widget.heroSuffix ?? ""),
         child: Image(
-          image: AssetImage(widget.groceryItem.imagePath),
+          image: NetworkImage(widget.campaign.imgURL),
         ),
       ),
     );
   }
 
-  Widget getProducts(List<GroceryItem> items) {
+  Widget getProducts(List<Campaign> campaigns) {
     return ListView.builder(
         shrinkWrap: true,
-        itemCount: items.length,
+        itemCount: campaigns.length,
         itemBuilder: (context, index) {
-          var item = items[index];
+          var item = campaigns[index];
           return Row(
             children: [
               Visibility(
@@ -153,13 +153,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   child: Padding(
                     padding: EdgeInsets.only(top: 10),
                     child: Image.asset(
-                      item.imagePath,
+                      item.imgURL,
                       height: 80,
                       width: 80,
                     ),
                   )),
               Spacer(),
-              Visibility(visible: _isVisible, child: AppText(text: item.name)),
+              Visibility(visible: _isVisible, child: AppText(text: item.title)),
             ],
           );
         });
@@ -189,7 +189,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                     child: AppText(
                       text: DateFormat("dd/MM/yyyy")
-                          .format(widget.groceryItem.fromDate),
+                          .format(widget.campaign.startDate),
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
                       color: Color(0xff7C7C7C),
@@ -218,7 +218,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                     child: AppText(
                       text: DateFormat("dd/MM/yyyy")
-                          .format(widget.groceryItem.toDate),
+                          .format(widget.campaign.expirationDate),
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
                       color: Color(0xff7C7C7C),
@@ -346,7 +346,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         borderRadius: BorderRadius.circular(5),
       ),
       child: AppText(
-        text: DateFormat("dd/MM/yyyy").format(widget.groceryItem.expiredDate),
+        text: DateFormat("dd/MM/yyyy").format(widget.campaign.expirationDate),
         fontWeight: FontWeight.w600,
         fontSize: 12,
         color: Color(0xff7C7C7C),
@@ -362,7 +362,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         borderRadius: BorderRadius.circular(5),
       ),
       child: AppText(
-        text: durationDay().toString() + " days",
+        text: widget.campaign.duration.toString() + " days",
         fontWeight: FontWeight.w600,
         fontSize: 12,
         color: Color(0xff7C7C7C),
@@ -380,9 +380,4 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   // double getTotalPrice() {
   //   return amount * widget.groceryItem.price;
   // }
-  int durationDay() {
-    Duration duration =
-        widget.groceryItem.toDate.difference(widget.groceryItem.fromDate);
-    return duration.inDays;
-  }
 }

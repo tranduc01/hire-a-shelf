@@ -69,9 +69,7 @@ class ExploreScreen extends StatelessWidget {
           int index = e.key;
           CategoryItem categoryItem = e.value;
           return GestureDetector(
-            onTap: () {
-              onCategoryItemClicked(context, categoryItem);
-            },
+            onTap: () {},
             child: Container(
               padding: EdgeInsets.all(10),
               child: CategoryItemCardWidget(
@@ -85,13 +83,5 @@ class ExploreScreen extends StatelessWidget {
         crossAxisSpacing: 4.0, // add some space
       ),
     );
-  }
-
-  void onCategoryItemClicked(BuildContext context, CategoryItem categoryItem) {
-    Navigator.of(context).push(new MaterialPageRoute(
-      builder: (BuildContext context) {
-        return CategoryItemsScreen();
-      },
-    ));
   }
 }

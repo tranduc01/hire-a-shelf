@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
-import 'package:grocery_app/models/grocery_item.dart';
+import 'package:grocery_app/models/campaign.dart';
 import 'package:intl/intl.dart';
 
 class GroceryItemCardWidget extends StatelessWidget {
-  GroceryItemCardWidget({Key? key, required this.item, this.heroSuffix})
+  GroceryItemCardWidget({Key? key, required this.campaign, this.heroSuffix})
       : super(key: key);
-  final GroceryItem item;
+  final Campaign campaign;
   final String? heroSuffix;
 
   final double width = 174;
@@ -39,7 +39,10 @@ class GroceryItemCardWidget extends StatelessWidget {
             Expanded(
               child: Center(
                 child: Hero(
-                  tag: "GroceryItem:" + item.name + "-" + (heroSuffix ?? ""),
+                  tag: "GroceryItem:" +
+                      campaign.title +
+                      "-" +
+                      (heroSuffix ?? ""),
                   child: imageWidget(),
                 ),
               ),
@@ -48,7 +51,7 @@ class GroceryItemCardWidget extends StatelessWidget {
               height: 20,
             ),
             AppText(
-              text: item.name,
+              text: campaign.title,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
@@ -67,7 +70,7 @@ class GroceryItemCardWidget extends StatelessWidget {
                 ),
                 AppText(
                   text: "Exp: " +
-                      DateFormat("dd/MM/yyyy").format(item.expiredDate),
+                      DateFormat("dd/MM/yyyy").format(campaign.expirationDate),
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF7C7C7C),
@@ -80,10 +83,10 @@ class GroceryItemCardWidget extends StatelessWidget {
             Row(
               children: [
                 SizedBox(
-                  width: 4,
+                  width: 1.7,
                 ),
                 SvgPicture.asset(
-                  "assets/icons/location_icon.svg",
+                  "assets/icons/duration_icon.svg",
                   height: 23,
                   width: 23,
                 ),
@@ -93,7 +96,7 @@ class GroceryItemCardWidget extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(top: 4),
                   child: AppText(
-                    text: item.location,
+                    text: campaign.duration.toString() + " days",
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: Color(0xFF7C7C7C),
@@ -104,15 +107,24 @@ class GroceryItemCardWidget extends StatelessWidget {
             SizedBox(
               height: 15,
             ),
-            Row(
-              children: [
-                AppText(
-                  text: "\$${item.price.toStringAsFixed(2)}",
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-                Spacer(),
-              ],
+            Center(
+              child: Row(
+                children: [
+                  SvgPicture.asset(
+                    "assets/icons/money_icon.svg",
+                    width: 26,
+                    height: 26,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  AppText(
+                    text: "Contact",
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ],
+              ),
             )
           ],
         ),
@@ -122,8 +134,8 @@ class GroceryItemCardWidget extends StatelessWidget {
 
   Widget imageWidget() {
     return Container(
-      child: Image.asset(
-        item.imagePath,
+      child: Image.network(
+        campaign.imgURL,
         fit: BoxFit.fill,
       ),
     );

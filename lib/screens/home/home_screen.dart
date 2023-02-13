@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/models/grocery_item.dart';
+import 'package:grocery_app/app.dart';
+import 'package:grocery_app/models/campaign.dart';
 import 'package:grocery_app/screens/product_details/product_details_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/widgets/grocery_item_card_widget.dart';
@@ -7,7 +8,12 @@ import 'package:grocery_app/widgets/search_bar_widget.dart';
 
 import 'home_banner_widget.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,13 +42,13 @@ class HomeScreen extends StatelessWidget {
                   SizedBox(
                     height: 25,
                   ),
-                  padded(subTitle("Exclusive Offer")),
-                  getHorizontalItemSlider(exclusiveOffers),
+                  padded(subTitle("Ending Soon")),
+                  getHorizontalItemSliderOrdered(),
                   SizedBox(
                     height: 15,
                   ),
                   padded(subTitle("Now Available")),
-                  getHorizontalItemSlider(bestSelling),
+                  getHorizontalItemSlider(),
                   SizedBox(
                     height: 15,
                   ),
@@ -62,40 +68,90 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget getHorizontalItemSlider(List<GroceryItem> items) {
+  Widget getHorizontalItemSlider() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       height: 250,
-      child: ListView.separated(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        itemCount: items.length,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              onItemClicked(context, items[index]);
-            },
-            child: GroceryItemCardWidget(
-              item: items[index],
-              heroSuffix: "home_screen",
-            ),
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) {
-          return SizedBox(
-            width: 20,
-          );
+      child: FutureBuilder<List<Campaign>>(
+        future: fetchCampaigns(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<Campaign> campaigns = snapshot.data as List<Campaign>;
+            return ListView.separated(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              itemCount: campaigns.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    onItemClicked(context, campaigns[index]);
+                  },
+                  child: GroceryItemCardWidget(
+                    campaign: campaigns[index],
+                    heroSuffix: "home_screen",
+                  ),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(
+                  width: 20,
+                );
+              },
+            );
+          } else {
+            print(snapshot.error.toString());
+            return Text('error');
+          }
         },
       ),
     );
   }
 
-  void onItemClicked(BuildContext context, GroceryItem groceryItem) {
+  Widget getHorizontalItemSliderOrdered() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      height: 250,
+      child: FutureBuilder<List<Campaign>>(
+        future: fetchCampaignsOrderByExp(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<Campaign> campaigns = snapshot.data as List<Campaign>;
+            return ListView.separated(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              itemCount: campaigns.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    onItemClicked(context, campaigns[index]);
+                  },
+                  child: GroceryItemCardWidget(
+                    campaign: campaigns[index],
+                    heroSuffix: "home_screen",
+                  ),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(
+                  width: 20,
+                );
+              },
+            );
+          } else {
+            print(snapshot.error.toString());
+            return Text('error');
+          }
+        },
+      ),
+    );
+  }
+
+  void onItemClicked(BuildContext context, Campaign campaign) {
     Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => ProductDetailsScreen(
-                groceryItem,
+                campaign,
                 heroSuffix: "home_screen",
               )),
     );

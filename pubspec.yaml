@@ -20,6 +20,7 @@ dependencies:
   firebase_core: ^2.5.0
   firebase_messaging: ^14.2.2
   rxdart: ^0.27.7
+  http: ^0.13.5
 dev_dependencies:
   flutter_test:
     sdk: flutter
