@@ -107,25 +107,26 @@ class GroceryItemCardWidget extends StatelessWidget {
             SizedBox(
               height: 15,
             ),
-            Center(
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    "assets/icons/money_icon.svg",
-                    width: 26,
-                    height: 26,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  AppText(
-                    text: "Contact",
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ],
-              ),
-            )
+            Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                ),
+                SvgPicture.asset(
+                  "assets/icons/money_icon.svg",
+                  width: 26,
+                  height: 26,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                AppText(
+                  text: "Contact",
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ],
+            ),
           ],
         ),
       ),

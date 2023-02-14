@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/app.dart';
 import 'package:grocery_app/models/campaign.dart';
 import 'package:grocery_app/screens/product_details/product_details_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -100,7 +99,12 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           } else {
             print(snapshot.error.toString());
-            return Text('error');
+            return Row(children: [
+              SizedBox(
+                width: 200,
+              ),
+              CircularProgressIndicator(),
+            ]);
           }
         },
       ),
@@ -139,7 +143,12 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           } else {
             print(snapshot.error.toString());
-            return Text('error');
+            return Row(children: [
+              SizedBox(
+                width: 200,
+              ),
+              CircularProgressIndicator(),
+            ]);
           }
         },
       ),
