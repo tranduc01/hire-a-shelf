@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:grocery_app/screens/home/home_screen.dart';
 import 'package:grocery_app/screens/splash_screen.dart';
 import 'package:grocery_app/styles/theme.dart';
 
@@ -15,6 +14,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String? mytoken = "";
+  String? name = "";
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   @override
@@ -53,14 +53,32 @@ class _MyAppState extends State<MyApp> {
         mytoken = token;
         print("My token: $mytoken");
       });
-      //saveToken(token!);
+      saveToken(token!);
     });
   }
 
   void saveToken(String token) async {
-    await FirebaseFirestore.instance.collection("test").doc("duc").set({
-      'token': token,
-    });
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+
+    var platform = Theme.of(context).platform;
+
+    if (platform != TargetPlatform.iOS) {
+      await FirebaseFirestore.instance
+          .collection("test")
+          .doc(androidInfo.data['product'].toString())
+          .set({
+        'token': token,
+      });
+    } else {
+      await FirebaseFirestore.instance
+          .collection("test")
+          .doc(iosInfo.data['name'].toString())
+          .set({
+        'token': token,
+      });
+    }
   }
 
   initInfor() {
