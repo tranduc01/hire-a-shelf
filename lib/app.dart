@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -62,19 +64,18 @@ class _MyAppState extends State<MyApp> {
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
 
-    var platform = Theme.of(context).platform;
-
-    if (platform != TargetPlatform.iOS) {
+    print(androidInfo.id);
+    if (Platform.isIOS) {
       await FirebaseFirestore.instance
           .collection("test")
-          .doc(androidInfo.data['product'].toString())
+          .doc(iosInfo.data['name'].toString())
           .set({
         'token': token,
       });
     } else {
       await FirebaseFirestore.instance
           .collection("test")
-          .doc(iosInfo.data['name'].toString())
+          .doc(androidInfo.id.toString())
           .set({
         'token': token,
       });
