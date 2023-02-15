@@ -66,10 +66,7 @@ class _MyAppState extends State<MyApp> {
 
     print(androidInfo.id);
     if (Platform.isIOS) {
-      await FirebaseFirestore.instance
-          .collection("test")
-          .doc(iosInfo.identifierForVendor)
-          .set({
+      await FirebaseFirestore.instance.collection("test").doc("123").set({
         'token': token,
       });
     } else {
