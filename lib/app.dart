@@ -53,12 +53,12 @@ class _MyAppState extends State<MyApp> {
         mytoken = token;
         print("My token: $mytoken");
       });
-      saveToken(token!);
+      //saveToken(token!);
     });
   }
 
   void saveToken(String token) async {
-    await FirebaseFirestore.instance.collection("test").doc("tuan").set({
+    await FirebaseFirestore.instance.collection("test").doc("duc").set({
       'token': token,
     });
   }
@@ -79,6 +79,7 @@ class _MyAppState extends State<MyApp> {
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print('hello');
       print("Message: ${message.notification?.title}");
       BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
         message.notification!.body.toString(),
