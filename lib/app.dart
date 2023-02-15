@@ -16,7 +16,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String? mytoken = "";
-  String? name = "";
+
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   @override
@@ -68,7 +68,7 @@ class _MyAppState extends State<MyApp> {
     if (Platform.isIOS) {
       await FirebaseFirestore.instance
           .collection("test")
-          .doc(iosInfo.data['name'].toString())
+          .doc(iosInfo.identifierForVendor)
           .set({
         'token': token,
       });
