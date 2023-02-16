@@ -64,25 +64,18 @@ class _MyAppState extends State<MyApp> {
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
 
-    await FirebaseFirestore.instance
-        .collection("test")
-        .doc(iosInfo.identifierForVendor)
-        .set({
-      'token': token,
-    });
-
-    // if (Platform.isIOS) {
-    //   await FirebaseFirestore.instance.collection("test").doc("123").set({
-    //     'token': token,
-    //   });
-    // } else {
-    //   await FirebaseFirestore.instance
-    //       .collection("test")
-    //       .doc(androidInfo.id.toString())
-    //       .set({
-    //     'token': token,
-    //   });
-    // }
+    if (Platform.isIOS) {
+      await FirebaseFirestore.instance.collection("test").doc("123").set({
+        'token': token,
+      });
+    } else {
+      await FirebaseFirestore.instance
+          .collection("test")
+          .doc(androidInfo.id.toString())
+          .set({
+        'token': token,
+      });
+    }
   }
 
   initInfor() {

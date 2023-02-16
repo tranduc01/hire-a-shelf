@@ -99,12 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           } else {
             print(snapshot.error.toString());
-            return Row(children: [
-              SizedBox(
-                width: 200,
-              ),
-              CircularProgressIndicator(),
-            ]);
+            return Center(child: CircularProgressIndicator());
           }
         },
       ),
@@ -143,12 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           } else {
             print(snapshot.error.toString());
-            return Row(children: [
-              SizedBox(
-                width: 200,
-              ),
-              CircularProgressIndicator(),
-            ]);
+            return Center(child: CircularProgressIndicator());
           }
         },
       ),

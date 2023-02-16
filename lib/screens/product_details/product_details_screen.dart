@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/campaign.dart';
+import 'package:grocery_app/models/campaign_product.dart';
 import 'package:intl/intl.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -80,7 +81,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                       Divider(thickness: 1),
                       getProductDetailsWidget(),
-                      //getProducts(coca),
+                      getProducts(),
                       Divider(thickness: 1),
                       getExpiredDate(customWidget: expiredDateWidget()),
                       Divider(thickness: 1),
@@ -140,29 +141,43 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Widget getProducts(List<Campaign> campaigns) {
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: campaigns.length,
-        itemBuilder: (context, index) {
-          var item = campaigns[index];
-          return Row(
-            children: [
-              Visibility(
-                  visible: _isVisible,
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Image.asset(
-                      item.imgURL,
-                      height: 80,
-                      width: 80,
-                    ),
-                  )),
-              Spacer(),
-              Visibility(visible: _isVisible, child: AppText(text: item.title)),
-            ],
-          );
-        });
+  Widget getProducts() {
+    return FutureBuilder<List<CampaignProduct>>(
+      future: fetchProductByCampaignId(widget.campaign.id),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<CampaignProduct> campaigns =
+              snapshot.data as List<CampaignProduct>;
+          return ListView.builder(
+              shrinkWrap: true,
+              itemCount: campaigns.length,
+              itemBuilder: (context, index) {
+                var item = campaigns[index];
+                return Row(
+                  children: [
+                    Visibility(
+                        visible: _isVisible,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 10),
+                          child: Image.network(
+                            item.product.imgURL,
+                            height: 80,
+                            width: 80,
+                          ),
+                        )),
+                    Spacer(),
+                    Visibility(
+                        visible: _isVisible,
+                        child: AppText(text: item.product.name)),
+                  ],
+                );
+              });
+        } else {
+          print(snapshot.error.toString());
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
   }
 
   Widget getDuration() {
