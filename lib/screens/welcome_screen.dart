@@ -5,7 +5,13 @@ import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/screens/dashboard/dashboard_screen.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeSreen extends StatefulWidget {
+  const WelcomeSreen({Key? key}) : super(key: key);
+  @override
+  _WelcomeScreenState createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeSreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,9 +103,7 @@ class WelcomeScreen extends StatelessWidget {
 
   void onGetStartedClicked(BuildContext context) {
     Navigator.of(context).pushReplacement(new MaterialPageRoute(
-      builder: (BuildContext context) {
-        return DashboardScreen();
-      },
+      builder: (context) => DashboardScreen(),
     ));
   }
 }

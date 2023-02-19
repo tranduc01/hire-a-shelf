@@ -3,53 +3,108 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/helpers/column_with_seprator.dart';
+import 'package:grocery_app/screens/login_screen.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'account_item.dart';
 
-class AccountScreen extends StatelessWidget {
+class AccountScreen extends StatefulWidget {
+  final token;
+  const AccountScreen({this.token, Key? key}) : super(key: key);
+  @override
+  State<AccountScreen> createState() => _AccountState();
+}
+
+class _AccountState extends State<AccountScreen> {
+  bool _isVisible = false;
+  int _accountId = 0;
+  //String _jwt = "";
+  @override
+  void initState() {
+    super.initState();
+    if (widget.token != null) {
+      if (JwtDecoder.isExpired(widget.token)) {
+        _isVisible = false;
+      } else {
+        _isVisible = true;
+        _loadAccountId();
+      }
+    }
+  }
+
+  _loadAccountId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _accountId = (prefs.getInt('accountId') ?? 0);
+  }
+
+  // loadToken() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   _jwt = (prefs.getString('token') ?? "");
+  // }
+
+  logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              ListTile(
-                leading:
-                    SizedBox(width: 65, height: 65, child: getImageHeader()),
-                title: AppText(
-                  text: "User's Name",
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 20,
                 ),
-                subtitle: AppText(
-                  text: "User's Email",
-                  color: Color(0xff7C7C7C),
-                  fontWeight: FontWeight.normal,
-                  fontSize: 16,
-                ),
-              ),
-              Column(
-                children: getChildrenWithSeperator(
-                  widgets: accountItems.map((e) {
-                    return getAccountItemWidget(e);
-                  }).toList(),
-                  seperator: Divider(
-                    thickness: 1,
+                (widget.token != null)
+                    ? ((JwtDecoder.isExpired(widget.token))
+                        ? getHeaderNotLogin()
+                        : getHeaderWidget())
+                    : getHeaderNotLogin(),
+                // (JwtDecoder.isExpired(widget.token))
+                //     ? getHeaderNotLogin()
+                //     : getHeaderWidget(),
+                // ListTile(
+                //   leading:
+                //       SizedBox(width: 65, height: 65, child: getImageHeader()),
+                //   title: AppText(
+                //     text: "User's Name",
+                //     fontSize: 18,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                //   subtitle: AppText(
+                //     text: "User's Email",
+                //     color: Color(0xff7C7C7C),
+                //     fontWeight: FontWeight.normal,
+                //     fontSize: 16,
+                //   ),
+                //   onTap: () {
+                //     Navigator.push(context,
+                //         MaterialPageRoute(builder: (context) => LoginScreen()));
+                //   },
+                // ),
+                Column(
+                  children: getChildrenWithSeperator(
+                    widgets: accountItems.map((e) {
+                      return getAccountItemWidget(e);
+                    }).toList(),
+                    seperator: Divider(
+                      thickness: 1,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 390,
-              ),
-              logoutButton(),
-              SizedBox(
-                height: 20,
-              )
-            ],
+                SizedBox(
+                  height: 390,
+                ),
+                Visibility(visible: _isVisible, child: logoutButton()),
+                SizedBox(
+                  height: 20,
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -96,7 +151,14 @@ class AccountScreen extends StatelessWidget {
             Container()
           ],
         ),
-        onPressed: () {},
+        onPressed: () {
+          logout();
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AccountScreen(),
+              ));
+        },
       ),
     );
   }
@@ -134,6 +196,51 @@ class AccountScreen extends StatelessWidget {
           Icon(Icons.arrow_forward_ios)
         ],
       ),
+    );
+  }
+
+  Widget getHeaderWidget() {
+    return ListTile(
+      leading: SizedBox(width: 65, height: 65, child: getImageHeader()),
+      title: AppText(
+        text: "Tran Duc",
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+      subtitle: AppText(
+        text: "doantranduc01@gmail.com",
+        color: Color(0xff7C7C7C),
+        fontWeight: FontWeight.normal,
+        fontSize: 16,
+      ),
+      onTap: () {
+        print(_accountId);
+        // Navigator.push(
+        //     context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      },
+    );
+  }
+
+  Widget getHeaderNotLogin() {
+    return ListTile(
+      leading: SizedBox(width: 65, height: 65, child: getImageHeader()),
+      title: AppText(
+        text: "Login",
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+      subtitle: AppText(
+        text: "Hire a Shelf",
+        color: Color(0xff7C7C7C),
+        fontWeight: FontWeight.normal,
+        fontSize: 16,
+      ),
+      onTap: () {
+        // print(_accountId);
+        // print(_jwt);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => LoginScreen()));
+      },
     );
   }
 }

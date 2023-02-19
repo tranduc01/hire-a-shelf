@@ -1,9 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
-import 'navigator_item.dart';
+import '../account/account_screen.dart';
+import '../explore_screen.dart';
+import '../home/home_screen.dart';
+import '../notifications/notification_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
+  const DashboardScreen({Key? key}) : super(key: key);
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
 }
@@ -14,62 +20,46 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: navigatorItems[currentIndex].screen,
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(15),
-            topLeft: Radius.circular(15),
-          ),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black38.withOpacity(0.1),
-                spreadRadius: 0,
-                blurRadius: 37,
-                offset: Offset(0, -12)),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(15),
-            topRight: Radius.circular(15),
-          ),
-          child: BottomNavigationBar(
-            backgroundColor: Colors.white,
-            currentIndex: currentIndex,
-            onTap: (index) {
-              setState(() {
-                currentIndex = index;
-              });
-            },
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: Color.fromARGB(255, 65, 105, 255),
-            selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
-            unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
-            unselectedItemColor: Colors.black,
-            items: navigatorItems.map((e) {
-              return getNavigationBarItem(
-                  label: e.label, index: e.index, iconPath: e.iconPath);
-            }).toList(),
-          ),
-        ),
-      ),
+      body: PersistentTabView(context,
+          screens: screens(),
+          items: navBarItems(),
+          resizeToAvoidBottomInset: true,
+          navBarStyle: NavBarStyle.style1),
     );
   }
 
-  BottomNavigationBarItem getNavigationBarItem(
-      {required String label, required String iconPath, required int index}) {
-    Color iconColor = index == currentIndex
-        ? Color.fromARGB(255, 65, 105, 255)
-        : Colors.black;
-    return BottomNavigationBarItem(
-      label: label,
-      icon: SvgPicture.asset(
-        iconPath,
-        color: iconColor,
-        height: 25,
-        width: 25,
+  List<Widget> screens() {
+    return [
+      HomeScreen(),
+      ExploreScreen(),
+      NotificationScreen(),
+      AccountScreen()
+    ];
+  }
+
+  List<PersistentBottomNavBarItem> navBarItems() {
+    return [
+      PersistentBottomNavBarItem(
+        icon: Icon(CupertinoIcons.home),
+        title: "Home",
+        activeColorPrimary: Colors.black,
+        inactiveColorSecondary: CupertinoColors.systemGrey,
       ),
-    );
+      PersistentBottomNavBarItem(
+          icon: Icon(CupertinoIcons.pencil_outline),
+          title: "Campaign",
+          activeColorPrimary: Colors.black,
+          inactiveColorSecondary: CupertinoColors.systemGrey),
+      PersistentBottomNavBarItem(
+          icon: Icon(CupertinoIcons.bell),
+          title: "Notification",
+          activeColorPrimary: Colors.black,
+          inactiveColorSecondary: CupertinoColors.systemGrey),
+      PersistentBottomNavBarItem(
+          icon: Icon(CupertinoIcons.person),
+          title: "Account",
+          activeColorPrimary: Colors.black,
+          inactiveColorSecondary: CupertinoColors.systemGrey),
+    ];
   }
 }

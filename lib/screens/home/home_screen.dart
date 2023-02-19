@@ -8,6 +8,9 @@ import 'package:grocery_app/widgets/search_bar_widget.dart';
 import 'home_banner_widget.dart';
 
 class HomeScreen extends StatefulWidget {
+  final token;
+  HomeScreen({this.token, Key? key}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }

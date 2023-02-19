@@ -9,7 +9,8 @@ import 'package:grocery_app/screens/splash_screen.dart';
 import 'package:grocery_app/styles/theme.dart';
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final token;
+  const MyApp({required this.token, Key? key}) : super(key: key);
   @override
   State<MyApp> createState() => _MyAppState();
 }
