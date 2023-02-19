@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
   void saveToken(String token) async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    //IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
 
     if (Platform.isIOS) {
       await FirebaseFirestore.instance.collection("test").doc("123").set({

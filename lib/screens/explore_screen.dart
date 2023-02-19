@@ -5,8 +5,6 @@ import 'package:grocery_app/models/category_item.dart';
 import 'package:grocery_app/widgets/category_item_card_widget.dart';
 import 'package:grocery_app/widgets/search_bar_widget.dart';
 
-import 'category_items_screen.dart';
-
 List<Color> gridColors = [
   Color(0xff53B175),
   Color(0xffF8A44C),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/helpers/column_with_seprator.dart';
+import 'package:grocery_app/screens/dashboard/dashboard_screen.dart';
 import 'package:grocery_app/screens/login_screen.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -64,28 +66,6 @@ class _AccountState extends State<AccountScreen> {
                         ? getHeaderNotLogin()
                         : getHeaderWidget())
                     : getHeaderNotLogin(),
-                // (JwtDecoder.isExpired(widget.token))
-                //     ? getHeaderNotLogin()
-                //     : getHeaderWidget(),
-                // ListTile(
-                //   leading:
-                //       SizedBox(width: 65, height: 65, child: getImageHeader()),
-                //   title: AppText(
-                //     text: "User's Name",
-                //     fontSize: 18,
-                //     fontWeight: FontWeight.bold,
-                //   ),
-                //   subtitle: AppText(
-                //     text: "User's Email",
-                //     color: Color(0xff7C7C7C),
-                //     fontWeight: FontWeight.normal,
-                //     fontSize: 16,
-                //   ),
-                //   onTap: () {
-                //     Navigator.push(context,
-                //         MaterialPageRoute(builder: (context) => LoginScreen()));
-                //   },
-                // ),
                 Column(
                   children: getChildrenWithSeperator(
                     widgets: accountItems.map((e) {
@@ -152,12 +132,49 @@ class _AccountState extends State<AccountScreen> {
           ],
         ),
         onPressed: () {
-          logout();
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AccountScreen(),
-              ));
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(
+                  "Logging Out",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                content: Text("Are you sure want to log out?"),
+                shape: ContinuousRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                actionsAlignment: MainAxisAlignment.center,
+                actions: <Widget>[
+                  ElevatedButton(
+                      onPressed: () {
+                        logout();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DashboardScreen(),
+                            ));
+                      },
+                      child: Text("Log Out"),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          textStyle: TextStyle(fontWeight: FontWeight.w600))),
+                  ElevatedButton(
+                      child: Text("Cancel"),
+                      onPressed: () => Navigator.pop(context, 'Cancel'),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          textStyle: TextStyle(fontWeight: FontWeight.w600)))
+                ],
+              );
+            },
+          );
+          // logout();
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => AccountScreen(),
+          //     ));
         },
       ),
     );
