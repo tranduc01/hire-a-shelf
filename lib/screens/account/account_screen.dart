@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/helpers/column_with_seprator.dart';
 import 'package:grocery_app/screens/dashboard/dashboard_screen.dart';
@@ -9,19 +8,21 @@ import 'package:grocery_app/screens/login_screen.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../models/account.dart';
 import 'account_item.dart';
 
+// ignore: must_be_immutable
 class AccountScreen extends StatefulWidget {
   final token;
-  const AccountScreen({this.token, Key? key}) : super(key: key);
+  Account? account;
+  AccountScreen({this.token, this.account, Key? key}) : super(key: key);
   @override
   State<AccountScreen> createState() => _AccountState();
 }
 
 class _AccountState extends State<AccountScreen> {
   bool _isVisible = false;
-  int _accountId = 0;
-  //String _jwt = "";
+
   @override
   void initState() {
     super.initState();
@@ -30,20 +31,9 @@ class _AccountState extends State<AccountScreen> {
         _isVisible = false;
       } else {
         _isVisible = true;
-        _loadAccountId();
       }
     }
   }
-
-  _loadAccountId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _accountId = (prefs.getInt('accountId') ?? 0);
-  }
-
-  // loadToken() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   _jwt = (prefs.getString('token') ?? "");
-  // }
 
   logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -169,12 +159,6 @@ class _AccountState extends State<AccountScreen> {
               );
             },
           );
-          // logout();
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (context) => AccountScreen(),
-          //     ));
         },
       ),
     );
@@ -220,18 +204,24 @@ class _AccountState extends State<AccountScreen> {
     return ListTile(
       leading: SizedBox(width: 65, height: 65, child: getImageHeader()),
       title: AppText(
-        text: "Tran Duc",
+        text: (widget.account!.brand != null)
+            ? (widget.account!.brand!.name)
+            : (widget.account!.store != null)
+                ? (widget.account!.store!.name)
+                : (widget.account!.username),
         fontSize: 18,
         fontWeight: FontWeight.bold,
       ),
       subtitle: AppText(
-        text: "doantranduc01@gmail.com",
+        text: widget.account!.email,
         color: Color(0xff7C7C7C),
         fontWeight: FontWeight.normal,
         fontSize: 16,
       ),
       onTap: () {
-        print(_accountId);
+        print(widget.account?.brand?.name);
+        print(widget.account?.store?.name);
+        print(widget.account?.admin?.address);
         // Navigator.push(
         //     context, MaterialPageRoute(builder: (context) => HomeScreen()));
       },
@@ -253,8 +243,6 @@ class _AccountState extends State<AccountScreen> {
         fontSize: 16,
       ),
       onTap: () {
-        // print(_accountId);
-        // print(_jwt);
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => LoginScreen()));
       },
