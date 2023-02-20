@@ -165,10 +165,26 @@ class _AccountState extends State<AccountScreen> {
   }
 
   Widget getImageHeader() {
-    String imagePath = "assets/images/account_image.jpg";
+    String imagePath = "";
+    if (widget.token != null) {
+      if (JwtDecoder.isExpired(widget.token)) {
+        imagePath =
+            "https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/account.png";
+      } else {
+        (widget.account!.brand != null)
+            ? imagePath = (widget.account!.brand!.logo!)
+            : (widget.account!.store != null)
+                ? imagePath = (widget.account!.store!.logo!)
+                : imagePath =
+                    ("https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/admin.jpg");
+      }
+    } else {
+      imagePath =
+          "https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/account.png";
+    }
     return CircleAvatar(
       radius: 5.0,
-      backgroundImage: AssetImage(imagePath),
+      backgroundImage: NetworkImage(imagePath),
       backgroundColor: Color.fromARGB(255, 65, 105, 255).withOpacity(0.7),
     );
   }

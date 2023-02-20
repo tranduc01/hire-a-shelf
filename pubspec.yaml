@@ -29,6 +29,7 @@ dependencies:
   jwt_decoder: ^2.0.1
   shared_preferences: ^2.0.17
   persistent_bottom_nav_bar: ^5.0.2   
+  auto_reload: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

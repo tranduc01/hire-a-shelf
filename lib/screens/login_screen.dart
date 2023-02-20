@@ -49,6 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (responseJson['status'] == 200) {
       Account account = Account.fromJson(responseJson['account']);
       prefs.setString('token', responseJson['token']);
+      prefs.setInt("accountId", account.id);
       Navigator.push(
           context,
           MaterialPageRoute(

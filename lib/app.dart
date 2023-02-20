@@ -54,7 +54,6 @@ class _MyAppState extends State<MyApp> {
     await FirebaseMessaging.instance.getToken().then((token) {
       setState(() {
         mytoken = token;
-        print("My token: $mytoken");
       });
       saveToken(token!);
     });

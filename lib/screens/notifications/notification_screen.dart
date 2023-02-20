@@ -3,8 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/helpers/column_with_seprator.dart';
 import 'package:grocery_app/screens/notifications/notificationItem.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class NotificationScreen extends StatelessWidget {
+class NotificationScreen extends StatefulWidget {
+  @override
+  _NotificationState createState() => _NotificationState();
+}
+
+class _NotificationState extends State<NotificationScreen> {
+  List<NotificationItem> notifications = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadNotification();
+  }
+
+  loadNotification() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    int? id = preferences.getInt("accountId");
+    Future<List<NotificationItem>> noti = fetchNotificationByAccountId(id!);
+    setState(() async {
+      notifications = await noti;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,6 +41,13 @@ class NotificationScreen extends StatelessWidget {
               ),
               ListTile(
                 title: AppText(
+                  // child: Text(
+                  //   "Notifications",
+                  //   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  // ),
+                  // onPressed: () {
+                  //   print(notifications.length);
+                  // },
                   text: "Notifications",
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
@@ -31,7 +61,7 @@ class NotificationScreen extends StatelessWidget {
               SingleChildScrollView(
                 child: Column(
                   children: getChildrenWithSeperator(
-                    widgets: notiItem.map((e) {
+                    widgets: notifications.map((e) {
                       return getNotificationItemWidget(e);
                     }).toList(),
                     seperator: Divider(
@@ -62,7 +92,7 @@ Widget getNotificationItemWidget(NotificationItem notiItem) {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               subtitle: Text(
-                notiItem.detail,
+                notiItem.body,
                 style: TextStyle(fontSize: 15),
               ),
             ),
