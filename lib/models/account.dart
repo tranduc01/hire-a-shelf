@@ -35,7 +35,6 @@ class Account {
 Future<Account> fetchAccountById(int id) async {
   var response =
       await http.get(Uri.parse("http://10.0.2.2:9090/api/account/$id"));
-  print(response.body);
   if (response.statusCode == 200) {
     return Account.fromJson(json.decode(response.body));
   } else {

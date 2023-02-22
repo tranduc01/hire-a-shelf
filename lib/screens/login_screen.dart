@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
       headers: {'Content-Type': "application/json"},
     );
     var responseJson = jsonDecode(response.body);
-    var myToken = responseJson['token'];
+    //var myToken = responseJson['token'];
     if (responseJson['status'] == 200) {
       Account account = Account.fromJson(responseJson['account']);
       prefs.setString('token', responseJson['token']);
@@ -53,10 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => AccountScreen(
-              token: myToken,
-              account: account,
-            ),
+            builder: (context) => AccountScreen(),
           ));
       // Navigator.of(context, rootNavigator: true).push(
       //   MaterialPageRoute(
@@ -157,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 20,
                 ),
-                loginGoogleButton(context)
+                loginGoogleButton()
               ]),
             )
           ]),
@@ -250,22 +247,18 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget loginGoogleButton(BuildContext context) {
+  Widget loginGoogleButton() {
     return AppButton(
       label: "Continue with Google",
       fontWeight: FontWeight.w600,
       padding: EdgeInsets.symmetric(vertical: 25),
       onPressed: () {
-        onLoginGoogleClicked(context);
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => DashboardScreen(),
+        //     ));
       },
     );
-  }
-
-  void onLoginGoogleClicked(BuildContext context) {
-    Navigator.of(context).pushReplacement(new MaterialPageRoute(
-      builder: (BuildContext context) {
-        return DashboardScreen();
-      },
-    ));
   }
 }

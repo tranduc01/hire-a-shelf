@@ -17,12 +17,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int currentIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PersistentTabView(context,
           screens: screens(),
           items: navBarItems(),
           resizeToAvoidBottomInset: true,
+          popAllScreensOnTapOfSelectedTab: true,
+          popActionScreens: PopActionScreensType.all,
+          confineInSafeArea: true,
+          stateManagement: true,
           navBarStyle: NavBarStyle.style1),
     );
   }

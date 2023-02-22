@@ -11,33 +11,39 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/account.dart';
 import 'account_item.dart';
 
-// ignore: must_be_immutable
 class AccountScreen extends StatefulWidget {
-  final token;
-  Account? account;
-  AccountScreen({this.token, this.account, Key? key}) : super(key: key);
+  AccountScreen({Key? key}) : super(key: key);
   @override
   State<AccountScreen> createState() => _AccountState();
 }
 
 class _AccountState extends State<AccountScreen> {
-  bool _isVisible = false;
-
+  int _id = 0;
+  String _jwt = "";
   @override
   void initState() {
     super.initState();
-    if (widget.token != null) {
-      if (JwtDecoder.isExpired(widget.token)) {
-        _isVisible = false;
-      } else {
-        _isVisible = true;
-      }
-    }
+    loadID();
+    loadJwt();
   }
 
   logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
+  }
+
+  loadID() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      _id = preferences.getInt("accountId") ?? 0;
+    });
+  }
+
+  loadJwt() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      _jwt = preferences.getString("token") ?? "";
+    });
   }
 
   @override
@@ -51,10 +57,10 @@ class _AccountState extends State<AccountScreen> {
                 SizedBox(
                   height: 20,
                 ),
-                (widget.token != null)
-                    ? ((JwtDecoder.isExpired(widget.token))
+                (_jwt != "")
+                    ? ((JwtDecoder.isExpired(_jwt))
                         ? getHeaderNotLogin()
-                        : getHeaderWidget())
+                        : getHeaderWidget(_id, _jwt))
                     : getHeaderNotLogin(),
                 Column(
                   children: getChildrenWithSeperator(
@@ -69,7 +75,11 @@ class _AccountState extends State<AccountScreen> {
                 SizedBox(
                   height: 390,
                 ),
-                Visibility(visible: _isVisible, child: logoutButton()),
+                Visibility(
+                    visible: (_jwt != "")
+                        ? ((JwtDecoder.isExpired(_jwt)) ? false : true)
+                        : false,
+                    child: logoutButton()),
                 SizedBox(
                   height: 20,
                 )
@@ -164,31 +174,6 @@ class _AccountState extends State<AccountScreen> {
     );
   }
 
-  Widget getImageHeader() {
-    String imagePath = "";
-    if (widget.token != null) {
-      if (JwtDecoder.isExpired(widget.token)) {
-        imagePath =
-            "https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/account.png";
-      } else {
-        (widget.account!.brand != null)
-            ? imagePath = (widget.account!.brand!.logo!)
-            : (widget.account!.store != null)
-                ? imagePath = (widget.account!.store!.logo!)
-                : imagePath =
-                    ("https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/admin.jpg");
-      }
-    } else {
-      imagePath =
-          "https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/account.png";
-    }
-    return CircleAvatar(
-      radius: 5.0,
-      backgroundImage: NetworkImage(imagePath),
-      backgroundColor: Color.fromARGB(255, 65, 105, 255).withOpacity(0.7),
-    );
-  }
-
   Widget getAccountItemWidget(AccountItem accountItem) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 15),
@@ -216,37 +201,80 @@ class _AccountState extends State<AccountScreen> {
     );
   }
 
-  Widget getHeaderWidget() {
-    return ListTile(
-      leading: SizedBox(width: 65, height: 65, child: getImageHeader()),
-      title: AppText(
-        text: (widget.account!.brand != null)
-            ? (widget.account!.brand!.name)
-            : (widget.account!.store != null)
-                ? (widget.account!.store!.name)
-                : (widget.account!.username),
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
-      subtitle: AppText(
-        text: widget.account!.email,
-        color: Color(0xff7C7C7C),
-        fontWeight: FontWeight.normal,
-        fontSize: 16,
-      ),
-      onTap: () {
-        print(widget.account?.brand?.name);
-        print(widget.account?.store?.name);
-        print(widget.account?.admin?.address);
-        // Navigator.push(
-        //     context, MaterialPageRoute(builder: (context) => HomeScreen()));
+  Widget getHeaderWidget(int id, String token) {
+    return FutureBuilder<Account>(
+      future: fetchAccountById(id),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          var account = snapshot.data;
+          String imagePath = "";
+          if (token != "") {
+            if (JwtDecoder.isExpired(token)) {
+              imagePath =
+                  "https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/account.png";
+            } else {
+              (account!.brand != null)
+                  ? imagePath = (account.brand!.logo!)
+                  : (account.store != null)
+                      ? imagePath = (account.store!.logo!)
+                      : imagePath =
+                          ("https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/admin.jpg");
+            }
+          } else {
+            imagePath =
+                "https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/account.png";
+          }
+          return ListTile(
+            leading: SizedBox(
+                width: 100,
+                height: 100,
+                child: CircleAvatar(
+                  radius: 5.0,
+                  backgroundImage: NetworkImage(imagePath),
+                  backgroundColor:
+                      Color.fromARGB(255, 65, 105, 255).withOpacity(0.7),
+                )),
+            title: AppText(
+              text: (account!.brand != null)
+                  ? (account.brand!.name)
+                  : (account.store != null)
+                      ? (account.store!.name)
+                      : (account.username),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+            subtitle: AppText(
+              text: account.email,
+              color: Color(0xff7C7C7C),
+              fontWeight: FontWeight.normal,
+              fontSize: 16,
+            ),
+            onTap: () {
+              print(account.brand?.name);
+              print(account.store?.name);
+              print(account.admin?.address);
+              // Navigator.push(
+              //     context, MaterialPageRoute(builder: (context) => HomeScreen()));
+            },
+          );
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
       },
     );
   }
 
   Widget getHeaderNotLogin() {
     return ListTile(
-      leading: SizedBox(width: 65, height: 65, child: getImageHeader()),
+      leading: SizedBox(
+          width: 65,
+          height: 65,
+          child: CircleAvatar(
+            radius: 5.0,
+            backgroundImage: NetworkImage(
+                "https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/account.png"),
+            backgroundColor: Color.fromARGB(255, 65, 105, 255).withOpacity(0.7),
+          )),
       title: AppText(
         text: "Login",
         fontSize: 18,
