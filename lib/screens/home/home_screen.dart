@@ -16,45 +16,57 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  Future<List<Campaign>>? campaigns;
+
+  Future<void> _refreshData() async {
+    var newCampaigns = fetchCampaigns();
+    setState(() {
+      campaigns = newCampaigns;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          child: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 15,
-                  ),
-                  homeScreenIcon(),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  padded(locationWidget()),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  padded(SearchBarWidget()),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  padded(HomeBanner()),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  padded(subTitle("Ending Soon")),
-                  getHorizontalItemSliderOrdered(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  padded(subTitle("Now Available")),
-                  getHorizontalItemSlider(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                ],
+        child: RefreshIndicator(
+          onRefresh: _refreshData,
+          child: Container(
+            child: SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 15,
+                    ),
+                    homeScreenIcon(),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    padded(locationWidget()),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    padded(SearchBarWidget()),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    padded(HomeBanner()),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    padded(subTitle("Ending Soon")),
+                    getHorizontalItemSliderOrdered(campaigns),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    padded(subTitle("Now Available")),
+                    getHorizontalItemSlider(campaigns),
+                    SizedBox(
+                      height: 15,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -70,12 +82,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget getHorizontalItemSlider() {
+  Widget getHorizontalItemSlider(Future<List<Campaign>>? campaigns) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       height: 250,
       child: FutureBuilder<List<Campaign>>(
-        future: fetchCampaigns(),
+        future: campaigns,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<Campaign> campaigns = snapshot.data as List<Campaign>;
@@ -108,15 +120,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget getHorizontalItemSliderOrdered() {
+  Widget getHorizontalItemSliderOrdered(Future<List<Campaign>>? campaigns) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       height: 250,
       child: FutureBuilder<List<Campaign>>(
-        future: fetchCampaignsOrderByExp(),
+        future: campaigns,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            List<Campaign> campaigns = snapshot.data as List<Campaign>;
+            List<Campaign> campaigns = snapshot.data!;
+            campaigns
+                .sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
             return ListView.separated(
               padding: EdgeInsets.symmetric(horizontal: 20),
               itemCount: campaigns.length,

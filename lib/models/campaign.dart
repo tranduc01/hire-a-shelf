@@ -34,21 +34,6 @@ class Campaign {
   }
 }
 
-Future<List<Campaign>> fetchCampaignsOrderByExp() async {
-  var response = await http.get(Uri.parse("http://10.0.2.2:9090/api/campaign"));
-  if (response.statusCode == 200) {
-    List<Campaign> campaigns = (json.decode(response.body) as List)
-        .map((e) => Campaign.fromJson(e))
-        .toList();
-    campaigns.sort(
-      (a, b) => a.expirationDate.compareTo(b.expirationDate),
-    );
-    return campaigns;
-  } else {
-    throw Exception("Fail to fetch");
-  }
-}
-
 Future<List<Campaign>> fetchCampaigns() async {
   var response = await http.get(Uri.parse("http://10.0.2.2:9090/api/campaign"));
   if (response.statusCode == 200) {
