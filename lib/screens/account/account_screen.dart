@@ -6,8 +6,10 @@ import 'package:grocery_app/helpers/column_with_seprator.dart';
 import 'package:grocery_app/styles/colors.dart';
 
 import 'account_item.dart';
+import 'detail_screen.dart';
 
 class AccountScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -33,15 +35,24 @@ class AccountScreen extends StatelessWidget {
                   fontSize: 16,
                 ),
               ),
-              Column(
-                children: getChildrenWithSeperator(
-                  widgets: accountItems.map((e) {
-                    return getAccountItemWidget(e);
-                  }).toList(),
-                  seperator: Divider(
-                    thickness: 1,
-                  ),
-                ),
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: accountItems.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: SizedBox(width: 20, height: 20, child: SvgPicture.asset(accountItems[index].iconPath)),
+                    title: Text(accountItems[index].label, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    trailing: Icon(Icons.arrow_forward_ios),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailScreen(accountItem: accountItems[index]),
+                          ),
+                      );
+                    }
+                  );
+                }
               ),
               SizedBox(
                 height: 20,
@@ -110,30 +121,30 @@ class AccountScreen extends StatelessWidget {
     );
   }
 
-  Widget getAccountItemWidget(AccountItem accountItem) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 15),
-      padding: EdgeInsets.symmetric(horizontal: 25),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 20,
-            height: 20,
-            child: SvgPicture.asset(
-              accountItem.iconPath,
-            ),
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          Text(
-            accountItem.label,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          Spacer(),
-          Icon(Icons.arrow_forward_ios)
-        ],
-      ),
-    );
-  }
+  // Widget getAccountItemWidget(BuildContext context) {
+  //   return Container(
+  //     child: ListView.builder(
+  //                   shrinkWrap: true,
+  //                   itemCount: accountItems.length,
+  //                   itemBuilder: (context, index) {
+  //                     return ListTile(
+  //                       leading: SizedBox(width: 20, height: 20, child: SvgPicture.asset(accountItems[index].iconPath)),
+  //                       title: Text(accountItems[index].label, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+  //                       trailing: Icon(Icons.arrow_forward_ios),
+  //                       onTap: () {
+  //                         Navigator.push(
+  //                           context,
+  //                           MaterialPageRoute(
+  //                             builder: (context) => DetailScreen(accountItem: accountItems[index]),
+  //                           ),
+  //                       );
+  //                   }
+  //                 );
+  //               }
+  //     ),
+  //   );
+  // }
+  
 }
+
+
