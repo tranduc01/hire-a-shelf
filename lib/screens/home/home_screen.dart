@@ -17,6 +17,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Future<List<Campaign>>? campaigns;
+  @override
+  void initState() {
+    super.initState();
+    _refreshData();
+  }
 
   Future<void> _refreshData() async {
     var newCampaigns = fetchCampaigns();

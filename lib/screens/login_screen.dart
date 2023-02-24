@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void login(String username, String password) async {
     var response = await http.post(
-      Uri.parse("http://10.0.2.2:9090/api/auth"),
+      Uri.parse("https://hireashelf.up.railway.app/api/auth"),
       body: jsonEncode({"userName": username, "password": password}),
       headers: {'Content-Type': "application/json"},
     );
@@ -241,7 +241,7 @@ class _LoginScreenState extends State<LoginScreen> {
             fontSize: 16.0,
           );
         } else {
-          login(usernameController.text, passwordController.text);
+          login(usernameController.text.trim(), passwordController.text.trim());
         }
       },
     );

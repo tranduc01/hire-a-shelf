@@ -32,7 +32,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           popActionScreens: PopActionScreensType.all,
           confineInSafeArea: true,
           stateManagement: true,
-          navBarStyle: NavBarStyle.style1),
+          navBarStyle: NavBarStyle.style9),
     );
   }
 

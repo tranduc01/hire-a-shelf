@@ -12,11 +12,11 @@ class HomeBanner extends StatelessWidget {
           child: ImageSlideshow(
             children: [
               Image.network(
-                "https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/redbull-banner.jpg",
+                "https://firebasestorage.googleapis.com/v0/b/hire-a-shelf.appspot.com/o/resoures%2Fredbull-banner.jpg?alt=media&token=e4e1d457-b399-4882-ae8f-40ab52efd496",
                 fit: BoxFit.fill,
               ),
               Image.network(
-                "https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/thtruemilk-banner.jpg",
+                "https://firebasestorage.googleapis.com/v0/b/hire-a-shelf.appspot.com/o/resoures%2Fthtruemilk-banner.jpg?alt=media&token=ccb304fa-cc74-4b87-a1ba-6cb8d0d491ec",
                 fit: BoxFit.fill,
               )
             ],

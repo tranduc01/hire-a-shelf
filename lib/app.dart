@@ -55,6 +55,7 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         mytoken = token;
       });
+      print(token);
       saveToken(token!);
     });
   }
@@ -94,8 +95,6 @@ class _MyAppState extends State<MyApp> {
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print('hello');
-      print("Message: ${message.notification?.title}");
       BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
         message.notification!.body.toString(),
         htmlFormatBigText: true,

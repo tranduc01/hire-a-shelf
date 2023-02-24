@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
+import 'package:grocery_app/models/account.dart';
 import 'package:grocery_app/models/campaign.dart';
 import 'package:grocery_app/models/campaign_product.dart';
+import 'package:grocery_app/screens/account/account_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../login_screen.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final Campaign campaign;
@@ -21,6 +26,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   bool _isVisible = false;
   bool _isVisibleDuration = false;
 
+  String _jwt = "";
+  @override
+  void initState() {
+    super.initState();
+    loadJwt();
+  }
+
   void showToast() {
     setState(() {
       _isVisible = !_isVisible;
@@ -30,6 +42,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   void showToastDuration() {
     setState(() {
       _isVisibleDuration = !_isVisibleDuration;
+    });
+  }
+
+  loadJwt() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      _jwt = preferences.getString("token") ?? "";
     });
   }
 
@@ -44,59 +63,65 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: ListView(
-                    children: [
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(
-                          widget.campaign.title,
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Padding(
-                            padding: EdgeInsets.only(top: 5),
-                            child: AppText(
-                              text: widget.campaign.content,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xff7C7C7C),
-                            )),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Contact",
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                  child: CustomScrollView(
+                    physics: BouncingScrollPhysics(),
+                    shrinkWrap: true,
+                    slivers: [
+                      SliverList(
+                        delegate: SliverChildListDelegate(
+                          [
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              title: Text(
+                                widget.campaign.title,
+                                style: TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Padding(
+                                  padding: EdgeInsets.only(top: 5),
+                                  child: AppText(
+                                    text: widget.campaign.content,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xff7C7C7C),
+                                  )),
                             ),
-                          )
-                        ],
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Contact",
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Divider(thickness: 1),
+                            getProductDetailsWidget(),
+                            getProducts(),
+                            Divider(thickness: 1),
+                            getExpiredDate(customWidget: expiredDateWidget()),
+                            Divider(thickness: 1),
+                            getDurationWidget(customWidget: durationWidget()),
+                            getDuration(),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            joinButton(_jwt),
+                            Spacer(),
+                            SizedBox(
+                              height: 20,
+                            )
+                          ],
+                        ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Divider(thickness: 1),
-                      getProductDetailsWidget(),
-                      getProducts(),
-                      Divider(thickness: 1),
-                      getExpiredDate(customWidget: expiredDateWidget()),
-                      Divider(thickness: 1),
-                      getDurationWidget(customWidget: durationWidget()),
-                      getDuration(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      AppButton(
-                        label: "Join Campaign",
-                      ),
-                      Spacer(),
-                      SizedBox(
-                        height: 20,
-                      )
                     ],
                   ),
                 ),
@@ -392,7 +417,123 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       return Icon(Icons.keyboard_arrow_down, size: 30);
   }
 
-  // double getTotalPrice() {
-  //   return amount * widget.groceryItem.price;
-  // }
+  Widget joinButton(String jwt) {
+    return AppButton(
+      label: "Join Campaign",
+      onPressed: () async {
+        if (jwt == "") {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(
+                  "Error!",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                content: Text("To Join this Campaign you need to login first!"),
+                shape: ContinuousRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                actionsAlignment: MainAxisAlignment.center,
+                actions: <Widget>[
+                  // ElevatedButton(
+                  //     onPressed: () {
+                  //       Navigator.push(
+                  //           context,
+                  //           MaterialPageRoute(
+                  //               builder: (context) => AccountScreen()));
+                  //     },
+                  //     child: Text("Login"),
+                  //     style: ElevatedButton.styleFrom(
+                  //         backgroundColor: Colors.black,
+                  //         textStyle: TextStyle(fontWeight: FontWeight.w600))),
+                  ElevatedButton(
+                      child: Text("OK"),
+                      onPressed: () => Navigator.pop(context, 'OK'),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          textStyle: TextStyle(fontWeight: FontWeight.w600)))
+                ],
+              );
+            },
+          );
+        } else {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          var id = (prefs.getInt('accountId'));
+          Account? account = await fetchAccountById(id!);
+          if (account.store != null) {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(
+                    widget.campaign.title,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  content: Text("Are you sure want to join this campaign?"),
+                  shape: ContinuousRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  actionsAlignment: MainAxisAlignment.center,
+                  actions: <Widget>[
+                    ElevatedButton(
+                        onPressed: () {
+                          print("Pressed");
+                        },
+                        child: Text("Join"),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            textStyle: TextStyle(fontWeight: FontWeight.w600))),
+                    ElevatedButton(
+                        child: Text("Cancel"),
+                        onPressed: () => Navigator.pop(context, 'Cancel'),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            textStyle: TextStyle(fontWeight: FontWeight.w600)))
+                  ],
+                );
+              },
+            );
+          } else {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(
+                    "Error!",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  content:
+                      Text("You don't have permission to perfom this action!"),
+                  shape: ContinuousRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  actionsAlignment: MainAxisAlignment.center,
+                  actions: <Widget>[
+                    // ElevatedButton(
+                    //     onPressed: () {
+                    //       Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //               builder: (context) => AccountScreen()));
+                    //     },
+                    //     child: Text("Login"),
+                    //     style: ElevatedButton.styleFrom(
+                    //         backgroundColor: Colors.black,
+                    //         textStyle: TextStyle(fontWeight: FontWeight.w600))),
+                    ElevatedButton(
+                        child: Text("OK"),
+                        onPressed: () => Navigator.pop(context, 'OK'),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            textStyle: TextStyle(fontWeight: FontWeight.w600)))
+                  ],
+                );
+              },
+            );
+          }
+        }
+      },
+    );
+  }
 }

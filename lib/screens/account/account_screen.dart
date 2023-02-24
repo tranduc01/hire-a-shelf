@@ -211,18 +211,18 @@ class _AccountState extends State<AccountScreen> {
           if (token != "") {
             if (JwtDecoder.isExpired(token)) {
               imagePath =
-                  "https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/account.png";
+                  "https://firebasestorage.googleapis.com/v0/b/hire-a-shelf.appspot.com/o/resoures%2Faccount.png?alt=media&token=a960c284-3728-4120-99cf-bd3b838328d4";
             } else {
               (account!.brand != null)
                   ? imagePath = (account.brand!.logo!)
                   : (account.store != null)
                       ? imagePath = (account.store!.logo!)
                       : imagePath =
-                          ("https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/admin.jpg");
+                          ("https://firebasestorage.googleapis.com/v0/b/hire-a-shelf.appspot.com/o/resoures%2Fadmin.jpg?alt=media&token=53ed88fe-bd99-44d6-86af-04a3fe2031a2");
             }
           } else {
             imagePath =
-                "https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/account.png";
+                "https://firebasestorage.googleapis.com/v0/b/hire-a-shelf.appspot.com/o/resoures%2Faccount.png?alt=media&token=a960c284-3728-4120-99cf-bd3b838328d4";
           }
           return ListTile(
             leading: SizedBox(
@@ -272,7 +272,7 @@ class _AccountState extends State<AccountScreen> {
           child: CircleAvatar(
             radius: 5.0,
             backgroundImage: NetworkImage(
-                "https://s3.ap-southeast-1.amazonaws.com/hireashelf.com/resource/account.png"),
+                "https://firebasestorage.googleapis.com/v0/b/hire-a-shelf.appspot.com/o/resoures%2Faccount.png?alt=media&token=a960c284-3728-4120-99cf-bd3b838328d4"),
             backgroundColor: Color.fromARGB(255, 65, 105, 255).withOpacity(0.7),
           )),
       title: AppText(

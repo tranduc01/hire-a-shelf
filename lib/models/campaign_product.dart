@@ -17,8 +17,8 @@ class CampaignProduct {
 }
 
 Future<List<CampaignProduct>> fetchProductByCampaignId(int id) async {
-  var response = await http
-      .get(Uri.parse("http://10.0.2.2:9090/api/campaign_product/$id"));
+  var response = await http.get(
+      Uri.parse("https://hireashelf.up.railway.app/api/campaign_product/$id"));
   if (response.statusCode == 200) {
     return (json.decode(response.body) as List)
         .map((e) => CampaignProduct.fromJson(e))
