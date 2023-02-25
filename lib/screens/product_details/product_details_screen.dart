@@ -4,11 +4,11 @@ import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/account.dart';
 import 'package:grocery_app/models/campaign.dart';
 import 'package:grocery_app/models/campaign_product.dart';
-import 'package:grocery_app/screens/account/account_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../login_screen.dart';
+import 'join_success_dialog.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final Campaign campaign;
@@ -50,6 +50,24 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     setState(() {
       _jwt = preferences.getString("token") ?? "";
     });
+  }
+
+  createContract(int campaignId, int storeId) async {
+    var response = await http.post(
+      Uri.parse("http://10.0.2.2:9090/api/contract"),
+      body: jsonEncode({"campaignId": campaignId, "storeId": storeId}),
+      headers: {'Content-Type': "application/json"},
+    );
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return OrderFailedDialogue();
+          });
+    } else {
+      print(response.body);
+    }
   }
 
   @override
@@ -431,22 +449,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   "Error!",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                content: Text("To Join this Campaign you need to login first!"),
+                content: AppText(
+                  text: "You need to login first to perform this action",
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xff7C7C7C),
+                ),
                 shape: ContinuousRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
                 actionsAlignment: MainAxisAlignment.center,
                 actions: <Widget>[
-                  // ElevatedButton(
-                  //     onPressed: () {
-                  //       Navigator.push(
-                  //           context,
-                  //           MaterialPageRoute(
-                  //               builder: (context) => AccountScreen()));
-                  //     },
-                  //     child: Text("Login"),
-                  //     style: ElevatedButton.styleFrom(
-                  //         backgroundColor: Colors.black,
-                  //         textStyle: TextStyle(fontWeight: FontWeight.w600))),
                   ElevatedButton(
                       child: Text("OK"),
                       onPressed: () => Navigator.pop(context, 'OK'),
@@ -459,8 +471,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           );
         } else {
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          var id = (prefs.getInt('accountId'));
-          Account? account = await fetchAccountById(id!);
+          var accountId = (prefs.getInt('accountId'));
+          Account? account = await fetchAccountById(accountId!);
           if (account.store != null) {
             showDialog(
               context: context,
@@ -471,14 +483,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     widget.campaign.title,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  content: Text("Are you sure want to join this campaign?"),
+                  content: AppText(
+                    text: "Are you sure want to join this campaign?",
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xff7C7C7C),
+                  ),
                   shape: ContinuousRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   actionsAlignment: MainAxisAlignment.center,
                   actions: <Widget>[
                     ElevatedButton(
                         onPressed: () {
-                          print("Pressed");
+                          createContract(widget.campaign.id, account.store!.id);
                         },
                         child: Text("Join"),
                         style: ElevatedButton.styleFrom(
@@ -504,23 +521,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     "Error!",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  content:
-                      Text("You don't have permission to perfom this action!"),
+                  content: AppText(
+                    text: "You don't have permission to perfom this action!",
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xff7C7C7C),
+                  ),
                   shape: ContinuousRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   actionsAlignment: MainAxisAlignment.center,
                   actions: <Widget>[
-                    // ElevatedButton(
-                    //     onPressed: () {
-                    //       Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(
-                    //               builder: (context) => AccountScreen()));
-                    //     },
-                    //     child: Text("Login"),
-                    //     style: ElevatedButton.styleFrom(
-                    //         backgroundColor: Colors.black,
-                    //         textStyle: TextStyle(fontWeight: FontWeight.w600))),
                     ElevatedButton(
                         child: Text("OK"),
                         onPressed: () => Navigator.pop(context, 'OK'),

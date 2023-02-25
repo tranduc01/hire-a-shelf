@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
-import 'package:grocery_app/screens/order_accepted_screen.dart';
+import 'package:grocery_app/screens/dashboard/dashboard_screen.dart';
 
 class OrderFailedDialogue extends StatelessWidget {
   @override
@@ -20,7 +21,7 @@ class OrderFailedDialogue extends StatelessWidget {
           children: <Widget>[
             Container(
               padding: EdgeInsets.symmetric(
-                vertical: 20,
+                vertical: 7,
               ),
               child: Row(
                 children: [
@@ -37,28 +38,27 @@ class OrderFailedDialogue extends StatelessWidget {
               ),
             ),
             Spacer(
-              flex: 10,
+              flex: 5,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 45,
               ),
-              child: Image(
-                  image: AssetImage("assets/images/order_failed_image.png")),
+              child: SvgPicture.asset("assets/icons/order_accepted_icon.svg"),
             ),
             Spacer(
               flex: 5,
             ),
             AppText(
-              text: "Oops! Order Failed",
+              text: "Yay ! Join Successfully",
               fontSize: 28,
               fontWeight: FontWeight.w600,
             ),
             Spacer(
-              flex: 2,
+              flex: 4,
             ),
             AppText(
-              text: "Something went temply wrong",
+              text: "You can follow up your application at My Campaign",
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Color(0xff7C7C7C),
@@ -67,28 +67,15 @@ class OrderFailedDialogue extends StatelessWidget {
               flex: 8,
             ),
             AppButton(
-              label: "Please Try Again",
+              label: "Back To Home",
               fontWeight: FontWeight.w600,
               onPressed: () {
-                Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                Navigator.of(context).push(new MaterialPageRoute(
                   builder: (BuildContext context) {
-                    return OrderAcceptedScreen();
+                    return DashboardScreen();
                   },
                 ));
               },
-            ),
-            Spacer(
-              flex: 4,
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: AppText(
-                text: "Back To Home",
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
             ),
             Spacer(
               flex: 4,

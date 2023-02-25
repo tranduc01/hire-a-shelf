@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 
-import '../order_failed_dialog.dart';
+import '../product_details/join_success_dialog.dart';
 
 class CheckoutBottomSheet extends StatefulWidget {
   @override

@@ -108,6 +108,12 @@ Widget getNotificationItemWidget(NotificationItem notiItem) {
       children: [
         Expanded(
           child: Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: BorderSide(
+                  color: Colors.grey,
+                  style: BorderStyle.solid,
+                )),
             child: ListTile(
               title: Text(
                 notiItem.title,
