@@ -33,13 +33,10 @@ Flutter Grocery App UI
 ## Screens  
 - Splash Screen  
 - Welcome Screen  
-- Home Screen(Shop)  
-- Product Details Screen  
-- Categories Screen (Explore)  
-- Products Screen (After clicking any category)
+- Home Screen(Campaign)  
+- Campaign Details Screen  
 - Filter Screen  
-- My Cart Screen  
-- Checkout Bottom Sheet  
-- Order Failed Dialog  
-- Order Accepted Screen  
+- My Campaign Screen (Brand/Store)  
+- Login Screen  
 - Profile Screen
+- Notifications Screen

@@ -50,15 +50,15 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  void getToken() async {
-    await FirebaseMessaging.instance.getToken().then((token) {
-      setState(() {
-        mytoken = token;
-      });
-      print(token);
-      saveToken(token!);
-    });
-  }
+  // void getToken() async {
+  //   await FirebaseMessaging.instance.getToken().then((token) {
+  //     setState(() {
+  //       mytoken = token;
+  //     });
+  //     print(token);
+  //     saveToken(token!);
+  //   });
+  // }
 
   void saveToken(String token) async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();

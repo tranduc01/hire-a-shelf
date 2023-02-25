@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -21,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordController = TextEditingController();
   bool _isObscure = true;
   late SharedPreferences prefs;
-
+  String? fcmToken = "";
   @override
   void initState() {
     super.initState();
@@ -39,9 +40,23 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void login(String username, String password) async {
+    // var response = await http.post(
+    //   Uri.parse("https://hireashelf.up.railway.app/api/auth"),
+    //   body: jsonEncode({"userName": username, "password": password}),
+    //   headers: {'Content-Type': "application/json"},
+    // );
+    await FirebaseMessaging.instance.getToken().then((token) {
+      setState(() {
+        fcmToken = token;
+      });
+    });
     var response = await http.post(
-      Uri.parse("https://hireashelf.up.railway.app/api/auth"),
-      body: jsonEncode({"userName": username, "password": password}),
+      Uri.parse("http://10.0.2.2:9090/api/auth"),
+      body: jsonEncode({
+        "userName": username,
+        "password": password,
+        "firebaseToken": fcmToken
+      }),
       headers: {'Content-Type': "application/json"},
     );
     var responseJson = jsonDecode(response.body);

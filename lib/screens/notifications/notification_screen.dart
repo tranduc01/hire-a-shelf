@@ -21,31 +21,36 @@ class _NotificationState extends State<NotificationScreen> {
     super.initState();
     _refreshData();
     Timer.periodic(Duration(seconds: 4), (Timer t) => _refreshData());
-    loadID();
-    loadJwt();
+    // loadID();
+    // loadJwt();
   }
 
-  loadID() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      _id = preferences.getInt("accountId") ?? 0;
-    });
-  }
+  // loadID() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     _id = preferences.getInt("accountId") ?? 0;
+  //   });
+  // }
 
-  loadJwt() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      _jwt = preferences.getString("token") ?? "";
-    });
-  }
+  // loadJwt() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     _jwt = preferences.getString("token") ?? "";
+  //   });
+  // }
 
   void _refreshData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     _id = preferences.getInt("accountId") ?? 0;
-    var newNotifications = fetchNotificationByAccountId(_id);
-    setState(() {
-      notifications = newNotifications;
-    });
+    _jwt = preferences.getString("token") ?? "";
+    if (_jwt != "") {
+      var newNotifications = fetchNotificationByAccountId(_id);
+      setState(() {
+        _id = preferences.getInt("accountId") ?? 0;
+        _jwt = preferences.getString("token") ?? "";
+        notifications = newNotifications;
+      });
+    }
   }
 
   @override
