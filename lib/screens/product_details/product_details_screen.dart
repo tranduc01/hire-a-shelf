@@ -440,35 +440,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       label: "Join Campaign",
       onPressed: () async {
         if (jwt == "") {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) {
-              return AlertDialog(
-                title: Text(
-                  "Error!",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                content: AppText(
-                  text: "You need to login first to perform this action",
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xff7C7C7C),
-                ),
-                shape: ContinuousRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                actionsAlignment: MainAxisAlignment.center,
-                actions: <Widget>[
-                  ElevatedButton(
-                      child: Text("OK"),
-                      onPressed: () => Navigator.pop(context, 'OK'),
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          textStyle: TextStyle(fontWeight: FontWeight.w600)))
-                ],
-              );
-            },
-          );
+          onClickDialog("You need to login first to perform this action");
         } else {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           var accountId = (prefs.getInt('accountId'));
@@ -512,37 +484,41 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               },
             );
           } else {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text(
-                    "Error!",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  content: AppText(
-                    text: "You don't have permission to perfom this action!",
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xff7C7C7C),
-                  ),
-                  shape: ContinuousRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  actionsAlignment: MainAxisAlignment.center,
-                  actions: <Widget>[
-                    ElevatedButton(
-                        child: Text("OK"),
-                        onPressed: () => Navigator.pop(context, 'OK'),
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            textStyle: TextStyle(fontWeight: FontWeight.w600)))
-                  ],
-                );
-              },
-            );
+            onClickDialog("You don't have permission to perfom this action!");
           }
         }
+      },
+    );
+  }
+
+  void onClickDialog(String text) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            "Error!",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: AppText(
+            text: text,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Color(0xff7C7C7C),
+          ),
+          shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(20)),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: <Widget>[
+            ElevatedButton(
+                child: Text("OK"),
+                onPressed: () => Navigator.pop(context, 'OK'),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    textStyle: TextStyle(fontWeight: FontWeight.w600)))
+          ],
+        );
       },
     );
   }
