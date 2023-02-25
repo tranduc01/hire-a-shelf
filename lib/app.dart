@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     requestPermission();
-    getToken();
+    //getToken();
     initInfor();
   }
 
