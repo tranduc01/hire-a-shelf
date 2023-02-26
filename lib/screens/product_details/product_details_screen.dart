@@ -133,10 +133,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               height: 10,
                             ),
                             joinButton(_jwt),
-                            Spacer(),
-                            SizedBox(
-                              height: 20,
-                            )
+                            Container(height: 20),
                           ],
                         ),
                       ),

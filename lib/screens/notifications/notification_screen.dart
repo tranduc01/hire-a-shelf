@@ -59,6 +59,7 @@ class _NotificationState extends State<NotificationScreen> {
       body: SafeArea(
         child: Container(
           child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Padding(
               padding: EdgeInsets.only(left: 15, right: 15),
               child: Column(
@@ -139,6 +140,7 @@ Widget getNotifications(Future<List<NotificationItem>> nodifications) {
         List<NotificationItem> notifications = snapshot.data!;
         List<NotificationItem> reverse = notifications.reversed.toList();
         return ListView.builder(
+          physics: BouncingScrollPhysics(),
           shrinkWrap: true,
           itemCount: reverse.length,
           itemBuilder: (context, index) {

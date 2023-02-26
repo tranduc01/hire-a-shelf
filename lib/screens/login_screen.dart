@@ -193,31 +193,26 @@ class _LoginScreenState extends State<LoginScreen> {
         SizedBox(
           height: 20,
         ),
-        Row(
-          children: [
-            Text(
-              "Username",
-              style: TextStyle(color: Colors.black, fontSize: 20),
-            )
-          ],
-        ),
         SizedBox(
           height: 5,
         ),
         TextField(
           controller: usernameController,
-          decoration: InputDecoration(hintText: 'Username'),
+          decoration: InputDecoration(
+            hintText: 'Username',
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(5),
+                    topRight: Radius.circular(30),
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(5))),
+            labelText: "Username",
+            labelStyle: TextStyle(
+                fontWeight: FontWeight.w600, fontSize: 22, color: Colors.grey),
+          ),
         ),
         SizedBox(
           height: 25,
-        ),
-        Row(
-          children: [
-            Text(
-              "Password",
-              style: TextStyle(color: Colors.black, fontSize: 20),
-            )
-          ],
         ),
         SizedBox(
           height: 5,
@@ -226,14 +221,24 @@ class _LoginScreenState extends State<LoginScreen> {
           controller: passwordController,
           obscureText: _isObscure,
           decoration: InputDecoration(
-              hintText: 'Password',
-              suffixIcon: GestureDetector(
-                onTap: () {
-                  updateVisible();
-                },
-                child:
-                    Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
-              )),
+            hintText: 'Password',
+            suffixIcon: GestureDetector(
+              onTap: () {
+                updateVisible();
+              },
+              child: Icon(_isObscure ? Icons.visibility : Icons.visibility_off,
+                  color: Colors.grey),
+            ),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(5),
+                    topRight: Radius.circular(30),
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(5))),
+            labelText: "Password",
+            labelStyle: TextStyle(
+                fontWeight: FontWeight.w600, fontSize: 22, color: Colors.grey),
+          ),
         ),
       ],
     );
