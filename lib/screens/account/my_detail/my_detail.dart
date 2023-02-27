@@ -2,82 +2,208 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/helpers/column_with_seprator.dart';
-import 'package:grocery_app/screens/account/my_detail/my_detail_item.dart';
+import 'package:grocery_app/models/account.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class MyDetail extends StatelessWidget{
+class MyDetail extends StatefulWidget {
+  @override
+  State<MyDetail> createState() => _MyDetailState();
+}
+
+class _MyDetailState extends State<MyDetail> {
+  int _id = 0;
+  String _jwt = "";
+  @override
+  void initState() {
+    super.initState();
+    loadID();
+    loadJwt();
+  }
+
+  loadID() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      _id = preferences.getInt("accountId") ?? 0;
+    });
+  }
+
+  loadJwt() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      _jwt = preferences.getString("token") ?? "";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        child: Center (
-          child: Column(
-            children: [
-              SizedBox(
-                    height:35,
+    return Scaffold(
+        body: SafeArea(
+            child: Container(
+                child: Center(
+                    child: Column(
+      children: [
+        SizedBox(
+          height: 35,
+        ),
+        getMyDetailItemWidget(_id),
+        SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          height: 20,
+        )
+      ],
+    )))));
+  }
+
+  Widget homeScreenIcon(String iconPath) {
+    return Image.network(
+      iconPath,
+      height: 120,
+      width: 120,
+      fit: BoxFit.cover,
+    );
+  }
+
+  Widget getMyDetailItemWidget(int id) {
+    return FutureBuilder<Account>(
+      future: fetchAccountById(id),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          var account = snapshot.data;
+          String imagePath = "";
+          (account!.brand != null)
+              ? imagePath = (account.brand!.logo!)
+              : (account.store != null)
+                  ? imagePath = (account.store!.logo!)
+                  : imagePath =
+                      ("https://firebasestorage.googleapis.com/v0/b/hire-a-shelf.appspot.com/o/resoures%2Fadmin.jpg?alt=media&token=53ed88fe-bd99-44d6-86af-04a3fe2031a2");
+          return Container(
+              margin: EdgeInsets.symmetric(vertical: 15),
+              padding: EdgeInsets.symmetric(horizontal: 25),
+              child: Column(
+                children: [
+                  homeScreenIcon(imagePath),
+                  ListTile(
+                    title: AppText(
+                      text: "My Detail",
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-              homeScreenIcon(),
-              ListTile(
-                title: AppText(
-                  text: "My Detail",
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Column(
-                children: getChildrenWithSeperator(
-                  widgets: myDetailItems.map((e) {
-                    return getMyDetailItemWidget(e);
-                  }).toList(),
-                  seperator: Divider(
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Divider(
                     thickness: 1,
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                height: 20,
-              )
-            ],
-          )
-        )
-      )
-    );
-  }
-  Widget homeScreenIcon() {
-    String iconPath = "assets/icons/splash_screen_icon.svg";
-    return SvgPicture.asset(
-      iconPath,
-      height: 60,
-      width: 60,
-    );
-  }
-  
-  Widget getMyDetailItemWidget(MyDetailItem myDetailItem) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 15),
-      padding: EdgeInsets.symmetric(horizontal: 25),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 40,
-            height: 20,
-            child: Text(
-              myDetailItem.label,
-            ),
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          Text(
-            myDetailItem.detail,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
+                  Row(
+                    children: [
+                      SizedBox(
+                          width: 80,
+                          height: 30,
+                          child: Center(
+                            child: Text(
+                              "Username",
+                            ),
+                          )),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        account!.username,
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    thickness: 1,
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                          width: 80,
+                          height: 30,
+                          child: Center(
+                            child: Text(
+                              "Email",
+                            ),
+                          )),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        account.email,
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    thickness: 1,
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                          width: 80,
+                          height: 30,
+                          child: Center(
+                            child: Text(
+                              "Name",
+                            ),
+                          )),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        (account.brand != null)
+                            ? (account.brand!.name)
+                            : (account.admin != null)
+                                ? "admin"
+                                : (account.store!.name),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    thickness: 1,
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                          width: 80,
+                          height: 30,
+                          child: Center(
+                            child: Text(
+                              "Phone",
+                            ),
+                          )),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        (account.brand != null)
+                            ? (account.brand!.phone)
+                            : (account.admin != null)
+                                ? account.admin!.phone
+                                : (account.store!.phone),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    thickness: 1,
+                  ),
+                ],
+              ));
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
     );
   }
 }

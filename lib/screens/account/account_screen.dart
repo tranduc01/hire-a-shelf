@@ -10,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/account.dart';
 import 'account_item.dart';
-import 'detail_screen.dart';
 
 class AccountScreen extends StatefulWidget {
   AccountScreen({Key? key}) : super(key: key);
@@ -177,29 +176,38 @@ class _AccountState extends State<AccountScreen> {
 
   Widget getAccountItemWidget(AccountItem accountItem) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 15),
-      padding: EdgeInsets.symmetric(horizontal: 25),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 20,
-            height: 20,
-            child: SvgPicture.asset(
-              accountItem.iconPath,
-            ),
+        margin: EdgeInsets.symmetric(vertical: 15),
+        padding: EdgeInsets.symmetric(horizontal: 25),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => accountItem.screen,
+              ),
+            );
+          },
+          child: Row(
+            children: [
+              SizedBox(
+                width: 20,
+                height: 20,
+                child: SvgPicture.asset(
+                  accountItem.iconPath,
+                ),
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Text(
+                accountItem.label,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Spacer(),
+              Icon(Icons.arrow_forward_ios)
+            ],
           ),
-          SizedBox(
-            width: 20,
-          ),
-          Text(
-            accountItem.label,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          Spacer(),
-          Icon(Icons.arrow_forward_ios)
-        ],
-      ),
-    );
+        ));
   }
 
   Widget getHeaderWidget(int id, String token) {
