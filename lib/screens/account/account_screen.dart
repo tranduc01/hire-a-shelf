@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/account.dart';
 import 'account_item.dart';
+import 'detail_screen.dart';
 
 class AccountScreen extends StatefulWidget {
   AccountScreen({Key? key}) : super(key: key);
