@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
-import 'package:grocery_app/helpers/column_with_seprator.dart';
 import 'package:grocery_app/models/account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,7 +43,22 @@ class _MyDetailState extends State<MyDetail> {
         SizedBox(
           height: 35,
         ),
-        getMyDetailItemWidget(_id),
+        (_jwt != "")
+            ? getMyDetailItemWidget(_id)
+            : Column(
+                children: [
+                  Text(
+                    "Please login !!",
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'Your Session has been expired',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w600, color: Color(0xFF7C7C7C)),
+                    textAlign: TextAlign.center,
+                  )
+                ],
+              ),
         SizedBox(
           height: 20,
         ),
@@ -112,7 +125,7 @@ class _MyDetailState extends State<MyDetail> {
                         width: 20,
                       ),
                       Text(
-                        account!.username,
+                        account.username,
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),

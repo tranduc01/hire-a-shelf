@@ -10,7 +10,6 @@ import 'package:grocery_app/screens/account/account_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/account.dart';
-import 'dashboard/dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
