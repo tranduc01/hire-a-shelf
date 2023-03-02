@@ -78,17 +78,10 @@ class _MyAppState extends State<MyApp> {
   initInfor() {
     var androidInitialize =
         const AndroidInitializationSettings('@mipmap/ic_launcher');
-    var iosInitialize = const IOSInitializationSettings();
+    var iosInitialize = const DarwinInitializationSettings();
     var initializationSettings =
         InitializationSettings(android: androidInitialize, iOS: iosInitialize);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (String? payload) async {
-      try {
-        if (payload != null && payload.isNotEmpty) {
-        } else {}
-      } catch (e) {}
-      return;
-    });
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
@@ -108,7 +101,7 @@ class _MyAppState extends State<MyApp> {
       );
       NotificationDetails platformChannelSpecifics = NotificationDetails(
           android: androidPlatformChannelSpecifics,
-          iOS: const IOSNotificationDetails());
+          iOS: const DarwinNotificationDetails());
       await flutterLocalNotificationsPlugin.show(0, message.notification?.title,
           message.notification?.body, platformChannelSpecifics,
           payload: message.data['body']);

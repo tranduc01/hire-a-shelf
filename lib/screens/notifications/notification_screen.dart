@@ -20,9 +20,6 @@ class _NotificationState extends State<NotificationScreen> {
   void initState() {
     super.initState();
     _refreshData();
-    Timer.periodic(Duration(seconds: 4), (Timer t) => _refreshData());
-    // loadID();
-    // loadJwt();
   }
 
   // loadID() async {
@@ -74,14 +71,6 @@ class _NotificationState extends State<NotificationScreen> {
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  // ListTile(
-                  //   title: AppText(
-                  //     text: "Notifications",
-                  //     fontSize: 25,
-                  //     fontWeight: FontWeight.bold,
-                  //     textAlign: TextAlign.center,
-                  //   ),
-                  // ),
                   (_jwt == "")
                       ? Text(
                           'No Notifications',

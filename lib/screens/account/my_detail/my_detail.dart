@@ -34,42 +34,57 @@ class _MyDetailState extends State<MyDetail> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         body: SafeArea(
             child: Container(
-                child: Center(
-                    child: Column(
+                child: Column(
       children: [
         SizedBox(
-          height: 35,
+          height: 10,
         ),
-        (_jwt != "")
-            ? getMyDetailItemWidget(_id)
-            : Column(
-                children: [
-                  Text(
-                    "Please login !!",
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        Align(
+          alignment: Alignment.topLeft,
+          child: BackButton(),
+        ),
+        Flexible(
+          child: (_jwt != "")
+              ? getMyDetailItemWidget(_id)
+              : Container(
+                  height: screenHeight,
+                  width: screenWidth,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/background-error.jpg"),
+                        fit: BoxFit.cover),
                   ),
-                  Text(
-                    'Your Session has been expired',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w600, color: Color(0xFF7C7C7C)),
-                    textAlign: TextAlign.center,
-                  )
-                ],
-              ),
-        SizedBox(
-          height: 20,
-        ),
-        SizedBox(
-          height: 20,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "Please login !!",
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        'Your Session has been expired',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF7C7C7C)),
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  ),
+                ),
         )
       ],
-    )))));
+    ))));
   }
 
-  Widget homeScreenIcon(String iconPath) {
+  Widget avatarImage(String iconPath) {
     return Image.network(
       iconPath,
       height: 120,
@@ -96,7 +111,7 @@ class _MyDetailState extends State<MyDetail> {
               padding: EdgeInsets.symmetric(horizontal: 25),
               child: Column(
                 children: [
-                  homeScreenIcon(imagePath),
+                  avatarImage(imagePath),
                   ListTile(
                     title: AppText(
                       text: "My Detail",

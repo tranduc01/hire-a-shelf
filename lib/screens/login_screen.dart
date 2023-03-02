@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/screens/account/account_screen.dart';
@@ -22,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isObscure = true;
   late SharedPreferences prefs;
   String? fcmToken = "";
+
   @override
   void initState() {
     super.initState();
@@ -86,6 +89,53 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  Future<void> logInGoogle() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    final GoogleSignInAccount? googleSignInAccount =
+        await googleSignIn.signIn();
+    if (googleSignInAccount != null) {
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
+      final AuthCredential authCredential = GoogleAuthProvider.credential(
+          idToken: googleSignInAuthentication.idToken,
+          accessToken: googleSignInAuthentication.accessToken);
+      UserCredential result =
+          await FirebaseAuth.instance.signInWithCredential(authCredential);
+      var idToken = await FirebaseAuth.instance.currentUser?.getIdToken();
+      if (result.user != null) {
+        await FirebaseMessaging.instance.getToken().then((token) {
+          setState(() {
+            fcmToken = token;
+          });
+        });
+        var response = await http.post(
+            Uri.parse("http://10.0.2.2:9090/api/auth/google"),
+            body: {"idToken": idToken, "firebaseToken": fcmToken});
+        var responseJson = jsonDecode(response.body);
+        //var myToken = responseJson['token'];
+        if (responseJson['status'] == 200) {
+          Account account = Account.fromJson(responseJson['account']);
+          prefs.setString('token', responseJson['token']);
+          prefs.setInt("accountId", account.id);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AccountScreen(),
+              ));
+        } else {
+          Fluttertoast.showToast(
+            msg: "Invalid Username or Password !!!",
+            toastLength: Toast.LENGTH_LONG,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +144,11 @@ class _LoginScreenState extends State<LoginScreen> {
         child: SingleChildScrollView(
           child: Column(children: [
             SizedBox(
-              height: 50,
+              height: 10,
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: BackButton(),
             ),
             Center(
               child: homeScreenIcon(),
@@ -272,11 +326,7 @@ class _LoginScreenState extends State<LoginScreen> {
       fontWeight: FontWeight.w600,
       padding: EdgeInsets.symmetric(vertical: 25),
       onPressed: () {
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => DashboardScreen(),
-        //     ));
+        logInGoogle();
       },
     );
   }

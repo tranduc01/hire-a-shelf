@@ -13,7 +13,11 @@ class About extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(
-                  height: 35,
+                  height: 10,
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: BackButton(),
                 ),
                 homeScreenIcon(),
                 ListTile(
