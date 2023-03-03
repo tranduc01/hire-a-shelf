@@ -21,14 +21,13 @@ class _NotificationState extends State<NotificationScreen> {
   void initState() {
     super.initState();
     _refreshData();
-    //Timer.periodic(Duration(seconds: 4), (Timer t) => _refreshData());
   }
 
   Future<String?> readFromStorage(String key) async {
     return await storage.read(key: key);
   }
 
-  void _refreshData() async {
+  Future<void> _refreshData() async {
     var id = await readFromStorage("accountId");
     var jwt = await readFromStorage("token");
     if (jwt != "" && id != null) {
@@ -46,34 +45,40 @@ class _NotificationState extends State<NotificationScreen> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Padding(
-              padding: EdgeInsets.only(left: 15, right: 15),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Center(
-                    child: Text(
-                      "Notifications",
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          child: RefreshIndicator(
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Padding(
+                padding: EdgeInsets.only(left: 15, right: 15),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 20,
                     ),
-                  ),
-                  (_jwt == "")
-                      ? Text(
-                          'No Notifications',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xFF7C7C7C)),
-                          textAlign: TextAlign.center,
-                        )
-                      : getNotifications(notifications!),
-                ],
+                    Center(
+                      child: Text(
+                        "Notifications",
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    (_jwt == "")
+                        ? Container(
+                            height: 600,
+                            child: Text(
+                              'No Notifications',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF7C7C7C)),
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                        : getNotifications(notifications!),
+                  ],
+                ),
               ),
             ),
+            onRefresh: () => _refreshData(),
           ),
         ),
       ),
