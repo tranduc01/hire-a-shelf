@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/account.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MyDetail extends StatefulWidget {
   @override
@@ -11,6 +11,7 @@ class MyDetail extends StatefulWidget {
 class _MyDetailState extends State<MyDetail> {
   int _id = 0;
   String _jwt = "";
+  final storage = new FlutterSecureStorage();
   @override
   void initState() {
     super.initState();
@@ -18,18 +19,31 @@ class _MyDetailState extends State<MyDetail> {
     loadJwt();
   }
 
+  Future<String?> readFromStorage(String key) async {
+    return await storage.read(key: key);
+  }
+
   loadID() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      _id = preferences.getInt("accountId") ?? 0;
-    });
+    String? id = await readFromStorage("accountId");
+    if (id != null) {
+      int i = int.parse(id);
+      setState(() {
+        _id = i;
+      });
+    } else {
+      setState(() {
+        _id = 0;
+      });
+    }
   }
 
   loadJwt() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      _jwt = preferences.getString("token") ?? "";
-    });
+    String? token = await readFromStorage("token");
+    if (token != null) {
+      setState(() {
+        _jwt = token;
+      });
+    }
   }
 
   @override

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -10,7 +11,6 @@ import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/screens/account/account_screen.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import '../models/account.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,17 +22,12 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool _isObscure = true;
-  late SharedPreferences prefs;
+  final storage = new FlutterSecureStorage();
   String? fcmToken = "";
 
   @override
   void initState() {
     super.initState();
-    initSharedPref();
-  }
-
-  void initSharedPref() async {
-    prefs = await SharedPreferences.getInstance();
   }
 
   void updateVisible() {
@@ -65,8 +60,8 @@ class _LoginScreenState extends State<LoginScreen> {
     //var myToken = responseJson['token'];
     if (responseJson['status'] == 200) {
       Account account = Account.fromJson(responseJson['account']);
-      prefs.setString('token', responseJson['token']);
-      prefs.setInt("accountId", account.id);
+      await storage.write(key: 'token', value: responseJson['token']);
+      await storage.write(key: "accountId", value: account.id.toString());
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -115,8 +110,8 @@ class _LoginScreenState extends State<LoginScreen> {
         //var myToken = responseJson['token'];
         if (responseJson['status'] == 200) {
           Account account = Account.fromJson(responseJson['account']);
-          prefs.setString('token', responseJson['token']);
-          prefs.setInt("accountId", account.id);
+          await storage.write(key: 'token', value: responseJson['token']);
+          await storage.write(key: "accountId", value: account.id.toString());
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -321,13 +316,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget loginGoogleButton() {
-    return AppButton(
-      label: "Continue with Google",
-      fontWeight: FontWeight.w600,
-      padding: EdgeInsets.symmetric(vertical: 25),
-      onPressed: () {
+    return GestureDetector(
+      onTap: () {
         logInGoogle();
       },
+      child: SvgPicture.asset(
+        "assets/icons/google-icon.svg",
+        height: 50,
+        width: 50,
+      ),
     );
   }
 }

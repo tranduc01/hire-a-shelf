@@ -2,9 +2,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grocery_app/helpers/column_with_seprator.dart';
 import 'package:grocery_app/screens/notifications/notificationItem.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationScreen extends StatefulWidget {
   NotificationScreen({Key? key}) : super(key: key);
@@ -16,35 +16,26 @@ class _NotificationState extends State<NotificationScreen> {
   Future<List<NotificationItem>>? notifications;
   int _id = 0;
   String _jwt = "";
+  final storage = new FlutterSecureStorage();
   @override
   void initState() {
     super.initState();
     _refreshData();
+    //Timer.periodic(Duration(seconds: 4), (Timer t) => _refreshData());
   }
 
-  // loadID() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     _id = preferences.getInt("accountId") ?? 0;
-  //   });
-  // }
-
-  // loadJwt() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     _jwt = preferences.getString("token") ?? "";
-  //   });
-  // }
+  Future<String?> readFromStorage(String key) async {
+    return await storage.read(key: key);
+  }
 
   void _refreshData() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    _id = preferences.getInt("accountId") ?? 0;
-    _jwt = preferences.getString("token") ?? "";
-    if (_jwt != "") {
+    var id = await readFromStorage("accountId");
+    var jwt = await readFromStorage("token");
+    if (jwt != "" && id != null) {
       var newNotifications = fetchNotificationByAccountId(_id);
       setState(() {
-        _id = preferences.getInt("accountId") ?? 0;
-        _jwt = preferences.getString("token") ?? "";
+        _id = int.parse(id);
+        _jwt = jwt!;
         notifications = newNotifications;
       });
     }

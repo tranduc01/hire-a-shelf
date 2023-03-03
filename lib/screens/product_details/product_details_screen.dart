@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/account.dart';
@@ -7,7 +10,6 @@ import 'package:grocery_app/models/campaign_product.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'join_success_dialog.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -25,6 +27,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   bool _isIconDuration = false;
   bool _isVisible = false;
   bool _isVisibleDuration = false;
+  final storage = new FlutterSecureStorage();
 
   String _jwt = "";
   @override
@@ -45,11 +48,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     });
   }
 
+  Future<String?> readFromStorage(String key) async {
+    return await storage.read(key: key);
+  }
+
   loadJwt() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      _jwt = preferences.getString("token") ?? "";
-    });
+    String? token = await readFromStorage("token");
+    if (token != null) {
+      setState(() {
+        _jwt = token;
+      });
+    }
   }
 
   createContract(int campaignId, int storeId) async {
@@ -439,9 +448,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         if (jwt == "") {
           onClickDialog("You need to login first to perform this action");
         } else {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          var accountId = (prefs.getInt('accountId'));
-          Account? account = await fetchAccountById(accountId!);
+          var accountId = await readFromStorage("accountId");
+          int id = 0;
+          if (accountId != null) {
+            id = int.parse(accountId);
+          } else {
+            id = 0;
+          }
+          Account? account = await fetchAccountById(id);
           if (account.store != null) {
             showDialog(
               context: context,
