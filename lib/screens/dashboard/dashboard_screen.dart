@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 import '../account/account_screen.dart';
-import '../explore_screen.dart';
+import '../mycampaign_screen.dart';
 import '../home/home_screen.dart';
 import '../notifications/notification_screen.dart';
 
@@ -39,7 +39,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   List<Widget> screens() {
     return [
       HomeScreen(),
-      ExploreScreen(),
+      MyCampaignScreen(),
       NotificationScreen(),
       AccountScreen()
     ];

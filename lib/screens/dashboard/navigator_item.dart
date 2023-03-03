@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/screens/account/account_screen.dart';
-import 'package:grocery_app/screens/explore_screen.dart';
+import 'package:grocery_app/screens/mycampaign_screen.dart';
 import 'package:grocery_app/screens/home/home_screen.dart';
 
 import '../notifications/notification_screen.dart';
@@ -17,7 +17,7 @@ class NavigatorItem {
 List<NavigatorItem> navigatorItems = [
   NavigatorItem("Home", "assets/icons/shop_icon.svg", 0, HomeScreen()),
   NavigatorItem(
-      "My Campaingn", "assets/icons/explore_icon.svg", 1, ExploreScreen()),
+      "My Campaingn", "assets/icons/explore_icon.svg", 1, MyCampaignScreen()),
   NavigatorItem("Notifications", "assets/icons/notification_icon.svg", 2,
       NotificationScreen()),
   NavigatorItem("Account", "assets/icons/account_icon.svg", 3, AccountScreen()),
