@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
@@ -8,9 +6,7 @@ import 'package:grocery_app/models/account.dart';
 import 'package:grocery_app/models/campaign.dart';
 import 'package:grocery_app/models/campaign_product.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'join_success_dialog.dart';
+import 'checkout_bottom_sheet.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final Campaign campaign;
@@ -58,24 +54,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       setState(() {
         _jwt = token;
       });
-    }
-  }
-
-  createContract(int campaignId, int storeId) async {
-    var response = await http.post(
-      Uri.parse("http://10.0.2.2:9090/api/contract"),
-      body: jsonEncode({"campaignId": campaignId, "storeId": storeId}),
-      headers: {'Content-Type': "application/json"},
-    );
-    if (response.statusCode == 200) {
-      Navigator.pop(context);
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return OrderFailedDialogue();
-          });
-    } else {
-      print(response.body);
     }
   }
 
@@ -478,7 +456,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   actions: <Widget>[
                     ElevatedButton(
                         onPressed: () {
-                          createContract(widget.campaign.id, account.store!.id);
+                          //createContract(widget.campaign.id, account.store!.id);
+                          showBottomSheet(context);
                         },
                         child: Text("Join"),
                         style: ElevatedButton.styleFrom(
@@ -532,5 +511,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         );
       },
     );
+  }
+
+  void showBottomSheet(context) {
+    showModalBottomSheet(
+        useSafeArea: true,
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (BuildContext bc) {
+          return CheckoutBottomSheet(
+            campaign: widget.campaign,
+          );
+        });
   }
 }

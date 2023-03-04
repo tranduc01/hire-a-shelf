@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/screens/dashboard/dashboard_screen.dart';
 
-class OrderFailedDialogue extends StatelessWidget {
+class JoinSuccessDialouge extends StatefulWidget {
+  JoinSuccessDialouge({Key? key}) : super(key: key);
+  @override
+  _JoinSuccessDialougeSate createState() => _JoinSuccessDialougeSate();
+}
+
+class _JoinSuccessDialougeSate extends State<JoinSuccessDialouge> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -19,33 +24,11 @@ class OrderFailedDialogue extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.symmetric(
-                vertical: 7,
-              ),
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Icon(
-                      Icons.close,
-                      size: 30,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Spacer(
-              flex: 5,
-            ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 45,
-              ),
-              child: SvgPicture.asset("assets/icons/order_accepted_icon.svg"),
-            ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                ),
+                child: Image.asset("assets/images/successful.gif")),
             Spacer(
               flex: 5,
             ),

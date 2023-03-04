@@ -1,15 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
+import 'package:grocery_app/models/campaign.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-import '../product_details/join_success_dialog.dart';
+import '../../models/account.dart';
+import 'join_success_dialog.dart';
 
 class CheckoutBottomSheet extends StatefulWidget {
+  final Campaign campaign;
+  CheckoutBottomSheet({required this.campaign, Key? key}) : super(key: key);
   @override
   _CheckoutBottomSheetState createState() => _CheckoutBottomSheetState();
 }
 
 class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
+  final storage = new FlutterSecureStorage();
+  Future<String?> readFromStorage(String key) async {
+    return await storage.read(key: key);
+  }
+
+  createContract(int campaignId, int storeId) async {
+    var response = await http.post(
+      Uri.parse("http://10.0.2.2:9090/api/contract"),
+      body: jsonEncode({"campaignId": campaignId, "storeId": storeId}),
+      headers: {'Content-Type': "application/json"},
+    );
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            return JoinSuccessDialouge();
+          });
+    } else {
+      print(response.body);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -66,13 +97,21 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
               top: 25,
             ),
             child: AppButton(
-              label: "Place Order",
+              label: "Join Campain",
               // fontWeight: FontWeight.w600,
               padding: EdgeInsets.symmetric(
                 vertical: 25,
               ),
-              onPressed: () {
-                onPlaceOrderClicked();
+              onPressed: () async {
+                var accountId = await readFromStorage("accountId");
+                int id = 0;
+                if (accountId != null) {
+                  id = int.parse(accountId);
+                } else {
+                  id = 0;
+                }
+                Account? account = await fetchAccountById(id);
+                createContract(widget.campaign.id, account.store!.id);
               },
             ),
           ),
@@ -156,7 +195,7 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return OrderFailedDialogue();
+          return JoinSuccessDialouge();
         });
   }
 }
