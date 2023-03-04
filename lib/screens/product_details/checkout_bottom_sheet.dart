@@ -75,18 +75,15 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
             height: 45,
           ),
           getDivider(),
-          checkoutRow("Delivery", trailingText: "Select Method"),
+          checkoutRow("Name", trailingText: widget.campaign.title),
           getDivider(),
-          checkoutRow(
-            "Payment",
-            trailingWidget: Icon(
-              Icons.payment,
-            ),
-          ),
+          checkoutRow("Duration",
+              trailingText: widget.campaign.duration.toString() + " days"),
           getDivider(),
-          checkoutRow("Promo Code", trailingText: "Pick Discount"),
+          checkoutRow("Brand", trailingText: widget.campaign.brand.name),
           getDivider(),
-          checkoutRow("Total Cost", trailingText: "\$13.97"),
+          checkoutRow("Contact Number",
+              trailingText: widget.campaign.brand.phone),
           getDivider(),
           SizedBox(
             height: 30,
@@ -97,7 +94,7 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
               top: 25,
             ),
             child: AppButton(
-              label: "Join Campain",
+              label: "Join Campaign",
               // fontWeight: FontWeight.w600,
               padding: EdgeInsets.symmetric(
                 vertical: 25,
@@ -130,7 +127,7 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
   Widget termsAndConditionsAgreement(BuildContext context) {
     return RichText(
       text: TextSpan(
-          text: 'By placing an order you agree to our',
+          text: 'By joining this campaign you agree to our',
           style: TextStyle(
             color: Color(0xFF7C7C7C),
             fontSize: 14,
@@ -181,10 +178,6 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
           SizedBox(
             width: 20,
           ),
-          Icon(
-            Icons.arrow_forward_ios,
-            size: 20,
-          )
         ],
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:grocery_app/models/brand.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -10,17 +11,18 @@ class Campaign {
   final DateTime startDate;
   final int duration;
   final String imgURL;
+  final Brand brand;
 
-  Campaign({
-    required this.id,
-    required this.title,
-    required this.content,
-    required this.expirationDate,
-    required this.createDate,
-    required this.startDate,
-    required this.duration,
-    required this.imgURL,
-  });
+  Campaign(
+      {required this.id,
+      required this.title,
+      required this.content,
+      required this.expirationDate,
+      required this.createDate,
+      required this.startDate,
+      required this.duration,
+      required this.imgURL,
+      required this.brand});
   factory Campaign.fromJson(Map<String, dynamic> json) {
     return Campaign(
         id: json['id'],
@@ -30,7 +32,8 @@ class Campaign {
         createDate: DateTime.parse(json['createdDate']),
         startDate: DateTime.parse(json['startDate']),
         duration: json['duration'],
-        imgURL: json['imgURL']);
+        imgURL: json['imgURL'],
+        brand: Brand.fromJson(json['brand']));
   }
 }
 
