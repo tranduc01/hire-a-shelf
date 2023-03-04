@@ -14,12 +14,6 @@ class NotificationItem {
   }
 }
 
-List<NotificationItem> notiItem = [
-  NotificationItem(title: "Notification 1", body: "Detail 1"),
-  NotificationItem(title: "Notification 2", body: "Detail 2"),
-  NotificationItem(title: "Notification 3", body: "Detail 3"),
-];
-
 Future<List<NotificationItem>> fetchNotificationByAccountId(int id) async {
   var response =
       await http.get(Uri.parse("http://10.0.2.2:9090/api/notification/$id"));

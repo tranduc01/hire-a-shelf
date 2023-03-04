@@ -14,8 +14,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  int currentIndex = 0;
-
   @override
   void initState() {
     super.initState();

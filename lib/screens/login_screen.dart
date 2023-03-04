@@ -56,9 +56,9 @@ class _LoginScreenState extends State<LoginScreen> {
       }),
       headers: {'Content-Type': "application/json"},
     );
-    var responseJson = jsonDecode(response.body);
     //var myToken = responseJson['token'];
-    if (responseJson['status'] == 200) {
+    if (response.statusCode == 200) {
+      var responseJson = jsonDecode(response.body);
       Account account = Account.fromJson(responseJson['account']);
       await storage.write(key: 'token', value: responseJson['token']);
       await storage.write(key: "accountId", value: account.id.toString());
@@ -67,11 +67,6 @@ class _LoginScreenState extends State<LoginScreen> {
           MaterialPageRoute(
             builder: (context) => AccountScreen(),
           ));
-      // Navigator.of(context, rootNavigator: true).push(
-      //   MaterialPageRoute(
-      //     builder: (_) => AccountScreen(),
-      //   ),
-      // );
     } else {
       Fluttertoast.showToast(
         msg: "Invalid Username or Password !!!",
@@ -97,6 +92,8 @@ class _LoginScreenState extends State<LoginScreen> {
       UserCredential result =
           await FirebaseAuth.instance.signInWithCredential(authCredential);
       var idToken = await FirebaseAuth.instance.currentUser?.getIdToken();
+      // print(idToken!.substring(0, 1000));
+      // print(idToken.substring(1000));
       if (result.user != null) {
         await FirebaseMessaging.instance.getToken().then((token) {
           setState(() {
@@ -106,9 +103,9 @@ class _LoginScreenState extends State<LoginScreen> {
         var response = await http.post(
             Uri.parse("http://10.0.2.2:9090/api/auth/google"),
             body: {"idToken": idToken, "firebaseToken": fcmToken});
-        var responseJson = jsonDecode(response.body);
         //var myToken = responseJson['token'];
-        if (responseJson['status'] == 200) {
+        if (response.statusCode == 200) {
+          var responseJson = jsonDecode(response.body);
           Account account = Account.fromJson(responseJson['account']);
           await storage.write(key: 'token', value: responseJson['token']);
           await storage.write(key: "accountId", value: account.id.toString());

@@ -14,7 +14,6 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationState extends State<NotificationScreen> {
   Future<List<NotificationItem>>? notifications;
-  int _id = 0;
   String _jwt = "";
   final storage = new FlutterSecureStorage();
   @override
@@ -30,11 +29,10 @@ class _NotificationState extends State<NotificationScreen> {
   Future<void> _refreshData() async {
     var id = await readFromStorage("accountId");
     var jwt = await readFromStorage("token");
-    if (jwt != "" && id != null) {
-      var newNotifications = fetchNotificationByAccountId(_id);
+    if (jwt != null) {
+      var newNotifications = fetchNotificationByAccountId(int.parse(id!));
       setState(() {
-        _id = int.parse(id);
-        _jwt = jwt!;
+        _jwt = jwt;
         notifications = newNotifications;
       });
     }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:grocery_app/models/account.dart';
 import 'package:grocery_app/widgets/category_item_card_widget.dart';
 
 import '../models/campaign.dart';
@@ -22,6 +24,9 @@ List<Color> gridColors = [
 
 class _MyCampaignState extends State<MyCampaignScreen>
     with SingleTickerProviderStateMixin {
+  final storage = new FlutterSecureStorage();
+  String _jwt = "";
+  Account? account;
   // Animation controller
   late AnimationController animationController;
 
@@ -51,6 +56,7 @@ class _MyCampaignState extends State<MyCampaignScreen>
       parent: animationController,
       curve: Curves.easeInOut,
     ));
+    getAccount();
     super.initState();
   }
 
@@ -73,10 +79,78 @@ class _MyCampaignState extends State<MyCampaignScreen>
     _isExpanded = !_isExpanded;
   }
 
+  Future<String?> readFromStorage(String key) async {
+    return await storage.read(key: key);
+  }
+
+  getAccount() async {
+    var id = await readFromStorage("accountId");
+    var jwt = await readFromStorage("token");
+    if (jwt != null) {
+      var accId = int.parse(id!);
+      var acc = await fetchAccountById(accId);
+      setState(() {
+        _jwt = jwt;
+        account = acc;
+      });
+    } else {
+      setState(() {
+        _jwt = "";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: Column(
+        floatingActionButton: getFloatingButton(_jwt),
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: getStaggeredGridView(),
+              ),
+            ],
+          ),
+        ));
+  }
+
+  Widget getStaggeredGridView() {
+    return FutureBuilder<List<Campaign>>(
+      future: fetchCampaigns(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<Campaign> campaigns = snapshot.data as List<Campaign>;
+          return ListView.builder(
+            padding: EdgeInsets.symmetric(
+              vertical: 10,
+            ),
+            itemCount: campaigns.length,
+            physics: AlwaysScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {},
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: CategoryItemCardWidget(
+                    campaign: campaigns[index],
+                    color: gridColors[index % gridColors.length],
+                  ),
+                ),
+              );
+            },
+          );
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+
+  getFloatingButton(String jwt) {
+    if (jwt != "") {
+      if (account!.brand != null) {
+        return Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Transform(
@@ -119,47 +193,12 @@ class _MyCampaignState extends State<MyCampaignScreen>
               ),
             ),
           ],
-        ),
-        body: SafeArea(
-          child: Column(
-            children: [
-              Expanded(
-                child: getStaggeredGridView(),
-              ),
-            ],
-          ),
-        ));
-  }
-
-  Widget getStaggeredGridView() {
-    return FutureBuilder<List<Campaign>>(
-      future: fetchCampaigns(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          List<Campaign> campaigns = snapshot.data as List<Campaign>;
-          return ListView.builder(
-            padding: EdgeInsets.symmetric(
-              vertical: 10,
-            ),
-            itemCount: campaigns.length,
-            physics: AlwaysScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {},
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  child: CategoryItemCardWidget(
-                    campaign: campaigns[index],
-                    color: gridColors[index % gridColors.length],
-                  ),
-                ),
-              );
-            },
-          );
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },
-    );
+        );
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
   }
 }
