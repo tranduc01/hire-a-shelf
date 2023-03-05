@@ -9,4 +9,5 @@ MyDetailItem(this.label, this.detail);
 List<MyDetailItem> myDetailItems = [
   MyDetailItem("Name", "User's Name"),
   MyDetailItem("Email", "User's Email"),
+  MyDetailItem("Phone", "User's Phone"),
 ];

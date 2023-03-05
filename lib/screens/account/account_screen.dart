@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
-import 'package:grocery_app/helpers/column_with_seprator.dart';
 import 'package:grocery_app/styles/colors.dart';
 
 import 'account_item.dart';

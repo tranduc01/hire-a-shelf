@@ -51,8 +51,8 @@ class MyDetail extends StatelessWidget{
     String iconPath = "assets/icons/splash_screen_icon.svg";
     return SvgPicture.asset(
       iconPath,
-      height: 60,
-      width: 60,
+      height: 50,
+      width: 50,
     );
   }
   
