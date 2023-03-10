@@ -24,7 +24,7 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
 
   createContract(int campaignId, int storeId) async {
     var response = await http.post(
-      Uri.parse("http://10.0.2.2:9090/api/contract"),
+      Uri.parse("http://10.0.2.2:8080/api/contract"),
       body: jsonEncode({"campaignId": campaignId, "storeId": storeId}),
       headers: {'Content-Type': "application/json"},
     );

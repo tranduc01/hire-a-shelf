@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   child: GroceryItemCardWidget(
                     campaign: campaigns[index],
-                    heroSuffix: "home_screen",
+                    heroSuffix: "horizontal_slider",
                   ),
                 );
               },
@@ -147,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   child: GroceryItemCardWidget(
                     campaign: campaigns[index],
-                    heroSuffix: "home_screen",
+                    heroSuffix: "horizontal_slider_ordered",
                   ),
                 );
               },

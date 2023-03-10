@@ -50,8 +50,11 @@ flutter:
     - assets/fonts/
 
   fonts:
-    - family: Gilroy
+    - family: OpenSans
       fonts:
-        - asset: assets/fonts/gilroy/Gilroy-Regular.ttf
-        - asset: assets/fonts/gilroy/Gilroy-SemiBold.ttf
-        - asset: assets/fonts/gilroy/Gilroy-Bold.otf
+        - asset: assets/fonts/opensans/OpenSans-Bold.ttf
+        - asset: assets/fonts/opensans/OpenSans-Italic.ttf
+        - asset: assets/fonts/opensans/OpenSans-BoldItalic.ttf
+        - asset: assets/fonts/opensans/OpenSans-SemiBold.ttf
+
+  

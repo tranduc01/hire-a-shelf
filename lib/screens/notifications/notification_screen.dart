@@ -12,7 +12,8 @@ class NotificationScreen extends StatefulWidget {
   _NotificationState createState() => _NotificationState();
 }
 
-class _NotificationState extends State<NotificationScreen> {
+class _NotificationState extends State<NotificationScreen>
+    with AutomaticKeepAliveClientMixin {
   Future<List<NotificationItem>>? notifications;
   String _jwt = "";
   final storage = new FlutterSecureStorage();
@@ -21,6 +22,16 @@ class _NotificationState extends State<NotificationScreen> {
     super.initState();
     _refreshData();
   }
+
+  @override
+  void didUpdateWidget(covariant NotificationScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print("object");
+    _refreshData();
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 
   Future<String?> readFromStorage(String key) async {
     return await storage.read(key: key);
@@ -40,6 +51,7 @@ class _NotificationState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: SafeArea(
         child: Container(

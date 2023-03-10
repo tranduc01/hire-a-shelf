@@ -34,17 +34,24 @@ class CategoryItemCardWidget extends StatelessWidget {
             width: 120,
             child: imageWidget(),
           ),
-          SizedBox(
+          Expanded(
               child: Padding(
             padding: EdgeInsets.only(left: 20),
             child: Center(
                 child: Column(
               children: [
-                AppText(
-                  text: campaign.title,
-                  textAlign: TextAlign.center,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                // AppText(
+                //   text: campaign.title,
+                //   textAlign: TextAlign.center,
+                //   fontSize: 16,
+                //   fontWeight: FontWeight.bold,
+                // ),
+                Text(
+                  campaign.title,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Open Sans'),
                 ),
                 Row(
                   children: [

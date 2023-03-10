@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
@@ -39,10 +41,7 @@ class GroceryItemCardWidget extends StatelessWidget {
             Expanded(
               child: Center(
                 child: Hero(
-                  tag: "GroceryItem:" +
-                      campaign.title +
-                      "-" +
-                      (heroSuffix ?? ""),
+                  tag: "${campaign.id}_$heroSuffix",
                   child: imageWidget(),
                 ),
               ),
@@ -50,10 +49,12 @@ class GroceryItemCardWidget extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            AppText(
-              text: campaign.title,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+            Text(
+              campaign.title,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Open Sans'),
             ),
             SizedBox(
               height: 5,

@@ -80,15 +80,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               title: Text(
                                 widget.campaign.title,
                                 style: TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.bold),
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Open Sans'),
                               ),
                               subtitle: Padding(
                                   padding: EdgeInsets.only(top: 5),
-                                  child: AppText(
-                                    text: widget.campaign.content,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xff7C7C7C),
+                                  child:
+                                      // AppText(
+                                      //   text: widget.campaign.content,
+                                      //   fontSize: 16,
+                                      //   fontWeight: FontWeight.w600,
+                                      //   color: Color(0xff7C7C7C),
+                                      // )
+                                      Text(
+                                    widget.campaign.content,
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xff7C7C7C),
+                                        fontFamily: 'Open Sans'),
                                   )),
                             ),
                             SizedBox(
@@ -195,12 +206,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     Spacer(),
                     Visibility(
                         visible: _isVisible,
-                        child: AppText(text: item.product.name)),
+                        child: Text(
+                          item.product.name,
+                          style: TextStyle(fontFamily: 'Open Sans'),
+                        )),
                   ],
                 );
               });
         } else {
-          print(snapshot.error.toString());
           return Center(child: CircularProgressIndicator());
         }
       },

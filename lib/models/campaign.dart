@@ -38,11 +38,12 @@ class Campaign {
 }
 
 Future<List<Campaign>> fetchCampaigns() async {
-  var response = await http
-      //.get(Uri.parse("https://hireashelf.up.railway.app/api/campaign"));
-      .get(Uri.parse("http://10.0.2.2:9090/api/campaign"));
+  var response = await http.get(Uri.parse(
+      "https://hireashelf.up.railway.app/api/campaign?page=0&states=Approved"));
+  //.get(Uri.parse("http://10.0.2.2:9090/api/campaign"));
   if (response.statusCode == 200) {
-    return (json.decode(response.body) as List)
+    var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
+    return (responseJson['listResponse'] as List)
         .map((e) => Campaign.fromJson(e))
         .toList();
   } else {
