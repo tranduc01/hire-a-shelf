@@ -86,14 +86,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               ),
                               subtitle: Padding(
                                   padding: EdgeInsets.only(top: 5),
-                                  child:
-                                      // AppText(
-                                      //   text: widget.campaign.content,
-                                      //   fontSize: 16,
-                                      //   fontWeight: FontWeight.w600,
-                                      //   color: Color(0xff7C7C7C),
-                                      // )
-                                      Text(
+                                  child: Text(
                                     widget.campaign.content,
                                     style: TextStyle(
                                         fontSize: 16,

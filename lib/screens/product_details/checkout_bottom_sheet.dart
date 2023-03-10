@@ -49,8 +49,9 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
         vertical: 30,
       ),
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       child: new Wrap(
         children: <Widget>[
           Row(
@@ -169,12 +170,15 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
           Spacer(),
           trailingText == null
               ? (trailingWidget ?? Container())
-              : AppText(
-                  text: trailingText,
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                ),
+              : Expanded(
+                  child: Align(
+                      alignment: Alignment.centerRight,
+                      child: AppText(
+                        text: trailingText,
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ))),
           SizedBox(
             width: 20,
           ),

@@ -40,12 +40,6 @@ class CategoryItemCardWidget extends StatelessWidget {
             child: Center(
                 child: Column(
               children: [
-                // AppText(
-                //   text: campaign.title,
-                //   textAlign: TextAlign.center,
-                //   fontSize: 16,
-                //   fontWeight: FontWeight.bold,
-                // ),
                 Text(
                   campaign.title,
                   style: TextStyle(

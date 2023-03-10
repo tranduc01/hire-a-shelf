@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   child: GroceryItemCardWidget(
                     campaign: campaigns[index],
-                    heroSuffix: "horizontal_slider",
+                    heroSuffix: "home_screen_${campaigns[index].id}",
                   ),
                 );
               },
@@ -147,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   child: GroceryItemCardWidget(
                     campaign: campaigns[index],
-                    heroSuffix: "horizontal_slider_ordered",
+                    heroSuffix: "home_screen_ordered${campaigns[index].id}",
                   ),
                 );
               },
@@ -171,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
       MaterialPageRoute(
           builder: (context) => ProductDetailsScreen(
                 campaign,
-                heroSuffix: "home_screen",
+                heroSuffix: "horizontal_slider",
               )),
     );
   }
