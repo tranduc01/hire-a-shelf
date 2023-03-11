@@ -6,7 +6,6 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import '../account/account_screen.dart';
 import '../mycampaign_screen.dart';
 import '../home/home_screen.dart';
-import '../notifications/notificationItem.dart';
 import '../notifications/notification_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
