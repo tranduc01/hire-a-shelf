@@ -37,25 +37,25 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void login(String username, String password) async {
-    // var response = await http.post(
-    //   Uri.parse("https://hireashelf.up.railway.app/api/auth"),
-    //   body: jsonEncode({"userName": username, "password": password}),
-    //   headers: {'Content-Type': "application/json"},
-    // );
+    var response = await http.post(
+      Uri.parse("https://hireashelf.up.railway.app/api/auth"),
+      body: jsonEncode({"userName": username, "password": password}),
+      headers: {'Content-Type': "application/json"},
+    );
     await FirebaseMessaging.instance.getToken().then((token) {
       setState(() {
         fcmToken = token;
       });
     });
-    var response = await http.post(
-      Uri.parse("http://10.0.2.2:8080/api/auth"),
-      body: jsonEncode({
-        "userName": username,
-        "password": password,
-        "firebaseToken": fcmToken
-      }),
-      headers: {'Content-Type': "application/json"},
-    );
+    // var response = await http.post(
+    //   Uri.parse("http://10.0.2.2:8080/api/auth"),
+    //   body: jsonEncode({
+    //     "userName": username,
+    //     "password": password,
+    //     "firebaseToken": fcmToken
+    //   }),
+    //   headers: {'Content-Type': "application/json"},
+    // );
     //var myToken = responseJson['token'];
     if (response.statusCode == 200) {
       var responseJson = jsonDecode(response.body);

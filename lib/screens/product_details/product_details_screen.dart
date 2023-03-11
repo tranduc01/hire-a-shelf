@@ -6,6 +6,7 @@ import 'package:grocery_app/models/account.dart';
 import 'package:grocery_app/models/campaign.dart';
 import 'package:grocery_app/models/campaign_product.dart';
 import 'package:intl/intl.dart';
+import '../../models/contract.dart';
 import 'checkout_bottom_sheet.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -441,44 +442,60 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           }
           Account? account = await fetchAccountById(id);
           if (account.store != null) {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text(
-                    widget.campaign.title,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  content: AppText(
-                    text: "Are you sure want to join this campaign?",
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xff7C7C7C),
-                  ),
-                  shape: ContinuousRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  actionsAlignment: MainAxisAlignment.center,
-                  actions: <Widget>[
-                    ElevatedButton(
-                        onPressed: () {
-                          //createContract(widget.campaign.id, account.store!.id);
-                          showBottomSheet(context);
-                        },
-                        child: Text("Join"),
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            textStyle: TextStyle(fontWeight: FontWeight.w600))),
-                    ElevatedButton(
-                        child: Text("Cancel"),
-                        onPressed: () => Navigator.pop(context, 'Cancel'),
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            textStyle: TextStyle(fontWeight: FontWeight.w600)))
-                  ],
-                );
-              },
-            );
+            List<Contract> contracts = await fetchContracts();
+            if ((contracts
+                        .where((element) => element.store.id == id)
+                        .toList()
+                        .length ==
+                    0) &&
+                (contracts
+                        .where((element) =>
+                            element.campaign.id == widget.campaign.id)
+                        .toList()
+                        .length ==
+                    0)) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text(
+                      widget.campaign.title,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    content: AppText(
+                      text: "Are you sure want to join this campaign?",
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xff7C7C7C),
+                    ),
+                    shape: ContinuousRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    actionsAlignment: MainAxisAlignment.center,
+                    actions: <Widget>[
+                      ElevatedButton(
+                          onPressed: () {
+                            showBottomSheet(context);
+                          },
+                          child: Text("Join"),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              textStyle:
+                                  TextStyle(fontWeight: FontWeight.w600))),
+                      ElevatedButton(
+                          child: Text("Cancel"),
+                          onPressed: () => Navigator.pop(context, 'Cancel'),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              textStyle:
+                                  TextStyle(fontWeight: FontWeight.w600)))
+                    ],
+                  );
+                },
+              );
+            } else {
+              onClickDialog("You have aldready join this campaign!");
+            }
           } else {
             onClickDialog("You don't have permission to perfom this action!");
           }
