@@ -10,16 +10,16 @@ class CampaignProduct {
   CampaignProduct({required this.campaign, required this.product});
   factory CampaignProduct.fromJson(Map<String, dynamic> json) {
     return CampaignProduct(
-      campaign: Campaign.fromJson(json['campaigns']),
-      product: Product.fromJson(json['products']),
+      campaign: Campaign.fromJson(json['campaignResponse']),
+      product: Product.fromJson(json['productResponse']),
     );
   }
 }
 
 Future<List<CampaignProduct>> fetchProductByCampaignId(int id) async {
   var response = await http.get(
-      //Uri.parse("https://hireashelf.up.railway.app/api/campaign_product/$id"));
-      Uri.parse("http://10.0.2.2:8080/api/campaign_product/$id"));
+      Uri.parse("https://hireashelf.up.railway.app/api/campaign_product/$id"));
+  //Uri.parse("http://10.0.2.2:8080/api/campaign_product/$id"));
   if (response.statusCode == 200) {
     return (json.decode(utf8.decode(response.bodyBytes)) as List)
         .map((e) => CampaignProduct.fromJson(e))

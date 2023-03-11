@@ -9,8 +9,8 @@ class Contract {
   Contract({required this.campaign, required this.store});
   factory Contract.fromJson(Map<String, dynamic> json) {
     return Contract(
-        campaign: Campaign.fromJson(json['campaign']),
-        store: Store.fromJson(json['store']));
+        campaign: Campaign.fromJson(json['campaignResponse']),
+        store: Store.fromJson(json['storeResponse']));
   }
 }
 

@@ -186,6 +186,7 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
     Navigator.pop(context);
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (BuildContext context) {
           return JoinSuccessDialouge();
         });

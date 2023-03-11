@@ -2,7 +2,7 @@ class Brand {
   int id;
   String name;
   String phone;
-  String description;
+  String? description;
   String? logo;
   Brand(
       {required this.id,

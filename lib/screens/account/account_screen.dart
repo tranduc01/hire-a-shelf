@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/helpers/column_with_seprator.dart';
 import 'package:grocery_app/screens/dashboard/dashboard_screen.dart';
@@ -21,6 +22,7 @@ class _AccountState extends State<AccountScreen> {
   int _id = 0;
   String _jwt = "";
   final storage = new FlutterSecureStorage();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   @override
   void initState() {
     super.initState();
@@ -30,6 +32,7 @@ class _AccountState extends State<AccountScreen> {
 
   logout() async {
     await storage.deleteAll();
+    await _googleSignIn.signOut();
   }
 
   Future<String?> readFromStorage(String key) async {
@@ -236,9 +239,9 @@ class _AccountState extends State<AccountScreen> {
                   "https://firebasestorage.googleapis.com/v0/b/hire-a-shelf.appspot.com/o/resoures%2Faccount.png?alt=media&token=a960c284-3728-4120-99cf-bd3b838328d4";
             } else {
               (account!.brand != null)
-                  ? imagePath = (account.brand!.logo!)
+                  ? imagePath = (account.brand!.logo) ?? ""
                   : (account.store != null)
-                      ? imagePath = (account.store!.logo!)
+                      ? imagePath = (account.store!.logo) ?? ""
                       : imagePath =
                           ("https://firebasestorage.googleapis.com/v0/b/hire-a-shelf.appspot.com/o/resoures%2Fadmin.jpg?alt=media&token=53ed88fe-bd99-44d6-86af-04a3fe2031a2");
             }

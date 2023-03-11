@@ -38,7 +38,7 @@ Future<Account> fetchAccountById(int id) async {
       await http
           .get(Uri.parse("https://hireashelf.up.railway.app/api/account/$id"));
   if (response.statusCode == 200) {
-    return Account.fromJson(json.decode(response.body));
+    return Account.fromJson(json.decode(utf8.decode(response.bodyBytes)));
   } else {
     throw Exception("Fail to fetch");
   }

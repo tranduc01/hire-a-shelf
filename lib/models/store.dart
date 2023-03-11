@@ -2,7 +2,7 @@ class Store {
   int id;
   String name;
   String phone;
-  String description;
+  String? description;
   String? logo;
   DateTime participateDate;
   Store(

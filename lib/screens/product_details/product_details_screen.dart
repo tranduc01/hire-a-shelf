@@ -197,13 +197,32 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             width: 80,
                           ),
                         )),
-                    Spacer(),
+                    SizedBox(
+                      width: 20,
+                    ),
                     Visibility(
                         visible: _isVisible,
-                        child: Text(
+                        child: Container(
+                          padding: EdgeInsets.all(4.5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(7),
+                            color: Color.fromARGB(141, 255, 235, 59),
+                          ),
+                          child: Text(
+                            item.product.price.toString() + "00 vnđ",
+                            style: TextStyle(fontFamily: 'Open Sans'),
+                          ),
+                        )),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Visibility(
+                        visible: _isVisible,
+                        child: Expanded(
+                            child: Text(
                           item.product.name,
                           style: TextStyle(fontFamily: 'Open Sans'),
-                        )),
+                        )))
                   ],
                 );
               });
