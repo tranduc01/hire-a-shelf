@@ -10,9 +10,9 @@ class GroceryItemCardWidget extends StatelessWidget {
   final Campaign campaign;
   final String? heroSuffix;
 
-  final double width = 174;
-  final double height = 250;
-  final Color borderColor = Color(0xffE2E2E2);
+  final double width = 190;
+  final double height = 260;
+  final Color borderColor = Color.fromARGB(255, 187, 184, 184);
   final double borderRadius = 18;
 
   @override
@@ -30,8 +30,8 @@ class GroceryItemCardWidget extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 15,
+          horizontal: 10,
+          vertical: 10,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +48,7 @@ class GroceryItemCardWidget extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 20,
+              height: 10,
             ),
             Text(
               campaign.title,
@@ -143,21 +143,4 @@ class GroceryItemCardWidget extends StatelessWidget {
       ),
     );
   }
-
-  // Widget addWidget() {
-  //   return Container(
-  //     height: 45,
-  //     width: 45,
-  //     decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.circular(17),
-  //         color: AppColors.primaryColor),
-  //     child: Center(
-  //       child: Icon(
-  //         Icons.add,
-  //         color: Colors.white,
-  //         size: 25,
-  //       ),
-  //     ),
-  //   );
-  // }
 }

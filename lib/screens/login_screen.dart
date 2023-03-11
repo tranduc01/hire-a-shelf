@@ -112,7 +112,6 @@ class _LoginScreenState extends State<LoginScreen> {
             Uri.parse("https://hireashelf.up.railway.app/api/auth/google"),
             body: {"idToken": idToken, "firebaseToken": fcmToken});
         //var myToken = responseJson['token'];
-        print(response.statusCode);
         if (response.statusCode == 200) {
           var responseJson = jsonDecode(response.body);
           Account account = Account.fromJson(responseJson['account']);
