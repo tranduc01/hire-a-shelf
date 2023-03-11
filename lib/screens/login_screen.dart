@@ -87,6 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> logInGoogle() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
+    googleSignIn.signOut();
     final GoogleSignInAccount? googleSignInAccount =
         await googleSignIn.signIn();
     if (googleSignInAccount != null) {
