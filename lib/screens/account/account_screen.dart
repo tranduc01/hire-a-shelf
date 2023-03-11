@@ -63,6 +63,13 @@ class _AccountState extends State<AccountScreen> {
   }
 
   @override
+  void didUpdateWidget(covariant AccountScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    loadID();
+    loadJwt();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(

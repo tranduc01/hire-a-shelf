@@ -26,7 +26,6 @@ class _NotificationState extends State<NotificationScreen>
   @override
   void didUpdateWidget(covariant NotificationScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    print("object");
     _refreshData();
   }
 

@@ -101,6 +101,12 @@ class _MyCampaignState extends State<MyCampaignScreen>
   }
 
   @override
+  void didUpdateWidget(covariant MyCampaignScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    getAccount();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: getFloatingButton(_jwt),
@@ -108,7 +114,7 @@ class _MyCampaignState extends State<MyCampaignScreen>
           child: Column(
             children: [
               Expanded(
-                child: getStaggeredGridView(),
+                child: getGridViewItem(_jwt),
               ),
             ],
           ),
@@ -199,6 +205,20 @@ class _MyCampaignState extends State<MyCampaignScreen>
       }
     } else {
       return null;
+    }
+  }
+
+  getGridViewItem(String jwt) {
+    if (jwt != "") {
+      if (account!.brand != null) {
+        return getStaggeredGridView();
+      } else if (account!.store != null) {
+        return Text("This is My Campaign Screen for store!");
+      } else {
+        return Text("You are admin");
+      }
+    } else {
+      return Text("You need to login!");
     }
   }
 }
