@@ -19,10 +19,10 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     requestPermission();
-    //getToken();
     initInfor();
   }
 
+//request notification permission
   void requestPermission() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     NotificationSettings settings = await messaging.requestPermission(
@@ -74,6 +74,7 @@ class _MyAppState extends State<MyApp> {
   //   }
   // }
 
+//create infor for notification
   initInfor() {
     var androidInitialize =
         const AndroidInitializationSettings('@mipmap/ic_launcher');

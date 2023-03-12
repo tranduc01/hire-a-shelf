@@ -114,7 +114,7 @@ class _MyCampaignState extends State<MyCampaignScreen>
           child: Column(
             children: [
               Expanded(
-                child: getGridViewItem(_jwt),
+                child: getGridViewItem(_jwt, context),
               ),
             ],
           ),
@@ -208,7 +208,7 @@ class _MyCampaignState extends State<MyCampaignScreen>
     }
   }
 
-  getGridViewItem(String jwt) {
+  getGridViewItem(String jwt, BuildContext context) {
     if (jwt != "") {
       if (account!.brand != null) {
         return getStaggeredGridView();
@@ -218,7 +218,35 @@ class _MyCampaignState extends State<MyCampaignScreen>
         return Text("You are admin");
       }
     } else {
-      return Text("You need to login!");
+      return Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage("assets/images/background-error.jpg"),
+              fit: BoxFit.cover),
+        ),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              "Please login !!",
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              'Your Session has been expired',
+              style: const TextStyle(
+                  fontWeight: FontWeight.w600, color: Color(0xFF7C7C7C)),
+              textAlign: TextAlign.center,
+            )
+          ],
+        ),
+      );
     }
   }
 }
