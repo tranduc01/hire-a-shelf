@@ -12,9 +12,6 @@ class About extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
-                  height: 10,
-                ),
                 Align(
                   alignment: Alignment.topLeft,
                   child: BackButton(),
@@ -38,11 +35,11 @@ class About extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 aboutPhoto(),
                 SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 AppText(
                   text:
