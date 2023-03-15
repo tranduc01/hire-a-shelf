@@ -43,7 +43,8 @@ class _LoginScreenState extends State<LoginScreen> {
       });
     });
     var response = await http.post(
-      Uri.parse("https://hireashelf.up.railway.app/api/auth"),
+      //Uri.parse("https://hireashelf.up.railway.app/api/auth"),
+      Uri.parse("http://10.0.2.2:8080/api/auth"),
       body: jsonEncode({
         "userName": username,
         "password": password,
@@ -52,16 +53,6 @@ class _LoginScreenState extends State<LoginScreen> {
       headers: {'Content-Type': "application/json"},
     );
 
-    // var response = await http.post(
-    //   Uri.parse("http://10.0.2.2:8080/api/auth"),
-    //   body: jsonEncode({
-    //     "userName": username,
-    //     "password": password,
-    //     "firebaseToken": fcmToken
-    //   }),
-    //   headers: {'Content-Type': "application/json"},
-    // );
-    //var myToken = responseJson['token'];
     if (response.statusCode == 200) {
       var responseJson = jsonDecode(response.body);
       Account account = Account.fromJson(responseJson['account']);
@@ -108,8 +99,8 @@ class _LoginScreenState extends State<LoginScreen> {
           });
         });
         var response = await http.post(
-            //Uri.parse("http://10.0.2.2:8080/api/auth/google"),
-            Uri.parse("https://hireashelf.up.railway.app/api/auth/google"),
+            Uri.parse("http://10.0.2.2:8080/api/auth/google"),
+            //Uri.parse("https://hireashelf.up.railway.app/api/auth/google"),
             body: {"idToken": idToken, "firebaseToken": fcmToken});
         //var myToken = responseJson['token'];
         if (response.statusCode == 200) {

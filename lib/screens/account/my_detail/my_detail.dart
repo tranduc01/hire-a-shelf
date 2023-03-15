@@ -115,9 +115,11 @@ class _MyDetailState extends State<MyDetail> {
           var account = snapshot.data;
           String imagePath = "";
           (account!.brand != null)
-              ? imagePath = (account.brand!.logo!)
+              ? imagePath = (account.brand!.logo) ??
+                  "https://firebasestorage.googleapis.com/v0/b/hire-a-shelf.appspot.com/o/resoures%2Faccount.png?alt=media&token=a960c284-3728-4120-99cf-bd3b838328d4"
               : (account.store != null)
-                  ? imagePath = (account.store!.logo!)
+                  ? imagePath = (account.store!.logo) ??
+                      "https://firebasestorage.googleapis.com/v0/b/hire-a-shelf.appspot.com/o/resoures%2Faccount.png?alt=media&token=a960c284-3728-4120-99cf-bd3b838328d4"
                   : imagePath =
                       ("https://firebasestorage.googleapis.com/v0/b/hire-a-shelf.appspot.com/o/resoures%2Fadmin.jpg?alt=media&token=53ed88fe-bd99-44d6-86af-04a3fe2031a2");
           return Container(
@@ -176,11 +178,13 @@ class _MyDetailState extends State<MyDetail> {
                       SizedBox(
                         width: 20,
                       ),
-                      Text(
-                        account.email,
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
+                      Expanded(
+                        child: Text(
+                          account.email,
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      )
                     ],
                   ),
                   Divider(

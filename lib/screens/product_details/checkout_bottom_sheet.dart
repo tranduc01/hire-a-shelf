@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../../models/account.dart';
+import '../../models/contract.dart';
+import '../../widgets/loading_indicator.dart';
 import 'join_success_dialog.dart';
 
 class CheckoutBottomSheet extends StatefulWidget {
@@ -18,21 +20,30 @@ class CheckoutBottomSheet extends StatefulWidget {
 
 class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
   final storage = new FlutterSecureStorage();
+
   Future<String?> readFromStorage(String key) async {
     return await storage.read(key: key);
   }
 
-  createContract(int campaignId, int storeId) async {
+  Future<int> createContract(int campaignId, int storeId) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return LoadingDialog();
+      },
+    );
     var response = await http.post(
-// Uri.parse("http://10.0.2.2:8080/api/contract"),
-      Uri.parse("https://hireashelf.up.railway.app/api/contract"),
+      Uri.parse("http://10.0.2.2:8080/api/contract"),
+      //Uri.parse("https://hireashelf.up.railway.app/api/contract"),
       body: jsonEncode({"campaignId": campaignId, "storeId": storeId}),
       headers: {'Content-Type': "application/json"},
     );
+    Navigator.of(context).pop();
     if (response.statusCode == 200) {
-      onPlaceOrderClicked();
+      return response.statusCode;
     } else {
-      print(response.body);
+      throw Exception("Fail to fetch");
     }
   }
 
@@ -104,7 +115,13 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
                   id = 0;
                 }
                 Account? account = await fetchAccountById(id);
-                createContract(widget.campaign.id, account.store!.id);
+                var status =
+                    await createContract(widget.campaign.id, account.store!.id);
+                if (status == 200) {
+                  onPlaceOrderClicked();
+                } else {
+                  print(status);
+                }
               },
             ),
           ),
@@ -188,7 +205,7 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return JoinSuccessDialouge();
+          return LoadingDialog();
         });
   }
 }

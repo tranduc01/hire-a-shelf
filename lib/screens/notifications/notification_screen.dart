@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grocery_app/helpers/column_with_seprator.dart';
-import 'package:grocery_app/screens/notifications/notificationItem.dart';
+import 'package:grocery_app/models/notificationItem.dart';
 
 class NotificationScreen extends StatefulWidget {
   NotificationScreen({Key? key}) : super(key: key);
@@ -126,9 +126,9 @@ Widget getNotificationItemWidget(NotificationItem notiItem) {
   );
 }
 
-Widget getNotifications(Future<List<NotificationItem>> nodifications) {
+Widget getNotifications(Future<List<NotificationItem>> notifications) {
   return FutureBuilder<List<NotificationItem>>(
-    future: nodifications,
+    future: notifications,
     builder: (context, snapshot) {
       if (snapshot.hasData) {
         List<NotificationItem> notifications = snapshot.data!;

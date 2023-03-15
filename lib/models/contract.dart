@@ -16,8 +16,8 @@ class Contract {
 
 Future<List<Contract>> fetchContracts() async {
   var response = await http
-      .get(Uri.parse("https://hireashelf.up.railway.app/api/contract"));
-  //.get(Uri.parse("http://10.0.2.2:8080/api/contract"));
+      //.get(Uri.parse("https://hireashelf.up.railway.app/api/contract"));
+      .get(Uri.parse("http://10.0.2.2:8080/api/contract"));
   if (response.statusCode == 200) {
     return (json.decode(response.body) as List)
         .map((e) => Contract.fromJson(e))
