@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../../models/account.dart';
-import '../../models/contract.dart';
 import '../../widgets/loading_indicator.dart';
 import 'join_success_dialog.dart';
 
@@ -34,8 +33,8 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
       },
     );
     var response = await http.post(
-      Uri.parse("http://10.0.2.2:8080/api/contract"),
-      //Uri.parse("https://hireashelf.up.railway.app/api/contract"),
+      //Uri.parse("http://10.0.2.2:8080/api/contract"),
+      Uri.parse("https://hireashelf.up.railway.app/api/contract"),
       body: jsonEncode({"campaignId": campaignId, "storeId": storeId}),
       headers: {'Content-Type': "application/json"},
     );

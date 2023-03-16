@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 import '../account/account_screen.dart';
-import '../mycampaign_screen.dart';
+import '../my_campaign/mycampaign_screen.dart';
 import '../home/home_screen.dart';
 import '../notifications/notification_screen.dart';
 

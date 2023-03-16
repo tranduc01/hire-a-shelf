@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/screens/account/account_screen.dart';
-import 'package:grocery_app/screens/mycampaign_screen.dart';
+import 'package:grocery_app/screens/my_campaign/mycampaign_screen.dart';
 import 'package:grocery_app/screens/home/home_screen.dart';
 
 import '../notifications/notification_screen.dart';

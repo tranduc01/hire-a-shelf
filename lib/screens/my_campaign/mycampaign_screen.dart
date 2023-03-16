@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grocery_app/models/account.dart';
-import 'package:grocery_app/widgets/category_item_card_widget.dart';
+import 'package:grocery_app/screens/my_campaign/mycampaign_item_card_widget.dart';
 
-import '../models/campaign.dart';
+import '../../models/campaign.dart';
 
 class MyCampaignScreen extends StatefulWidget {
   MyCampaignScreen({Key? key}) : super(key: key);
@@ -121,9 +121,9 @@ class _MyCampaignState extends State<MyCampaignScreen>
         ));
   }
 
-  Widget getBrandCampaignList() {
+  Widget getBrandCampaignList(int id) {
     return FutureBuilder<List<Campaign>>(
-      future: fetchCampaigns(),
+      future: fetchCampaignsByBrand(id),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<Campaign> campaigns = snapshot.data as List<Campaign>;
@@ -138,7 +138,7 @@ class _MyCampaignState extends State<MyCampaignScreen>
                 onTap: () {},
                 child: Container(
                   padding: EdgeInsets.all(10),
-                  child: CategoryItemCardWidget(
+                  child: MyCampaignItemCardWidget(
                     campaign: campaigns[index],
                     color: gridColors[index % gridColors.length],
                   ),
@@ -170,7 +170,7 @@ class _MyCampaignState extends State<MyCampaignScreen>
                 onTap: () {},
                 child: Container(
                   padding: EdgeInsets.all(10),
-                  child: CategoryItemCardWidget(
+                  child: MyCampaignItemCardWidget(
                     campaign: campaigns[index],
                     color: gridColors[index % gridColors.length],
                   ),
@@ -243,7 +243,7 @@ class _MyCampaignState extends State<MyCampaignScreen>
   getGridViewItem(String jwt, BuildContext context) {
     if (jwt != "") {
       if (account!.brand != null) {
-        return getBrandCampaignList();
+        return getBrandCampaignList(account!.brand!.id);
       } else if (account!.store != null) {
         return getStoreCampaignList();
       } else {
