@@ -26,7 +26,6 @@ class _AccountState extends State<AccountScreen> {
   @override
   void initState() {
     super.initState();
-    loadID();
     loadJwt();
   }
 
@@ -39,25 +38,13 @@ class _AccountState extends State<AccountScreen> {
     return await storage.read(key: key);
   }
 
-  loadID() async {
-    String? id = await readFromStorage("accountId");
-    if (id != null) {
-      int i = int.parse(id);
-      setState(() {
-        _id = i;
-      });
-    } else {
-      setState(() {
-        _id = 0;
-      });
-    }
-  }
-
   loadJwt() async {
     String? token = await readFromStorage("token");
     if (token != null) {
+      String? id = await readFromStorage("accountId");
       setState(() {
         _jwt = token;
+        _id = int.parse(id!);
       });
     }
   }
@@ -65,7 +52,6 @@ class _AccountState extends State<AccountScreen> {
   @override
   void didUpdateWidget(covariant AccountScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    loadID();
     loadJwt();
   }
 

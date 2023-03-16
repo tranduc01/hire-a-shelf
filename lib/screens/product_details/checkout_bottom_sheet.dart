@@ -205,7 +205,7 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return LoadingDialog();
+          return JoinSuccessDialouge();
         });
   }
 }

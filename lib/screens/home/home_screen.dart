@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(
                       height: 25,
                     ),
-                    padded(subTitle("Ending Soon")),
+                    padded(subTitle("Near You")),
                     getHorizontalItemSliderOrdered(campaigns),
                     SizedBox(
                       height: 15,
@@ -189,14 +189,14 @@ class _HomeScreenState extends State<HomeScreen> {
           text,
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        Spacer(),
-        Text(
-          "See All",
-          style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 13, 14, 13)),
-        ),
+        // Spacer(),
+        // Text(
+        //   "See All",
+        //   style: TextStyle(
+        //       fontSize: 18,
+        //       fontWeight: FontWeight.bold,
+        //       color: Color.fromARGB(255, 13, 14, 13)),
+        // ),
       ],
     );
   }

@@ -7,6 +7,7 @@ import 'package:grocery_app/models/campaign.dart';
 import 'package:grocery_app/models/campaign_product.dart';
 import 'package:intl/intl.dart';
 import '../../models/contract.dart';
+
 import 'checkout_bottom_sheet.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -26,6 +27,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   bool _isVisibleDuration = false;
   final storage = new FlutterSecureStorage();
 
+  int _id = 0;
   String _jwt = "";
   @override
   void initState() {
@@ -52,8 +54,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   loadJwt() async {
     String? token = await readFromStorage("token");
     if (token != null) {
+      String? id = await readFromStorage("accountId");
       setState(() {
         _jwt = token;
+        _id = int.parse(id!);
       });
     }
   }
@@ -124,7 +128,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             SizedBox(
                               height: 10,
                             ),
-                            joinButton(_jwt),
+                            joinButton(_jwt, _id),
                             Container(height: 20),
                           ],
                         ),
@@ -445,78 +449,103 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       return Icon(Icons.keyboard_arrow_down, size: 30);
   }
 
-  Widget joinButton(String jwt) {
+  Widget joinButton(String jwt, int id) {
     return AppButton(
       label: "Join Campaign",
       onPressed: () async {
+        // Show the loading dialog
+
+        // showDialog(
+        //   context: context,
+        //   barrierDismissible: false,
+        //   builder: (BuildContext context) {
+        //     return LoadingDialog();
+        //   },
+        // );
+
         if (jwt == "") {
+          // Hide the loading dialog
+          // Navigator.pop(context);
+
           onClickDialog("You need to login first to perform this action");
         } else {
-          var accountId = await readFromStorage("accountId");
-          int id = 0;
-          if (accountId != null) {
-            id = int.parse(accountId);
-          } else {
-            id = 0;
-          }
-          Account? account = await fetchAccountById(id);
-          if (account.store != null) {
-            List<Contract> contracts = await fetchContracts();
-            if ((contracts
-                        .where((element) => element.store.id == id)
-                        .toList()
-                        .length ==
-                    0) &&
-                (contracts
-                        .where((element) =>
-                            element.campaign.id == widget.campaign.id)
-                        .toList()
-                        .length ==
-                    0)) {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text(
-                      widget.campaign.title,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    content: AppText(
-                      text: "Are you sure want to join this campaign?",
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xff7C7C7C),
-                    ),
-                    shape: ContinuousRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    actionsAlignment: MainAxisAlignment.center,
-                    actions: <Widget>[
-                      ElevatedButton(
-                          onPressed: () {
-                            showBottomSheet(context);
-                          },
-                          child: Text("Join"),
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              textStyle:
-                                  TextStyle(fontWeight: FontWeight.w600))),
-                      ElevatedButton(
-                          child: Text("Cancel"),
-                          onPressed: () => Navigator.pop(context, 'Cancel'),
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              textStyle:
-                                  TextStyle(fontWeight: FontWeight.w600)))
-                    ],
-                  );
-                },
-              );
+          try {
+            Account? account = await fetchAccountById(id);
+            if (account.store != null) {
+              List<Contract> contracts = await fetchContracts();
+              if ((contracts
+                          .where((element) => element.store.id == id)
+                          .toList()
+                          .length ==
+                      0) &&
+                  (contracts
+                          .where((element) =>
+                              element.campaign.id == widget.campaign.id)
+                          .toList()
+                          .length ==
+                      0)) {
+                // Hide the loading dialog
+                //Navigator.pop(context);
+
+                // Show the alert dialog
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext alertContext) {
+                    return AlertDialog(
+                      title: Text(
+                        widget.campaign.title,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      content: AppText(
+                        text: "Are you sure want to join this campaign?",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xff7C7C7C),
+                      ),
+                      shape: ContinuousRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      actionsAlignment: MainAxisAlignment.center,
+                      actions: <Widget>[
+                        ElevatedButton(
+                            onPressed: () {
+                              showBottomSheet(alertContext);
+                            },
+                            child: Text("Join"),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                textStyle:
+                                    TextStyle(fontWeight: FontWeight.w600))),
+                        ElevatedButton(
+                            child: Text("Cancel"),
+                            onPressed: () =>
+                                Navigator.pop(alertContext, 'Cancel'),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                textStyle:
+                                    TextStyle(fontWeight: FontWeight.w600)))
+                      ],
+                    );
+                  },
+                );
+              } else {
+                // Hide the loading dialog
+                //Navigator.pop(context);
+
+                onClickDialog("You have already joined this campaign!");
+              }
             } else {
-              onClickDialog("You have aldready join this campaign!");
+              // Hide the loading dialog
+              //Navigator.pop(context);
+
+              onClickDialog(
+                  "You don't have permission to perform this action!");
             }
-          } else {
-            onClickDialog("You don't have permission to perfom this action!");
+          } catch (e) {
+            // Hide the loading dialog
+            //Navigator.pop(context);
+            onClickDialog(
+                "Failed to perform the action. Please try again later.");
           }
         }
       },
