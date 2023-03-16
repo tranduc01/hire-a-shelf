@@ -29,7 +29,8 @@ dependencies:
   persistent_bottom_nav_bar: ^5.0.2  
   google_sign_in: ^6.0.1
   firebase_auth: ^4.2.9
-
+  geolocator: ^9.0.2
+  geocoding: ^2.1.0
 
 
 dev_dependencies:
