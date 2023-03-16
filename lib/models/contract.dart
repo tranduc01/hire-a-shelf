@@ -6,11 +6,24 @@ import 'dart:convert';
 class Contract {
   final Campaign campaign;
   final Store store;
-  Contract({required this.campaign, required this.store});
+  final DateTime createDate;
+  final DateTime? approvalDate;
+  final String status;
+
+  Contract({
+    required this.campaign,
+    required this.store,
+    required this.createDate,
+    this.approvalDate,
+    required this.status,
+  });
   factory Contract.fromJson(Map<String, dynamic> json) {
     return Contract(
         campaign: Campaign.fromJson(json['campaignResponse']),
-        store: Store.fromJson(json['storeResponse']));
+        store: Store.fromJson(json['storeResponse']),
+        createDate: json['createDate'],
+        approvalDate: json['approvalDate'],
+        status: json['status']);
   }
 }
 

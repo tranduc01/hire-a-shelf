@@ -121,7 +121,39 @@ class _MyCampaignState extends State<MyCampaignScreen>
         ));
   }
 
-  Widget getStaggeredGridView() {
+  Widget getBrandCampaignList() {
+    return FutureBuilder<List<Campaign>>(
+      future: fetchCampaigns(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<Campaign> campaigns = snapshot.data as List<Campaign>;
+          return ListView.builder(
+            padding: EdgeInsets.symmetric(
+              vertical: 10,
+            ),
+            itemCount: campaigns.length,
+            physics: AlwaysScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {},
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: CategoryItemCardWidget(
+                    campaign: campaigns[index],
+                    color: gridColors[index % gridColors.length],
+                  ),
+                ),
+              );
+            },
+          );
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+
+  Widget getStoreCampaignList() {
     return FutureBuilder<List<Campaign>>(
       future: fetchCampaigns(),
       builder: (context, snapshot) {
@@ -211,9 +243,9 @@ class _MyCampaignState extends State<MyCampaignScreen>
   getGridViewItem(String jwt, BuildContext context) {
     if (jwt != "") {
       if (account!.brand != null) {
-        return getStaggeredGridView();
+        return getBrandCampaignList();
       } else if (account!.store != null) {
-        return Text("This is My Campaign Screen for store!");
+        return getStoreCampaignList();
       } else {
         return Text("You are admin");
       }

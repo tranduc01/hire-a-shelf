@@ -55,11 +55,8 @@ class _SearchBarState extends State<SearchBarWidget> {
   Future<void> getAddressFromLatLong(Position position) async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
-    print(position);
-    print(placemarks);
-    Placemark place = placemarks[0];
-    address =
-        '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    Placemark place = placemarks.first;
+    address = '${place.street}, ${place.administrativeArea}, ${place.country}';
     setState(() {});
   }
 
