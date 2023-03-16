@@ -45,10 +45,7 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/images/categories_images/
-    - assets/images/beverages_images/
     - assets/icons/
-    - assets/icons/account_icons/
     - assets/fonts/
 
   fonts:

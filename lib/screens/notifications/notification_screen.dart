@@ -110,6 +110,11 @@ Widget getNotificationItemWidget(NotificationItem notiItem) {
                   style: BorderStyle.solid,
                 )),
             child: ListTile(
+              leading: Image.asset(
+                'assets/images/approved.png', // Replace with your image path
+                width: 50,
+                height: 50,
+              ),
               title: Text(
                 notiItem.title,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
