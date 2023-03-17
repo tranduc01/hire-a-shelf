@@ -11,6 +11,7 @@ import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/screens/account/account_screen.dart';
 import 'package:http/http.dart' as http;
+import '../constraints/constraints.dart';
 import '../models/account.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -43,8 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
       });
     });
     var response = await http.post(
-      Uri.parse("https://hireashelf.up.railway.app/api/auth"),
-      //Uri.parse("http://10.0.2.2:8080/api/auth"),
+      Uri.parse("$BASE_URL/auth"),
       body: jsonEncode({
         "userName": username,
         "password": password,
@@ -98,9 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
             fcmToken = token;
           });
         });
-        var response = await http.post(
-            //Uri.parse("http://10.0.2.2:8080/api/auth/google"),
-            Uri.parse("https://hireashelf.up.railway.app/api/auth/google"),
+        var response = await http.post(Uri.parse("$BASE_URL/auth/google"),
             body: {"idToken": idToken, "firebaseToken": fcmToken});
         //var myToken = responseJson['token'];
         if (response.statusCode == 200) {

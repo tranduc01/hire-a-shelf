@@ -96,6 +96,11 @@ class _NotificationState extends State<NotificationScreen>
 }
 
 Widget getNotificationItemWidget(NotificationItem notiItem) {
+  String imgPath = (notiItem.type == "Approved")
+      ? 'assets/images/approved.png'
+      : (notiItem.type == "Declined")
+          ? 'assets/images/rejected.png'
+          : 'assets/images/megaphone.png';
   return Container(
     margin: EdgeInsets.symmetric(),
     padding: EdgeInsets.symmetric(),
@@ -111,9 +116,7 @@ Widget getNotificationItemWidget(NotificationItem notiItem) {
                 )),
             child: ListTile(
               leading: Image.asset(
-                'assets/images/approved.png', // Replace with your image path
-                width: 50,
-                height: 50,
+                imgPath,
               ),
               title: Text(
                 notiItem.title,
