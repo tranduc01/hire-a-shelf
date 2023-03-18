@@ -1,4 +1,5 @@
 import 'package:grocery_app/models/brand.dart';
+import 'package:grocery_app/models/store.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -15,6 +16,7 @@ class Campaign {
   final String imgURL;
   final String status;
   final Brand brand;
+  final List<Store> stores;
 
   Campaign(
       {required this.id,
@@ -26,7 +28,8 @@ class Campaign {
       required this.duration,
       required this.imgURL,
       required this.brand,
-      required this.status});
+      required this.status,
+      required this.stores});
   factory Campaign.fromJson(Map<String, dynamic> json) {
     return Campaign(
         id: json['id'],
@@ -38,7 +41,9 @@ class Campaign {
         duration: json['duration'],
         imgURL: json['imgURL'],
         status: json['status'],
-        brand: Brand.fromJson(json['brand']));
+        brand: Brand.fromJson(json['brand']),
+        stores:
+            (json['appliers'] as List).map((e) => Store.fromJson(e)).toList());
   }
 }
 

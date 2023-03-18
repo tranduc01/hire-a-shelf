@@ -5,6 +5,8 @@ import 'package:grocery_app/models/contract.dart';
 import 'package:grocery_app/screens/my_campaign/mycampaign_item_card_widget.dart';
 import 'package:grocery_app/screens/my_campaign/mycampaignstore_item_card_widget.dart';
 
+import '../../common_widgets/app_button.dart';
+import '../../common_widgets/app_text.dart';
 import '../../models/campaign.dart';
 
 class MyCampaignScreen extends StatefulWidget {
@@ -133,7 +135,62 @@ class _MyCampaignState extends State<MyCampaignScreen>
             physics: AlwaysScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (dialogContext) {
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0)),
+                        insetPadding: EdgeInsets.symmetric(horizontal: 25),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 25,
+                          ),
+                          height: 600.0,
+                          width: double.maxFinite,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              SingleChildScrollView(
+                                physics: AlwaysScrollableScrollPhysics(),
+                                child: Column(children: [
+                                  ListView.builder(
+                                    itemCount: campaigns[index].stores.length,
+                                    itemBuilder: (context, storeIndex) {
+                                      return ListTile(
+                                        title: Text(campaigns[index]
+                                            .stores[storeIndex]
+                                            .name),
+                                        subtitle: Text(campaigns[index]
+                                            .stores[storeIndex]
+                                            .phone),
+                                      );
+                                    },
+                                  )
+                                ]),
+                              ),
+                              Spacer(
+                                flex: 8,
+                              ),
+                              AppButton(
+                                label: "Ok",
+                                fontWeight: FontWeight.w600,
+                                onPressed: () {
+                                  Navigator.pop(dialogContext, 'Cancel');
+                                },
+                              ),
+                              Spacer(
+                                flex: 1,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
                 child: Container(
                   padding: EdgeInsets.all(10),
                   child: MyCampaignItemCardWidget(
@@ -153,7 +210,7 @@ class _MyCampaignState extends State<MyCampaignScreen>
 
   Widget getStoreCampaignList() {
     return FutureBuilder<List<Contract>>(
-      future: fetchContractByStore(16),
+      future: fetchContractByStore(account!.store!.id),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<Contract> contracts = snapshot.data as List<Contract>;

@@ -16,7 +16,7 @@ class MyCampaignItemCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 10, bottom: 5, top: 5),
+      padding: EdgeInsets.only(left: 8, bottom: 5, top: 5),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(18),
@@ -35,7 +35,7 @@ class MyCampaignItemCardWidget extends StatelessWidget {
           ),
           Expanded(
             child: Padding(
-                padding: EdgeInsets.only(left: 20),
+                padding: EdgeInsets.only(left: 15),
                 child: Column(
                   children: [
                     Text(
@@ -95,31 +95,47 @@ class MyCampaignItemCardWidget extends StatelessWidget {
                       ],
                     ),
                     SizedBox(
-                      height: 5,
+                      height: 7,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 12),
-                      child: Align(
-                          alignment: Alignment.topRight,
-                          child: Container(
-                            padding: EdgeInsets.all(4.5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(7),
-                              color: (campaign.status == "Pending")
-                                  ? Color.fromARGB(141, 231, 211, 24)
-                                  : (campaign.status == "Approved")
-                                      ? Color.fromARGB(141, 83, 231, 24)
-                                      : Color.fromARGB(141, 231, 90, 24),
-                            ),
-                            child: Text(
-                              campaign.status,
-                              style: TextStyle(
-                                  fontFamily: 'Open Sans',
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          )),
-                    ),
+                    Row(
+                      children: [
+                        Padding(
+                            padding: EdgeInsets.only(right: 50),
+                            child: Container(
+                              padding: EdgeInsets.all(4.5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(7),
+                                color: Color.fromARGB(143, 0, 150, 135),
+                              ),
+                              child: Text(
+                                "Participants: " +
+                                    campaign.stores.length.toString(),
+                                style: TextStyle(
+                                    fontFamily: 'Open Sans',
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )),
+                        Container(
+                          padding: EdgeInsets.all(4.5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(7),
+                            color: (campaign.status == "Pending")
+                                ? Color.fromARGB(141, 231, 211, 24)
+                                : (campaign.status == "Approved")
+                                    ? Color.fromARGB(141, 83, 231, 24)
+                                    : Color.fromARGB(141, 231, 90, 24),
+                          ),
+                          child: Text(
+                            campaign.status,
+                            style: TextStyle(
+                                fontFamily: 'Open Sans',
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 )),
           ),
