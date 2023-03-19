@@ -45,7 +45,6 @@ class Campaign {
 Future<List<Campaign>> fetchCampaigns() async {
   var response =
       await http.get(Uri.parse("$BASE_URL/campaign?page=0&states=Approved"));
-  //.get(Uri.parse("http://10.0.2.2:8080/api/campaign?page=0&states=Approved"));
   if (response.statusCode == 200) {
     var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
     return (responseJson['listResponse'] as List)
@@ -64,9 +63,6 @@ Future<List<Campaign>> fetchCampaignsByBrand(int id) async {
     return (responseJson['listResponse'] as List)
         .map((e) => Campaign.fromJson(e))
         .toList();
-    // return (json.decode(response.body) as List)
-    //     .map((e) => Campaign.fromJson(e))
-    //     .toList();
   } else {
     throw Exception("Fail to fetch");
   }

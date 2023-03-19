@@ -1,10 +1,12 @@
 //import 'package:flutter/cupertino.dart';
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grocery_app/helpers/column_with_seprator.dart';
 import 'package:grocery_app/models/notificationItem.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class NotificationScreen extends StatefulWidget {
   NotificationScreen({Key? key}) : super(key: key);
@@ -39,12 +41,14 @@ class _NotificationState extends State<NotificationScreen>
   Future<void> _refreshData() async {
     var id = await readFromStorage("accountId");
     var jwt = await readFromStorage("token");
-    if (jwt != null) {
-      var newNotifications = fetchNotificationByAccountId(int.parse(id!));
-      setState(() {
-        _jwt = jwt;
-        notifications = newNotifications;
-      });
+    if (jwt != "") {
+      if (!JwtDecoder.isExpired(jwt!)) {
+        var newNotifications = fetchNotificationByAccountId(int.parse(id!));
+        setState(() {
+          _jwt = jwt;
+          notifications = newNotifications;
+        });
+      }
     }
   }
 

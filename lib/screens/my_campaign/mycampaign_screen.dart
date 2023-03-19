@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grocery_app/models/account.dart';
+import 'package:grocery_app/models/contract.dart';
 import 'package:grocery_app/screens/my_campaign/mycampaign_item_card_widget.dart';
+import 'package:grocery_app/screens/my_campaign/mycampaignstore_item_card_widget.dart';
 
 import '../../models/campaign.dart';
 
@@ -93,10 +95,6 @@ class _MyCampaignState extends State<MyCampaignScreen>
         _jwt = jwt;
         account = acc;
       });
-    } else {
-      setState(() {
-        _jwt = "";
-      });
     }
   }
 
@@ -154,24 +152,24 @@ class _MyCampaignState extends State<MyCampaignScreen>
   }
 
   Widget getStoreCampaignList() {
-    return FutureBuilder<List<Campaign>>(
-      future: fetchCampaigns(),
+    return FutureBuilder<List<Contract>>(
+      future: fetchContractByStore(16),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          List<Campaign> campaigns = snapshot.data as List<Campaign>;
+          List<Contract> contracts = snapshot.data as List<Contract>;
           return ListView.builder(
             padding: EdgeInsets.symmetric(
               vertical: 10,
             ),
-            itemCount: campaigns.length,
+            itemCount: contracts.length,
             physics: AlwaysScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {},
                 child: Container(
                   padding: EdgeInsets.all(10),
-                  child: MyCampaignItemCardWidget(
-                    campaign: campaigns[index],
+                  child: MyCampaignStoreItemCardWidget(
+                    contract: contracts[index],
                     color: gridColors[index % gridColors.length],
                   ),
                 ),

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
-import 'package:grocery_app/models/campaign.dart';
+import 'package:grocery_app/models/contract.dart';
 import 'package:intl/intl.dart';
 
-class MyCampaignItemCardWidget extends StatelessWidget {
-  MyCampaignItemCardWidget(
-      {Key? key, required this.campaign, this.color = Colors.blue})
+class MyCampaignStoreItemCardWidget extends StatelessWidget {
+  MyCampaignStoreItemCardWidget(
+      {Key? key, required this.contract, this.color = Colors.blue})
       : super(key: key);
-  final Campaign campaign;
+  final Contract contract;
   final Color borderColor = Color(0xffE2E2E2);
   final double borderRadius = 18;
   final Color color;
@@ -39,7 +39,7 @@ class MyCampaignItemCardWidget extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      campaign.title,
+                      contract.campaign.title,
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -59,9 +59,9 @@ class MyCampaignItemCardWidget extends StatelessWidget {
                           width: 8,
                         ),
                         AppText(
-                          text: "Exp: " +
+                          text: "Apply Date: " +
                               DateFormat("dd/MM/yyyy")
-                                  .format(campaign.expirationDate),
+                                  .format(contract.createDate),
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: Color(0xFF7C7C7C),
@@ -85,7 +85,7 @@ class MyCampaignItemCardWidget extends StatelessWidget {
                           padding: EdgeInsets.only(top: 4),
                           child: AppText(
                             text: "Duration: " +
-                                campaign.duration.toString() +
+                                contract.campaign.duration.toString() +
                                 " days",
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -105,14 +105,14 @@ class MyCampaignItemCardWidget extends StatelessWidget {
                             padding: EdgeInsets.all(4.5),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(7),
-                              color: (campaign.status == "Pending")
+                              color: (contract.status == "Pending")
                                   ? Color.fromARGB(141, 231, 211, 24)
-                                  : (campaign.status == "Approved")
+                                  : (contract.status == "Approved")
                                       ? Color.fromARGB(141, 83, 231, 24)
                                       : Color.fromARGB(141, 231, 90, 24),
                             ),
                             child: Text(
-                              campaign.status,
+                              contract.status,
                               style: TextStyle(
                                   fontFamily: 'Open Sans',
                                   fontSize: 15,
@@ -131,7 +131,7 @@ class MyCampaignItemCardWidget extends StatelessWidget {
   Widget imageWidget() {
     return Container(
       child: Image.network(
-        campaign.imgURL,
+        contract.campaign.imgURL,
         fit: BoxFit.contain,
       ),
     );

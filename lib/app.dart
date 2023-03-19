@@ -1,8 +1,10 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grocery_app/screens/splash_screen.dart';
 import 'package:grocery_app/styles/theme.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -12,7 +14,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String? mytoken = "";
-
+  final storage = new FlutterSecureStorage();
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   @override
@@ -20,6 +22,20 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     requestPermission();
     initInfor();
+    checkLoginState();
+  }
+
+  Future<String?> readFromStorage(String key) async {
+    return await storage.read(key: key);
+  }
+
+  Future<void> checkLoginState() async {
+    var jwt = await readFromStorage("token");
+    if (jwt != "") {
+      if (JwtDecoder.isExpired(jwt!)) {
+        storage.deleteAll();
+      }
+    }
   }
 
 //request notification permission

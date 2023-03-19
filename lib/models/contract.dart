@@ -43,10 +43,11 @@ Future<List<Contract>> fetchContracts() async {
 }
 
 Future<List<Contract>> fetchContractByStore(int id) async {
-  var response =
-      await http.get(Uri.parse("$BASE_URL/contract/store?storeid=$id"));
+  var response = await http.get(Uri.parse(
+      "$BASE_URL/contract/store?storeId=$id&states=Approved&states=Pending&states=Declined"));
   if (response.statusCode == 200) {
-    return (json.decode(response.body) as List)
+    var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
+    return (responseJson['listResponse'] as List)
         .map((e) => Contract.fromJson(e))
         .toList();
   } else {
