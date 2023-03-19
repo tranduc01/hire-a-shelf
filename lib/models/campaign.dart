@@ -44,7 +44,7 @@ class Campaign {
 
 Future<List<Campaign>> fetchCampaigns() async {
   var response =
-      await http.get(Uri.parse("$BASE_URL/campaign?page=0&states=Approved"));
+      await http.get(Uri.parse("$BASE_URL/campaign?states=Approved"));
   if (response.statusCode == 200) {
     var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
     return (responseJson['listResponse'] as List)

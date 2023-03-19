@@ -121,6 +121,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             getProductDetailsWidget(),
                             getProducts(),
                             Divider(thickness: 1),
+                            getShelfType(customWidget: shelfTypeWidget()),
+                            Divider(thickness: 1),
                             getExpiredDate(customWidget: expiredDateWidget()),
                             Divider(thickness: 1),
                             getDurationWidget(customWidget: durationWidget()),
@@ -348,6 +350,28 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
+  Widget getShelfType({Widget? customWidget}) {
+    return Container(
+      margin: EdgeInsets.only(
+        top: 10,
+        bottom: 10,
+      ),
+      child: Row(
+        children: [
+          AppText(
+              text: "Shelf Type", fontWeight: FontWeight.w600, fontSize: 16),
+          Spacer(),
+          if (customWidget != null) ...[
+            customWidget,
+            SizedBox(
+              width: 20,
+            )
+          ],
+        ],
+      ),
+    );
+  }
+
   Widget getProductDetailsWidget({Widget? customWidget}) {
     return Container(
       margin: EdgeInsets.only(
@@ -420,7 +444,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       child: AppText(
         text: DateFormat("dd/MM/yyyy").format(widget.campaign.expirationDate),
         fontWeight: FontWeight.w600,
-        fontSize: 12,
+        fontSize: 14,
         color: Color(0xff7C7C7C),
       ),
     );
@@ -436,7 +460,23 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       child: AppText(
         text: widget.campaign.duration.toString() + " days",
         fontWeight: FontWeight.w600,
-        fontSize: 12,
+        fontSize: 14,
+        color: Color(0xff7C7C7C),
+      ),
+    );
+  }
+
+  Widget shelfTypeWidget() {
+    return Container(
+      padding: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: Color(0xffEBEBEB),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: AppText(
+        text: "Small",
+        fontWeight: FontWeight.w600,
+        fontSize: 14,
         color: Color(0xff7C7C7C),
       ),
     );
