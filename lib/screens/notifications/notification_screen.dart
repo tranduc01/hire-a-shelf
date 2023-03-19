@@ -41,8 +41,8 @@ class _NotificationState extends State<NotificationScreen>
   Future<void> _refreshData() async {
     var id = await readFromStorage("accountId");
     var jwt = await readFromStorage("token");
-    if (jwt != "") {
-      if (!JwtDecoder.isExpired(jwt!)) {
+    if (jwt != null) {
+      if (!JwtDecoder.isExpired(jwt)) {
         var newNotifications = fetchNotificationByAccountId(int.parse(id!));
         setState(() {
           _jwt = jwt;
