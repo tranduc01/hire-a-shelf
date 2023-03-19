@@ -24,7 +24,7 @@ class Contract {
         campaign: Campaign.fromJson(json['campaignResponse']),
         store: Store.fromJson(json['storeResponse']),
         createDate: DateTime.parse(json['createDate']),
-        approvalDate: json['approvalDate'] == null
+        approvalDate: (json['approvalDate'] == null)
             ? null
             : DateTime.parse(json['approvalDate']),
         status: json['status']);
@@ -33,6 +33,18 @@ class Contract {
 
 Future<List<Contract>> fetchContracts() async {
   var response = await http.get(Uri.parse("$BASE_URL/contract"));
+  if (response.statusCode == 200) {
+    return (json.decode(response.body) as List)
+        .map((e) => Contract.fromJson(e))
+        .toList();
+  } else {
+    throw Exception("Fail to fetch");
+  }
+}
+
+Future<List<Contract>> fetchContractByStore(int id) async {
+  var response =
+      await http.get(Uri.parse("$BASE_URL/contract/store?storeid=$id"));
   if (response.statusCode == 200) {
     return (json.decode(response.body) as List)
         .map((e) => Contract.fromJson(e))

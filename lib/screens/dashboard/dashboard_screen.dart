@@ -31,25 +31,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       body: PersistentTabView(context, screens: screens(), items: navBarItems(),
           onItemSelected: (index) {
-        if (index == 2) {
-          setState(() {
-            print("Refresh noti screen");
-          });
-        } else if (index == 1) {
-          setState(() {
-            print("Refresh my campaign screen");
-          });
-        } else if (index == 0) {
-          setState(
-            () {
-              print("Refresh my home screen");
-            },
-          );
-        } else {
-          setState(() {
-            print("Refresh my account screen");
-          });
-        }
+        setState(() {});
       },
           resizeToAvoidBottomInset: true,
           popActionScreens: PopActionScreensType.all,
