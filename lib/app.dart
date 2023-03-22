@@ -31,6 +31,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> checkLoginState() async {
     var jwt = await readFromStorage("token");
+    print(jwt);
     if (jwt != null) {
       if (JwtDecoder.isExpired(jwt)) {
         storage.deleteAll();

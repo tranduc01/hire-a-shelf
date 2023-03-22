@@ -1,4 +1,6 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grocery_app/models/brand.dart';
+import 'package:grocery_app/models/shelf.dart';
 import 'package:grocery_app/models/store.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -17,7 +19,7 @@ class Campaign {
   final String status;
   final Brand brand;
   final List<Store> stores;
-
+  final List<Shelf> shelves;
   Campaign(
       {required this.id,
       required this.title,
@@ -29,7 +31,8 @@ class Campaign {
       required this.imgURL,
       required this.brand,
       required this.status,
-      required this.stores});
+      required this.stores,
+      required this.shelves});
   factory Campaign.fromJson(Map<String, dynamic> json) {
     return Campaign(
         id: json['id'],
@@ -43,13 +46,22 @@ class Campaign {
         status: json['status'],
         brand: Brand.fromJson(json['brand']),
         stores:
-            (json['appliers'] as List).map((e) => Store.fromJson(e)).toList());
+            (json['appliers'] as List).map((e) => Store.fromJson(e)).toList(),
+        shelves: (json['shelvesTypeResponses'] as List)
+            .map((e) => Shelf.fromJson(e))
+            .toList());
   }
 }
 
 Future<List<Campaign>> fetchCampaigns() async {
-  var response =
-      await http.get(Uri.parse("$BASE_URL/campaign?states=Approved"));
+  final storage = new FlutterSecureStorage();
+  final token = await storage.read(key: 'token');
+  final headers = {
+    'Authorization': 'Bearer ' + token!,
+    'Content-Type': 'application/json',
+  };
+  var response = await http.get(Uri.parse("$BASE_URL/campaign?states=Approved"),
+      headers: headers);
   if (response.statusCode == 200) {
     var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
     return (responseJson['listResponse'] as List)

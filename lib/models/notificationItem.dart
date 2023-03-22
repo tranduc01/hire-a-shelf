@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grocery_app/constraints/constraints.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,7 +17,14 @@ class NotificationItem {
 }
 
 Future<List<NotificationItem>> fetchNotificationByAccountId(int id) async {
-  var response = await http.get(Uri.parse("$BASE_URL/notification/$id"));
+  final storage = new FlutterSecureStorage();
+  final token = await storage.read(key: 'token');
+  final headers = {
+    'Authorization': 'Bearer ' + token!,
+    'Content-Type': 'application/json',
+  };
+  var response =
+      await http.get(Uri.parse("$BASE_URL/notification/$id"), headers: headers);
   if (response.statusCode == 200) {
     return (json.decode(utf8.decode(response.bodyBytes)) as List)
         .map((e) => NotificationItem.fromJson(e))

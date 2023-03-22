@@ -121,7 +121,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             getProductDetailsWidget(),
                             getProducts(),
                             Divider(thickness: 1),
-                            getShelfType(customWidget: shelfTypeWidget()),
+                            getShelfType(),
                             Divider(thickness: 1),
                             getExpiredDate(customWidget: expiredDateWidget()),
                             Divider(thickness: 1),
@@ -350,28 +350,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Widget getShelfType({Widget? customWidget}) {
-    return Container(
-      margin: EdgeInsets.only(
-        top: 10,
-        bottom: 10,
-      ),
-      child: Row(
-        children: [
-          AppText(
-              text: "Shelf Type", fontWeight: FontWeight.w600, fontSize: 16),
-          Spacer(),
-          if (customWidget != null) ...[
-            customWidget,
-            SizedBox(
-              width: 20,
-            )
-          ],
-        ],
-      ),
-    );
-  }
-
   Widget getProductDetailsWidget({Widget? customWidget}) {
     return Container(
       margin: EdgeInsets.only(
@@ -466,18 +444,44 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Widget shelfTypeWidget() {
+  Widget getShelfType() {
     return Container(
-      padding: EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: Color(0xffEBEBEB),
-        borderRadius: BorderRadius.circular(5),
+      margin: EdgeInsets.only(
+        top: 10,
+        bottom: 10,
       ),
-      child: AppText(
-        text: "Small",
-        fontWeight: FontWeight.w600,
-        fontSize: 14,
-        color: Color(0xff7C7C7C),
+      child: Row(
+        children: [
+          AppText(
+              text: "Shelf Type", fontWeight: FontWeight.w600, fontSize: 16),
+          Spacer(),
+          Container(
+            width: 220,
+            height: 25,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: widget.campaign.shelves.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: EdgeInsets.only(right: 5),
+                  child: Container(
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Color(0xffEBEBEB),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: AppText(
+                      text: widget.campaign.shelves[index].name,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color: Color(0xff7C7C7C),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
