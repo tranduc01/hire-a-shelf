@@ -460,6 +460,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             height: 25,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
+              reverse: true,
               itemCount: widget.campaign.shelves.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
