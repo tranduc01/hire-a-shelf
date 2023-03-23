@@ -107,7 +107,7 @@ class GroceryItemCardWidget extends StatelessWidget {
               ],
             ),
             SizedBox(
-              height: 15,
+              height: 10,
             ),
             Row(
               children: [

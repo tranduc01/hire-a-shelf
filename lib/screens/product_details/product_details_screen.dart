@@ -25,6 +25,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   bool _isIconDuration = false;
   bool _isVisible = false;
   bool _isVisibleDuration = false;
+  bool _isVisibleType = false;
+  bool _isIconType = false;
+
   final storage = new FlutterSecureStorage();
 
   int _id = 0;
@@ -122,6 +125,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             getProductDetailsWidget(),
                             getProducts(),
                             Divider(thickness: 1),
+                            getShelfTypeWidget(customWidget: shelfTypeWidget()),
                             getShelfType(),
                             Divider(thickness: 1),
                             getExpiredDate(customWidget: expiredDateWidget()),
@@ -445,7 +449,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Widget getShelfType() {
+  Widget getShelfTypeWidget({Widget? customWidget}) {
     return Container(
       margin: EdgeInsets.only(
         top: 10,
@@ -456,35 +460,77 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           AppText(
               text: "Shelf Type", fontWeight: FontWeight.w600, fontSize: 16),
           Spacer(),
-          Container(
-            width: 220,
-            height: 25,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              reverse: true,
-              itemCount: widget.campaign.shelves.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: EdgeInsets.only(right: 5),
-                  child: Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Color(0xffEBEBEB),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: AppText(
-                      text: widget.campaign.shelves[index].name,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                      color: Color(0xff7C7C7C),
-                    ),
-                  ),
-                );
-              },
-            ),
+          if (customWidget != null) ...[
+            customWidget,
+            SizedBox(
+              width: 20,
+            )
+          ],
+          IconButton(
+            onPressed: () {
+              setState(() {
+                _isVisibleType = !_isVisibleType;
+                _isIconType = !_isIconType;
+              });
+            },
+            icon: iconChange(_isIconType),
           ),
         ],
       ),
+    );
+  }
+
+  Widget shelfTypeWidget() {
+    return Container(
+      padding: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: Color(0xffEBEBEB),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: AppText(
+        text: widget.campaign.shelves.length.toString() + " types",
+        fontWeight: FontWeight.w600,
+        fontSize: 14,
+        color: Color(0xff7C7C7C),
+      ),
+    );
+  }
+
+  Widget getShelfType() {
+    return Center(
+      child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: widget.campaign.shelves.length,
+          itemBuilder: (context, index) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Visibility(
+                  visible: _isVisibleType,
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(3),
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: Color(0xffEBEBEB),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: AppText(
+                            text: widget.campaign.shelves[index].name,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                            color: Color(0xff7C7C7C),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            );
+          }),
     );
   }
 
