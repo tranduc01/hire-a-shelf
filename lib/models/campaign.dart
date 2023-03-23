@@ -18,6 +18,7 @@ class Campaign {
   final String imgURL;
   final String status;
   final Brand brand;
+  final String location;
   final List<Store> stores;
   final List<Shelf> shelves;
   Campaign(
@@ -32,7 +33,8 @@ class Campaign {
       required this.brand,
       required this.status,
       required this.stores,
-      required this.shelves});
+      required this.shelves,
+      required this.location});
   factory Campaign.fromJson(Map<String, dynamic> json) {
     return Campaign(
         id: json['id'],
@@ -45,6 +47,7 @@ class Campaign {
         imgURL: json['imgURL'],
         status: json['status'],
         brand: Brand.fromJson(json['brand']),
+        location: json['city'],
         stores:
             (json['appliers'] as List).map((e) => Store.fromJson(e)).toList(),
         shelves: (json['shelvesTypeResponses'] as List)

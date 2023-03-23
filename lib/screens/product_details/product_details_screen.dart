@@ -105,10 +105,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             ),
                             Row(
                               children: [
+                                Icon(Icons.location_on),
                                 Text(
-                                  "Contact",
+                                  widget.campaign.location,
                                   style: TextStyle(
-                                    fontSize: 24,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 )

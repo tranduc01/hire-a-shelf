@@ -111,22 +111,17 @@ class GroceryItemCardWidget extends StatelessWidget {
             ),
             Row(
               children: [
+                Icon(Icons.location_on),
                 SizedBox(
-                  width: 20,
+                  width: 5,
                 ),
-                SvgPicture.asset(
-                  "assets/icons/money_icon.svg",
-                  width: 26,
-                  height: 26,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                AppText(
-                  text: "Contact",
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                Expanded(
+                  child: AppText(
+                    text: campaign.location,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
               ],
             ),
           ],
