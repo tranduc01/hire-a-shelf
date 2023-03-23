@@ -502,33 +502,33 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           shrinkWrap: true,
           itemCount: widget.campaign.shelves.length,
           itemBuilder: (context, index) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Visibility(
-                  visible: _isVisibleType,
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(3),
-                        child: Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: Color(0xffEBEBEB),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: AppText(
-                            text: widget.campaign.shelves[index].name,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                            color: Color(0xff7C7C7C),
-                          ),
+            return Visibility(
+              visible: _isVisibleType,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(
+                            color: Colors.grey,
+                            style: BorderStyle.solid,
+                          )),
+                      child: ListTile(
+                        title: Text(
+                          widget.campaign.shelves[index].name,
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
-                      )
-                    ],
+                        subtitle: Text(
+                          widget.campaign.shelves[index].description,
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                    ),
                   ),
-                )
-              ],
+                ],
+              ),
             );
           }),
     );
