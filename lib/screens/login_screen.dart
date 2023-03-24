@@ -163,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   children: [
                     Text(
-                      "Enter your email and password",
+                      "Enter your username and password",
                       style: TextStyle(
                         color: Colors.grey.withOpacity(0.8),
                         fontSize: 20,
@@ -192,20 +192,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 loginButton(context),
                 SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "Don't have an account? Sign up here",
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
-                ),
-                SizedBox(
-                  height: 10,
+                  height: 25,
                 ),
                 Text(
                   "Or connect with",
                   style: TextStyle(
                     color: Colors.black.withOpacity(0.7),
-                    fontSize: 15,
+                    fontSize: 18,
                   ),
                 ),
                 SizedBox(
