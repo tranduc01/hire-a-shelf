@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,7 +11,8 @@ import 'package:grocery_app/helpers/column_with_seprator.dart';
 import 'package:grocery_app/screens/dashboard/dashboard_screen.dart';
 import 'package:grocery_app/screens/login_screen.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-
+import 'package:http/http.dart' as http;
+import '../../constraints/constraints.dart';
 import '../../models/account.dart';
 import 'account_item.dart';
 
@@ -21,6 +25,7 @@ class AccountScreen extends StatefulWidget {
 class _AccountState extends State<AccountScreen> {
   int _id = 0;
   String _jwt = "";
+  String? fcmToken = "";
   final storage = new FlutterSecureStorage();
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   @override
@@ -30,8 +35,27 @@ class _AccountState extends State<AccountScreen> {
   }
 
   logout() async {
-    await storage.deleteAll();
-    await _googleSignIn.signOut();
+    await FirebaseMessaging.instance.getToken().then((token) {
+      setState(() {
+        fcmToken = token;
+      });
+    });
+    var response = await http.post(
+      Uri.parse("$BASE_URL/auth/logout"),
+      body: jsonEncode({"accountId": _id, "firebaseToken": fcmToken}),
+      headers: {'Content-Type': "application/json"},
+    );
+    if (response.statusCode == 200) {
+      await storage.deleteAll();
+      await _googleSignIn.signOut();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DashboardScreen(),
+          ));
+    } else {
+      print(response.statusCode);
+    }
   }
 
   Future<String?> readFromStorage(String key) async {
@@ -157,13 +181,31 @@ class _AccountState extends State<AccountScreen> {
                 actionsAlignment: MainAxisAlignment.center,
                 actions: <Widget>[
                   ElevatedButton(
-                      onPressed: () {
-                        logout();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DashboardScreen(),
-                            ));
+                      onPressed: () async {
+                        await FirebaseMessaging.instance
+                            .getToken()
+                            .then((token) {
+                          setState(() {
+                            fcmToken = token;
+                          });
+                        });
+                        var response = await http.post(
+                          Uri.parse("$BASE_URL/auth/logout"),
+                          body: jsonEncode(
+                              {"accountId": _id, "firebaseToken": fcmToken}),
+                          headers: {'Content-Type': "application/json"},
+                        );
+                        if (response.statusCode == 200) {
+                          await storage.deleteAll();
+                          await _googleSignIn.signOut();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DashboardScreen(),
+                              ));
+                        } else {
+                          print(response.statusCode);
+                        }
                       },
                       child: Text("Log Out"),
                       style: ElevatedButton.styleFrom(
@@ -271,9 +313,7 @@ class _AccountState extends State<AccountScreen> {
               fontSize: 16,
             ),
             onTap: () {
-              print(account.brand?.name);
-              print(account.store?.name);
-              print(account.admin?.address);
+              print(account.id);
               // Navigator.push(
               //     context, MaterialPageRoute(builder: (context) => HomeScreen()));
             },
