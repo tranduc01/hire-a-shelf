@@ -126,6 +126,7 @@ class _AccountState extends State<AccountScreen> {
               height: 20,
               child: SvgPicture.asset(
                 "assets/icons/account_icons/logout_icon.svg",
+                // ignore: deprecated_member_use
                 color: Color.fromARGB(255, 226, 21, 21),
               ),
             ),

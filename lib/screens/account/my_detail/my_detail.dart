@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/account.dart';
+import 'package:intl/intl.dart';
 
 class MyDetail extends StatefulWidget {
   @override
@@ -243,6 +244,73 @@ class _MyDetailState extends State<MyDetail> {
                   ),
                   Divider(
                     thickness: 1,
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                          width: 80,
+                          height: 30,
+                          child: Center(
+                            child: Text(
+                              "Address",
+                            ),
+                          )),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Expanded(
+                        child: Text(
+                          (account.brand != null)
+                              ? (account.brand!.location.address) +
+                                  ", " +
+                                  (account.brand!.location.ward) +
+                                  ", " +
+                                  (account.brand!.location.district) +
+                                  ", " +
+                                  (account.brand!.location.city)
+                              : (account.admin != null)
+                                  ? account.admin!.phone
+                                  : (account.store!.location.address) +
+                                      ", " +
+                                      (account.store!.location.ward) +
+                                      ", " +
+                                      (account.store!.location.district) +
+                                      ", " +
+                                      (account.store!.location.city),
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      )
+                    ],
+                  ),
+                  Divider(
+                    thickness: 1,
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                          width: 80,
+                          height: 30,
+                          child: Center(
+                            child: Text(
+                              "Participate Date",
+                            ),
+                          )),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        (account.brand != null)
+                            ? (DateFormat("dd/MM/yyyy")
+                                .format(account.brand!.participateDate))
+                            : (account.admin != null)
+                                ? account.admin!.phone
+                                : (DateFormat("dd/MM/yyyy")
+                                    .format(account.store!.participateDate)),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                 ],
               ));
