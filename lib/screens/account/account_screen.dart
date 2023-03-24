@@ -25,37 +25,13 @@ class AccountScreen extends StatefulWidget {
 class _AccountState extends State<AccountScreen> {
   int _id = 0;
   String _jwt = "";
-  String? fcmToken = "";
+
   final storage = new FlutterSecureStorage();
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   @override
   void initState() {
     super.initState();
     loadJwt();
-  }
-
-  logout() async {
-    await FirebaseMessaging.instance.getToken().then((token) {
-      setState(() {
-        fcmToken = token;
-      });
-    });
-    var response = await http.post(
-      Uri.parse("$BASE_URL/auth/logout"),
-      body: jsonEncode({"accountId": _id, "firebaseToken": fcmToken}),
-      headers: {'Content-Type': "application/json"},
-    );
-    if (response.statusCode == 200) {
-      await storage.deleteAll();
-      await _googleSignIn.signOut();
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DashboardScreen(),
-          ));
-    } else {
-      print(response.statusCode);
-    }
   }
 
   Future<String?> readFromStorage(String key) async {
@@ -182,12 +158,11 @@ class _AccountState extends State<AccountScreen> {
                 actions: <Widget>[
                   ElevatedButton(
                       onPressed: () async {
+                        var fcmToken;
                         await FirebaseMessaging.instance
                             .getToken()
                             .then((token) {
-                          setState(() {
-                            fcmToken = token;
-                          });
+                          fcmToken = token;
                         });
                         var response = await http.post(
                           Uri.parse("$BASE_URL/auth/logout"),
