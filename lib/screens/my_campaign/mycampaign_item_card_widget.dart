@@ -94,6 +94,26 @@ class MyCampaignItemCardWidget extends StatelessWidget {
                         )
                       ],
                     ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 1.7,
+                        ),
+                        Icon(Icons.location_on),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 4),
+                          child: AppText(
+                            text: campaign.location,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF7C7C7C),
+                          ),
+                        )
+                      ],
+                    ),
                     SizedBox(
                       height: 7,
                     ),
@@ -124,7 +144,9 @@ class MyCampaignItemCardWidget extends StatelessWidget {
                                 ? Color.fromARGB(141, 231, 211, 24)
                                 : (campaign.status == "Approved")
                                     ? Color.fromARGB(141, 83, 231, 24)
-                                    : Color.fromARGB(141, 231, 90, 24),
+                                    : (campaign.status == "Disable")
+                                        ? Color.fromARGB(143, 158, 158, 158)
+                                        : Color.fromARGB(141, 231, 90, 24),
                           ),
                           child: Text(
                             campaign.status,

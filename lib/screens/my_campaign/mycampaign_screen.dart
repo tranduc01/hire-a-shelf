@@ -4,9 +4,9 @@ import 'package:grocery_app/models/account.dart';
 import 'package:grocery_app/models/contract.dart';
 import 'package:grocery_app/screens/my_campaign/mycampaign_item_card_widget.dart';
 import 'package:grocery_app/screens/my_campaign/mycampaignstore_item_card_widget.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../../common_widgets/app_button.dart';
-import '../../common_widgets/app_text.dart';
 import '../../models/campaign.dart';
 
 class MyCampaignScreen extends StatefulWidget {
@@ -27,10 +27,14 @@ List<Color> gridColors = [
 ];
 
 class _MyCampaignState extends State<MyCampaignScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   final storage = new FlutterSecureStorage();
   String _jwt = "";
+  int i = 1;
   Account? account;
+  Future<List<Campaign>>? campaigns;
+  ScrollController scrollController = ScrollController();
+
   // Animation controller
   late AnimationController animationController;
 
@@ -42,7 +46,8 @@ class _MyCampaignState extends State<MyCampaignScreen>
 
   // This variable determnies whether the child FABs are visible or not
   bool _isExpanded = false;
-
+  @override
+  bool get wantKeepAlive => true;
   @override
   initState() {
     animationController = AnimationController(
@@ -60,6 +65,14 @@ class _MyCampaignState extends State<MyCampaignScreen>
       parent: animationController,
       curve: Curves.easeInOut,
     ));
+    scrollController.addListener(
+      () {
+        if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent) {
+          loadMoreData();
+        }
+      },
+    );
     getAccount();
     super.initState();
   }
@@ -68,6 +81,8 @@ class _MyCampaignState extends State<MyCampaignScreen>
   @override
   dispose() {
     animationController.dispose();
+    // Dispose of the ScrollController
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -91,48 +106,81 @@ class _MyCampaignState extends State<MyCampaignScreen>
     var id = await readFromStorage("accountId");
     var jwt = await readFromStorage("token");
     if (jwt != null) {
-      var accId = int.parse(id!);
-      var acc = await fetchAccountById(accId);
-      setState(() {
-        _jwt = jwt;
-        account = acc;
-      });
+      if (!JwtDecoder.isExpired(jwt)) {
+        var accId = int.parse(id!);
+        var acc = await fetchAccountById(accId);
+        var campaignList = fetchCampaignsByBrand(acc.brand!.id, 0);
+        setState(() {
+          _jwt = jwt;
+          account = acc;
+          campaigns = campaignList;
+        });
+      }
     }
+  }
+
+  loadMoreData() async {
+    var campaignList = fetchCampaignsByBrand(account!.brand!.id, i++);
+    var campaign = campaigns;
+    setState(() {
+      campaigns = addCampaigns(campaign!, campaignList);
+    });
+  }
+
+  Future<List<Campaign>> addCampaigns(
+      Future<List<Campaign>> list1, Future<List<Campaign>> list2) async {
+    // Wait for the results of both futures
+    List<Campaign> result1 = await list1;
+    List<Campaign> result2 = await list2;
+
+    // Concatenate the two lists and return the result
+    return List<Campaign>.from([...result1, ...result2]);
   }
 
   @override
   void didUpdateWidget(covariant MyCampaignScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    getAccount();
+    if (account != null) {
+      fetchCampaignsByBrand(account!.brand!.id, 0).then((campaignList) {
+        setState(() {
+          i = 1;
+          campaigns = Future.value(campaignList);
+        });
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
         floatingActionButton: getFloatingButton(_jwt),
         body: SafeArea(
           child: Column(
             children: [
               Expanded(
-                child: getGridViewItem(_jwt, context),
+                child: (account != null)
+                    ? getGridViewItem(_jwt, context, campaigns!)
+                    : getNotLoginWidget(),
               ),
             ],
           ),
         ));
   }
 
-  Widget getBrandCampaignList(int id) {
+  Widget getBrandCampaignList(Future<List<Campaign>> campaigns) {
     return FutureBuilder<List<Campaign>>(
-      future: fetchCampaignsByBrand(id),
+      future: campaigns,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<Campaign> campaigns = snapshot.data as List<Campaign>;
           return ListView.builder(
+            controller: scrollController,
             padding: EdgeInsets.symmetric(
               vertical: 10,
             ),
             itemCount: campaigns.length,
-            physics: AlwaysScrollableScrollPhysics(),
+            physics: BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
@@ -153,24 +201,7 @@ class _MyCampaignState extends State<MyCampaignScreen>
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              SingleChildScrollView(
-                                physics: AlwaysScrollableScrollPhysics(),
-                                child: Column(children: [
-                                  ListView.builder(
-                                    itemCount: campaigns[index].stores.length,
-                                    itemBuilder: (context, storeIndex) {
-                                      return ListTile(
-                                        title: Text(campaigns[index]
-                                            .stores[storeIndex]
-                                            .name),
-                                        subtitle: Text(campaigns[index]
-                                            .stores[storeIndex]
-                                            .phone),
-                                      );
-                                    },
-                                  )
-                                ]),
-                              ),
+                              Text("Test"),
                               Spacer(
                                 flex: 8,
                               ),
@@ -295,45 +326,50 @@ class _MyCampaignState extends State<MyCampaignScreen>
     }
   }
 
-  getGridViewItem(String jwt, BuildContext context) {
+  Widget getNotLoginWidget() {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage("assets/images/background-error.jpg"),
+            fit: BoxFit.cover),
+      ),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            "Please login !!",
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            'Your Session has been expired',
+            style: const TextStyle(
+                fontWeight: FontWeight.w600, color: Color(0xFF7C7C7C)),
+            textAlign: TextAlign.center,
+          )
+        ],
+      ),
+    );
+  }
+
+  getGridViewItem(
+      String jwt, BuildContext context, Future<List<Campaign>> campaigns) {
     if (jwt != "") {
       if (account!.brand != null) {
-        return getBrandCampaignList(account!.brand!.id);
+        return getBrandCampaignList(campaigns);
       } else if (account!.store != null) {
         return getStoreCampaignList();
       } else {
         return Text("You are admin");
       }
     } else {
-      return Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("assets/images/background-error.jpg"),
-              fit: BoxFit.cover),
-        ),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              "Please login !!",
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Your Session has been expired',
-              style: const TextStyle(
-                  fontWeight: FontWeight.w600, color: Color(0xFF7C7C7C)),
-              textAlign: TextAlign.center,
-            )
-          ],
-        ),
-      );
+      return getNotLoginWidget();
     }
   }
 }

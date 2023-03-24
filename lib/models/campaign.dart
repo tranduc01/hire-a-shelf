@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grocery_app/models/brand.dart';
 import 'package:grocery_app/models/shelf.dart';
@@ -57,14 +59,8 @@ class Campaign {
 }
 
 Future<List<Campaign>> fetchCampaigns() async {
-  final storage = new FlutterSecureStorage();
-  final token = await storage.read(key: 'token');
-  final headers = {
-    'Authorization': 'Bearer ' + token!,
-    'Content-Type': 'application/json',
-  };
-  var response = await http.get(Uri.parse("$BASE_URL/campaign?states=Approved"),
-      headers: headers);
+  var response =
+      await http.get(Uri.parse("$BASE_URL/campaign?states=Approved"));
   if (response.statusCode == 200) {
     var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
     return (responseJson['listResponse'] as List)
@@ -75,9 +71,9 @@ Future<List<Campaign>> fetchCampaigns() async {
   }
 }
 
-Future<List<Campaign>> fetchCampaignsByBrand(int id) async {
+Future<List<Campaign>> fetchCampaignsByBrand(int id, int page) async {
   var response = await http.get(Uri.parse(
-      "$BASE_URL/campaign?brandId=$id&states=Approved&states=Pending&states=Declined"));
+      "$BASE_URL/campaign?brandId=$id&page=$page&states=Approved&states=Pending&states=Declined&states=Disable"));
   if (response.statusCode == 200) {
     var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
     return (responseJson['listResponse'] as List)
