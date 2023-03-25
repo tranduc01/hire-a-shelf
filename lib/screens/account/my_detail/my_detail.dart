@@ -136,6 +136,14 @@ class _MyDetailState extends State<MyDetail> {
                       fontWeight: FontWeight.bold,
                       textAlign: TextAlign.center,
                     ),
+                    subtitle: AppText(
+                      text: (account.brand != null)
+                          ? "Brand"
+                          : (account.store != null)
+                              ? "Store"
+                              : "Admin",
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                   SizedBox(
                     height: 10,

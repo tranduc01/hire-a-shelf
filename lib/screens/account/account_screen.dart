@@ -82,7 +82,7 @@ class _AccountState extends State<AccountScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 390,
+                  height: 350,
                 ),
                 Visibility(
                     visible: (_jwt != "")

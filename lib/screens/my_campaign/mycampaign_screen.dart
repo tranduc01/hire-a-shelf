@@ -208,45 +208,7 @@ class _MyCampaignState extends State<MyCampaignScreen>
             physics: BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (dialogContext) {
-                      return Dialog(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0)),
-                        insetPadding: EdgeInsets.symmetric(horizontal: 25),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 25,
-                          ),
-                          height: 600.0,
-                          width: double.maxFinite,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text("Test"),
-                              Spacer(
-                                flex: 8,
-                              ),
-                              AppButton(
-                                label: "Ok",
-                                fontWeight: FontWeight.w600,
-                                onPressed: () {
-                                  Navigator.pop(dialogContext, 'Cancel');
-                                },
-                              ),
-                              Spacer(
-                                flex: 1,
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
+                onTap: () {},
                 child: Container(
                   padding: EdgeInsets.all(10),
                   child: MyCampaignItemCardWidget(

@@ -238,10 +238,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   visible: _isVisibleDuration,
                   child: AppText(
                       text: "From", fontWeight: FontWeight.w600, fontSize: 16)),
-              SizedBox(
-                height: 5,
-                width: 210,
-              ),
+              Spacer(),
               Visibility(
                   visible: _isVisibleDuration,
                   child: Container(
@@ -267,10 +264,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   visible: _isVisibleDuration,
                   child: AppText(
                       text: "To", fontWeight: FontWeight.w600, fontSize: 16)),
-              SizedBox(
-                height: 5,
-                width: 230,
-              ),
+              Spacer(),
               Visibility(
                   visible: _isVisibleDuration,
                   child: Container(

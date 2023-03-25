@@ -117,46 +117,52 @@ class MyCampaignItemCardWidget extends StatelessWidget {
                     SizedBox(
                       height: 7,
                     ),
-                    Row(
-                      children: [
-                        Padding(
-                            padding: EdgeInsets.only(right: 50),
-                            child: Container(
-                              padding: EdgeInsets.all(4.5),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(7),
-                                color: Color.fromARGB(143, 0, 150, 135),
-                              ),
-                              child: Text(
-                                "Participants: " +
-                                    campaign.stores.length.toString(),
-                                style: TextStyle(
-                                    fontFamily: 'Open Sans',
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )),
-                        Container(
-                          padding: EdgeInsets.all(4.5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(7),
-                            color: (campaign.status == "Pending")
-                                ? Color.fromARGB(141, 231, 211, 24)
-                                : (campaign.status == "Approved")
-                                    ? Color.fromARGB(141, 83, 231, 24)
-                                    : (campaign.status == "Disable")
-                                        ? Color.fromARGB(143, 158, 158, 158)
-                                        : Color.fromARGB(141, 231, 90, 24),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Column(
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.only(right: 10),
+                              child: Container(
+                                padding: EdgeInsets.all(4.5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(7),
+                                  color: Color.fromARGB(143, 0, 150, 135),
+                                ),
+                                child: Text(
+                                  "Participants: " +
+                                      campaign.stores.length.toString(),
+                                  style: TextStyle(
+                                      fontFamily: 'Open Sans',
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              )),
+                          SizedBox(
+                            height: 5,
                           ),
-                          child: Text(
-                            campaign.status,
-                            style: TextStyle(
-                                fontFamily: 'Open Sans',
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold),
+                          Container(
+                            padding: EdgeInsets.all(4.5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(7),
+                              color: (campaign.status == "Pending")
+                                  ? Color.fromARGB(141, 231, 211, 24)
+                                  : (campaign.status == "Approved")
+                                      ? Color.fromARGB(141, 83, 231, 24)
+                                      : (campaign.status == "Disable")
+                                          ? Color.fromARGB(143, 158, 158, 158)
+                                          : Color.fromARGB(141, 231, 90, 24),
+                            ),
+                            child: Text(
+                              campaign.status,
+                              style: TextStyle(
+                                  fontFamily: 'Open Sans',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     )
                   ],
                 )),
