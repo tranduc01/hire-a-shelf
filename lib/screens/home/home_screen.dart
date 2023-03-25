@@ -66,10 +66,10 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         }
       }
-      setState(() {
-        campaigns = newCampaigns;
-      });
     }
+    setState(() {
+      campaigns = newCampaigns;
+    });
   }
 
   loadMoreDataAll() {
