@@ -5,8 +5,6 @@ import 'package:grocery_app/models/contract.dart';
 import 'package:grocery_app/screens/my_campaign/mycampaign_item_card_widget.dart';
 import 'package:grocery_app/screens/my_campaign/mycampaignstore_item_card_widget.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-
-import '../../common_widgets/app_button.dart';
 import '../../models/campaign.dart';
 
 class MyCampaignScreen extends StatefulWidget {

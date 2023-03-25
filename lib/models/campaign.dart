@@ -63,9 +63,30 @@ class Campaign {
   }
 }
 
-Future<List<Campaign>> fetchCampaigns() async {
-  var response =
-      await http.get(Uri.parse("$BASE_URL/campaign?states=Approved"));
+Future<List<Campaign>> fetchCampaigns(int page) async {
+  var response = await http
+      .get(Uri.parse("$BASE_URL/campaign?page=$page&states=Approved"));
+  if (response.statusCode == 200) {
+    var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
+    return (responseJson['listResponse'] as List)
+        .map((e) => Campaign.fromJson(e))
+        .toList();
+  } else {
+    throw Exception("Fail to fetch");
+  }
+}
+
+Future<List<Campaign>> fetchCampaignsByLocation(int storeId, int page) async {
+  final storage = new FlutterSecureStorage();
+  final token = await storage.read(key: 'token');
+  final headers = {
+    'Authorization': 'Bearer ' + token!,
+    'Content-Type': 'application/json',
+  };
+  var response = await http.get(
+      Uri.parse(
+          "$BASE_URL/campaign/home?filterByLocation=true&storeId=$storeId&page=$page&states=Approved"),
+      headers: headers);
   if (response.statusCode == 200) {
     var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
     return (responseJson['listResponse'] as List)
