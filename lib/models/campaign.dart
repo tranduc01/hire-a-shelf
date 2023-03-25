@@ -1,5 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grocery_app/models/brand.dart';
+import 'package:grocery_app/models/product.dart';
 import 'package:grocery_app/models/shelf.dart';
 import 'package:grocery_app/models/store.dart';
 import 'package:http/http.dart' as http;
@@ -21,6 +22,8 @@ class Campaign {
   final String location;
   final List<Store> stores;
   final List<Shelf> shelves;
+  final List<Product> products;
+
   Campaign(
       {required this.id,
       required this.title,
@@ -34,6 +37,7 @@ class Campaign {
       required this.status,
       required this.stores,
       required this.shelves,
+      required this.products,
       required this.location});
   factory Campaign.fromJson(Map<String, dynamic> json) {
     return Campaign(
@@ -50,6 +54,9 @@ class Campaign {
         location: json['city'],
         stores:
             (json['appliers'] as List).map((e) => Store.fromJson(e)).toList(),
+        products: (json['productResponseSet'] as List)
+            .map((e) => Product.fromJson(e))
+            .toList(),
         shelves: (json['shelvesTypeResponses'] as List)
             .map((e) => Shelf.fromJson(e))
             .toList());

@@ -4,7 +4,6 @@ import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/account.dart';
 import 'package:grocery_app/models/campaign.dart';
-import 'package:grocery_app/models/campaign_product.dart';
 import 'package:intl/intl.dart';
 import '../../models/contract.dart';
 
@@ -185,63 +184,50 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   Widget getProducts() {
-    return FutureBuilder<List<CampaignProduct>>(
-      future: fetchProductByCampaignId(widget.campaign.id),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          List<CampaignProduct> campaigns =
-              snapshot.data as List<CampaignProduct>;
-          return ListView.builder(
-              shrinkWrap: true,
-              itemCount: campaigns.length,
-              itemBuilder: (context, index) {
-                var item = campaigns[index];
-                return Row(
-                  children: [
-                    Visibility(
-                        visible: _isVisible,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 10),
-                          child: Image.network(
-                            item.product.imgURL,
-                            height: 80,
-                            width: 80,
-                          ),
-                        )),
-                    SizedBox(
-                      width: 20,
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: widget.campaign.products.length,
+        itemBuilder: (context, index) {
+          return Row(
+            children: [
+              Visibility(
+                  visible: _isVisible,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Image.network(
+                      widget.campaign.products[index].imgURL,
+                      height: 80,
+                      width: 80,
                     ),
-                    Visibility(
-                        visible: _isVisible,
-                        child: Container(
-                          padding: EdgeInsets.all(4.5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(7),
-                            color: Color.fromARGB(141, 255, 235, 59),
-                          ),
-                          child: Text(
-                            item.product.price.toString() + "00 vnđ",
-                            style: TextStyle(fontFamily: 'Open Sans'),
-                          ),
-                        )),
-                    SizedBox(
-                      width: 20,
+                  )),
+              SizedBox(
+                width: 20,
+              ),
+              Visibility(
+                  visible: _isVisible,
+                  child: Container(
+                    padding: EdgeInsets.all(4.5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(7),
+                      color: Color.fromARGB(141, 255, 235, 59),
                     ),
-                    Visibility(
-                        visible: _isVisible,
-                        child: Expanded(
-                            child: Text(
-                          item.product.name,
-                          style: TextStyle(fontFamily: 'Open Sans'),
-                        )))
-                  ],
-                );
-              });
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },
-    );
+                    child: Text(
+                      widget.campaign.products[index].price.toStringAsFixed(0) +
+                          "vnđ",
+                      style: TextStyle(fontFamily: 'Open Sans'),
+                    ),
+                  )),
+              Spacer(),
+              Visibility(
+                  visible: _isVisible,
+                  child: Expanded(
+                      child: Text(
+                    widget.campaign.products[index].name,
+                    style: TextStyle(fontFamily: 'Open Sans'),
+                  )))
+            ],
+          );
+        });
   }
 
   Widget getDuration() {
