@@ -33,6 +33,7 @@ class _MyCampaignState extends State<MyCampaignScreen>
   int i = 1;
   Account? account;
   Future<List<Campaign>>? campaigns;
+  Future<List<Contract>>? contracts;
   ScrollController scrollController = ScrollController();
 
   // Animation controller
@@ -109,11 +110,22 @@ class _MyCampaignState extends State<MyCampaignScreen>
       if (!JwtDecoder.isExpired(jwt)) {
         var accId = int.parse(id!);
         var acc = await fetchAccountById(accId);
-        var campaignList = fetchCampaignsByBrand(acc.brand!.id, 0);
+        if (acc.brand != null) {
+          var campaignList = fetchCampaignsByBrand(acc.brand!.id, 0);
+          setState(() {
+            campaigns = campaignList;
+          });
+        } else {
+          if (acc.store != null) {
+            var contractList = fetchContractByStore(acc.store!.id);
+            setState(() {
+              contracts = contractList;
+            });
+          }
+        }
         setState(() {
           _jwt = jwt;
           account = acc;
-          campaigns = campaignList;
         });
       }
     }
@@ -141,12 +153,21 @@ class _MyCampaignState extends State<MyCampaignScreen>
   void didUpdateWidget(covariant MyCampaignScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (account != null) {
-      fetchCampaignsByBrand(account!.brand!.id, 0).then((campaignList) {
-        setState(() {
-          i = 1;
-          campaigns = Future.value(campaignList);
+      if (account!.brand != null) {
+        fetchCampaignsByBrand(account!.brand!.id, 0).then((campaignList) {
+          setState(() {
+            i = 1;
+            campaigns = Future.value(campaignList);
+          });
         });
-      });
+      } else if (account!.store != null) {
+        var contractList = fetchContractByStore(account!.store!.id);
+        setState(() {
+          contracts = contractList;
+        });
+      }
+    } else {
+      getAccount();
     }
   }
 
@@ -159,8 +180,12 @@ class _MyCampaignState extends State<MyCampaignScreen>
           child: Column(
             children: [
               Expanded(
-                child: (account != null)
-                    ? getGridViewItem(_jwt, context, campaigns!)
+                child: (_jwt != "")
+                    ? account!.brand != null
+                        ? getBrandCampaignList(campaigns!)
+                        : account!.store != null
+                            ? getStoreCampaignList(contracts!)
+                            : Text("You are admin")
                     : getNotLoginWidget(),
               ),
             ],
@@ -239,9 +264,9 @@ class _MyCampaignState extends State<MyCampaignScreen>
     );
   }
 
-  Widget getStoreCampaignList() {
+  Widget getStoreCampaignList(Future<List<Contract>> contracts) {
     return FutureBuilder<List<Contract>>(
-      future: fetchContractByStore(account!.store!.id),
+      future: contracts,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<Contract> contracts = snapshot.data as List<Contract>;
@@ -359,17 +384,5 @@ class _MyCampaignState extends State<MyCampaignScreen>
   }
 
   getGridViewItem(
-      String jwt, BuildContext context, Future<List<Campaign>> campaigns) {
-    if (jwt != "") {
-      if (account!.brand != null) {
-        return getBrandCampaignList(campaigns);
-      } else if (account!.store != null) {
-        return getStoreCampaignList();
-      } else {
-        return Text("You are admin");
-      }
-    } else {
-      return getNotLoginWidget();
-    }
-  }
+      String jwt, BuildContext context, Future<List<Campaign>> campaigns) {}
 }

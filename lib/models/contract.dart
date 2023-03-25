@@ -1,3 +1,4 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grocery_app/models/campaign.dart';
 import 'package:grocery_app/models/store.dart';
 import 'package:http/http.dart' as http;
@@ -43,8 +44,16 @@ Future<List<Contract>> fetchContracts() async {
 }
 
 Future<List<Contract>> fetchContractByStore(int id) async {
-  var response = await http.get(Uri.parse(
-      "$BASE_URL/contract/store?storeId=$id&states=Approved&states=Pending&states=Declined"));
+  final storage = new FlutterSecureStorage();
+  final token = await storage.read(key: 'token');
+  final headers = {
+    'Authorization': 'Bearer ' + token!,
+    'Content-Type': 'application/json',
+  };
+  var response = await http.get(
+      Uri.parse(
+          "$BASE_URL/contract/store?storeId=$id&states=Approved&states=Pending&states=Declined"),
+      headers: headers);
   if (response.statusCode == 200) {
     var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
     return (responseJson['listResponse'] as List)
