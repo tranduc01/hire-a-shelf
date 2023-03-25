@@ -33,7 +33,14 @@ class Contract {
 }
 
 Future<List<Contract>> fetchContracts() async {
-  var response = await http.get(Uri.parse("$BASE_URL/contract"));
+  final storage = new FlutterSecureStorage();
+  final token = await storage.read(key: 'token');
+  final headers = {
+    'Authorization': 'Bearer ' + token!,
+    'Content-Type': 'application/json',
+  };
+  var response =
+      await http.get(Uri.parse("$BASE_URL/contract"), headers: headers);
   if (response.statusCode == 200) {
     return (json.decode(response.body) as List)
         .map((e) => Contract.fromJson(e))

@@ -33,17 +33,19 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
         return LoadingDialog();
       },
     );
+    final storage = new FlutterSecureStorage();
+    final token = await storage.read(key: 'token');
+    final headers = {
+      'Authorization': 'Bearer ' + token!,
+      'Content-Type': 'application/json',
+    };
     var response = await http.post(
       Uri.parse("$BASE_URL/contract"),
       body: jsonEncode({"campaignId": campaignId, "storeId": storeId}),
-      headers: {'Content-Type': "application/json"},
+      headers: headers,
     );
     Navigator.of(context).pop();
-    if (response.statusCode == 200) {
-      return response.statusCode;
-    } else {
-      throw Exception("Fail to fetch");
-    }
+    return response.statusCode;
   }
 
   @override
@@ -91,6 +93,7 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
           checkoutRow("Contact Number",
               trailingText: widget.campaign.brand.phone),
           getDivider(),
+          checkoutRow("Location", trailingText: widget.campaign.location),
           SizedBox(
             height: 30,
           ),
@@ -118,6 +121,37 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
                     await createContract(widget.campaign.id, account.store!.id);
                 if (status == 200) {
                   onPlaceOrderClicked();
+                } else if (status == 400) {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text(
+                          "Error!",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        content: AppText(
+                          text: "You have join this campaign!",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xff7C7C7C),
+                        ),
+                        shape: ContinuousRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        actionsAlignment: MainAxisAlignment.center,
+                        actions: <Widget>[
+                          ElevatedButton(
+                              child: Text("OK"),
+                              onPressed: () => Navigator.pop(context, 'OK'),
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.black,
+                                  textStyle:
+                                      TextStyle(fontWeight: FontWeight.w600)))
+                        ],
+                      );
+                    },
+                  );
                 } else {
                   print(status);
                 }

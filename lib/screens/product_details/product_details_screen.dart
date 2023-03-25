@@ -5,8 +5,6 @@ import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/account.dart';
 import 'package:grocery_app/models/campaign.dart';
 import 'package:intl/intl.dart';
-import '../../models/contract.dart';
-
 import 'checkout_bottom_sheet.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -549,68 +547,43 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         } else {
           Account? account = await fetchAccountById(id);
           if (account.store != null) {
-            List<Contract> contracts = await fetchContracts();
-            if ((contracts
-                        .where((element) => element.store.id == id)
-                        .toList()
-                        .length ==
-                    0) &&
-                (contracts
-                        .where((element) =>
-                            element.campaign.id == widget.campaign.id)
-                        .toList()
-                        .length ==
-                    0)) {
-              // Hide the loading dialog
-              //Navigator.pop(context);
-
-              // Show the alert dialog
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext alertContext) {
-                  return AlertDialog(
-                    title: Text(
-                      widget.campaign.title,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    content: AppText(
-                      text: "Are you sure want to join this campaign?",
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xff7C7C7C),
-                    ),
-                    shape: ContinuousRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    actionsAlignment: MainAxisAlignment.center,
-                    actions: <Widget>[
-                      ElevatedButton(
-                          onPressed: () {
-                            showBottomSheet(alertContext);
-                          },
-                          child: Text("Join"),
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              textStyle:
-                                  TextStyle(fontWeight: FontWeight.w600))),
-                      ElevatedButton(
-                          child: Text("Cancel"),
-                          onPressed: () =>
-                              Navigator.pop(alertContext, 'Cancel'),
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              textStyle:
-                                  TextStyle(fontWeight: FontWeight.w600)))
-                    ],
-                  );
-                },
-              );
-            } else {
-              // Hide the loading dialog
-              //Navigator.pop(context);
-
-              onClickDialog("You have already joined this campaign!");
-            }
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext alertContext) {
+                return AlertDialog(
+                  title: Text(
+                    widget.campaign.title,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  content: AppText(
+                    text: "Are you sure want to join this campaign?",
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xff7C7C7C),
+                  ),
+                  shape: ContinuousRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  actionsAlignment: MainAxisAlignment.center,
+                  actions: <Widget>[
+                    ElevatedButton(
+                        onPressed: () {
+                          showBottomSheet(alertContext);
+                        },
+                        child: Text("Join"),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            textStyle: TextStyle(fontWeight: FontWeight.w600))),
+                    ElevatedButton(
+                        child: Text("Cancel"),
+                        onPressed: () => Navigator.pop(alertContext, 'Cancel'),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            textStyle: TextStyle(fontWeight: FontWeight.w600)))
+                  ],
+                );
+              },
+            );
           } else {
             // Hide the loading dialog
             //Navigator.pop(context);
